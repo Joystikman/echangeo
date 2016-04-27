@@ -14,4 +14,12 @@ class DefaultController extends Controller
     {
         return $this->render('EchangeoBundle:Default:index.html.twig');
     }
+
+    /**
+     * @Route("/test")
+     */
+    public function testAction()
+    {
+        return $this->render('EchangeoBundle:Default:test.html.twig');
+    }
 }

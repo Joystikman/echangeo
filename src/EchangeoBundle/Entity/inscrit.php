@@ -1,14 +1,15 @@
 <?php
-// src/AppBundle/Entity/User.php
 
-namespace AppBundle\Entity;
+namespace EchangeoBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Inscrit
+ *
+ * @ORM\Table(name="Inscrit")
  * @ORM\Entity
- * @ORM\Table(name="fos_user")
  */
 class Inscrit extends BaseUser
 {
