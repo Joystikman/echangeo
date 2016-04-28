@@ -2,6 +2,9 @@
 
 namespace EchangeoBundle\Controller;
 
+/*appel des entitées*/
+use EchangeoBundle\Entity\Categorie;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -20,6 +23,12 @@ class DefaultController extends Controller
      */
     public function testAction()
     {
-        return $this->render('EchangeoBundle:Default:test.html.twig');
+    	$docCategorie = $this->getDoctrine()->getRepository('EchangeoBundle:Categorie');
+		$categories = $docCategorie->findAll();
+		$docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
+		$sc = $docSC->findAll();
+        return $this->render('EchangeoBundle:Default:test.html.twig', array(
+        		"categories"=>$categories,
+        		"souscategories"=>$sc));
     }
 }

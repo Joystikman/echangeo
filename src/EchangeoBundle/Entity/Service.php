@@ -70,6 +70,22 @@ class Service
      */
     private $distance;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
+     *
+     */
+    private $inscrit;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="SousCategorie", cascade={"remove"})
+     * @ORM\JoinColumn(name="SousCategorie_id", referencedColumnName="id")
+     *
+     */
+    private $sousCategorie;
+
 
     /**
      * Get id
@@ -240,5 +256,51 @@ class Service
     public function getDistance()
     {
         return $this->distance;
+    }
+
+    /**
+     * Set inscrit
+     *
+     * @param \EchangeoBundle\Entity\Inscrit $inscrit
+     * @return Service
+     */
+    public function setInscrit(\EchangeoBundle\Entity\Inscrit $inscrit = null)
+    {
+        $this->inscrit = $inscrit;
+
+        return $this;
+    }
+
+    /**
+     * Get inscrit
+     *
+     * @return \EchangeoBundle\Entity\Inscrit 
+     */
+    public function getInscrit()
+    {
+        return $this->inscrit;
+    }
+
+    /**
+     * Set sousCategorie
+     *
+     * @param \EchangeoBundle\Entity\SousCategorie $sousCategorie
+     * @return Service
+     */
+    public function setSousCategorie(\EchangeoBundle\Entity\SousCategorie $sousCategorie = null)
+    {
+        $this->sousCategorie = $sousCategorie;
+
+        return $this;
+    }
+
+    /**
+     * Get sousCategorie
+     *
+     * @return \EchangeoBundle\Entity\SousCategorie 
+     */
+    public function getSousCategorie()
+    {
+        return $this->sousCategorie;
     }
 }

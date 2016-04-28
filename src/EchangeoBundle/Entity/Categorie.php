@@ -12,12 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Categorie
 {
+
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\OneToMany(targetEntity="EchangeoBundle\Entity\SousCategorie")
      */
     private $id;
 
@@ -34,6 +37,12 @@ class Categorie
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="SousCategorie", mappedBy="Categorie", cascade={"remove", "persist"})
+     */
+    private $sousCategorie;
 
 
     /**
@@ -90,5 +99,45 @@ class Categorie
     public function getDescription()
     {
         return $this->description;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->sousCategorie = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add sousCategorie
+     *
+     * @param \EchangeoBundle\Entity\SousCategorie $sousCategorie
+     * @return Categorie
+     */
+    public function addSousCategorie(\EchangeoBundle\Entity\SousCategorie $sousCategorie)
+    {
+        $this->sousCategorie[] = $sousCategorie;
+
+        return $this;
+    }
+
+    /**
+     * Remove sousCategorie
+     *
+     * @param \EchangeoBundle\Entity\SousCategorie $sousCategorie
+     */
+    public function removeSousCategorie(\EchangeoBundle\Entity\SousCategorie $sousCategorie)
+    {
+        $this->sousCategorie->removeElement($sousCategorie);
+    }
+
+    /**
+     * Get sousCategorie
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSousCategorie()
+    {
+        return $this->sousCategorie;
     }
 }

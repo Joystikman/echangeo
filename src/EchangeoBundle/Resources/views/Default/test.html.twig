@@ -1,1 +1,106 @@
-Ceci est un test !!!!	
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Test Echangeo</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/sofc.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+  	<div class="en-tete">
+  		<h1>Page de Test</h1>
+  	</div>
+  </div>
+    <div class="paragraphe1">
+      <div class="presentation">
+        <h2>Les Catégorie :</h2>
+        	<ul>
+        	{% for categorie in categories %}
+        		<li>{{categorie.libelle}}</li>
+        		<li>{{categorie.description}}</li>
+        		<li>Sous-catégorie :</li>
+        		{% for sc in categorie.sousCategorie %}
+        			<li>{{sc.libelle}}</li>
+        			<li>{{sc.description}}</li>
+        			<li>........................</li>
+        		{% endfor %}
+        		<p>_ _ _ _ _ _ _ _ _ _ _ _ _ _ </p>
+        	{% endfor %}
+      </div>
+    <div class="presentationLieu">
+      <h2>Cartes interactive !</h2>
+      <p>Ceci est une carte de la ville !</p>
+    </div>
+    <div class="paragraphe3" id="googlemaps">
+    </div>
+
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript"> 
+  // The latitude and longitude of your business / place
+  var p = [47.8451434, 1.9396573];
+  /*navigator.geolocation.getCurrentPosition(showGoogleMaps); */
+
+  function showGoogleMaps(position) {
+
+  	console.log(position);
+
+  	if(typeof position.coords != 'undefined'){
+      var latLng = new google.maps.LatLng(p[0], p[1]);
+  	}
+  	else{   
+      var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+   	}
+      var mapOptions = {
+          zoom: 16, // initialize zoom level - the max value is 21
+          streetViewControl: false, // hide the yellow Street View pegman
+          scaleControl: true, // allow users to zoom the Google Map
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: latLng
+      };
+   
+      map = new google.maps.Map(document.getElementById('googlemaps'),
+          mapOptions);
+   
+      // Show the default red marker at the location
+      marker = new google.maps.Marker({
+          position: latLng,
+          map: map,
+          draggable: false,
+          animation: google.maps.Animation.DROP
+      });
+  }
+   
+  /*google.maps.event.addDomListener(window, 'load', showGoogleMaps);*/
+</script>
+</html>

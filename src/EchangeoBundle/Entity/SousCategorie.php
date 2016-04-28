@@ -14,6 +14,7 @@ class SousCategorie
 {
     /**
     * @ORM\ManyToOne(targetEntity="EchangeoBundle\Entity\Categorie")
+    * @ORM\JoinColumn(name="Categorie_id", referencedColumnName="id")
     */
     
     /**
@@ -38,6 +39,14 @@ class SousCategorie
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
+
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Categorie", cascade={"remove"})
+     * @ORM\JoinColumn(name="Categorie_id", referencedColumnName="id")
+     */
+    private $Categorie;
 
 
     /**
@@ -94,5 +103,28 @@ class SousCategorie
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set Categorie
+     *
+     * @param \EchangeoBundle\Entity\Categorie $categorie
+     * @return SousCategorie
+     */
+    public function setCategorie(\EchangeoBundle\Entity\Categorie $categorie = null)
+    {
+        $this->Categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get Categorie
+     *
+     * @return \EchangeoBundle\Entity\Categorie 
+     */
+    public function getCategorie()
+    {
+        return $this->Categorie;
     }
 }

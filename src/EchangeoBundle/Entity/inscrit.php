@@ -48,9 +48,140 @@ class Inscrit extends BaseUser
      */
     private $adresse;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="Inscrit", cascade={"remove", "persist"})
+     */
+    private $service;
+
     public function __construct()
     {
         parent::__construct();
         // your own logic
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Inscrit
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     * @return Inscrit
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * Get prenom
+     *
+     * @return string 
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+
+    /**
+     * Set dateNaissance
+     *
+     * @param \DateTime $dateNaissance
+     * @return Inscrit
+     */
+    public function setDateNaissance($dateNaissance)
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get dateNaissance
+     *
+     * @return \DateTime 
+     */
+    public function getDateNaissance()
+    {
+        return $this->dateNaissance;
+    }
+
+    /**
+     * Set adresse
+     *
+     * @param string $adresse
+     * @return Inscrit
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return string 
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * Add service
+     *
+     * @param \EchangeoBundle\Entity\Service $service
+     * @return Inscrit
+     */
+    public function addService(\EchangeoBundle\Entity\Service $service)
+    {
+        $this->service[] = $service;
+
+        return $this;
+    }
+
+    /**
+     * Remove service
+     *
+     * @param \EchangeoBundle\Entity\Service $service
+     */
+    public function removeService(\EchangeoBundle\Entity\Service $service)
+    {
+        $this->service->removeElement($service);
+    }
+
+    /**
+     * Get service
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getService()
+    {
+        return $this->service;
     }
 }
