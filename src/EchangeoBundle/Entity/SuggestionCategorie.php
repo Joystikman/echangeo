@@ -35,6 +35,13 @@ class SuggestionCategorie
      */
     private $description;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
+     */
+    private $inscrit;
+
 
     /**
      * Get id
@@ -90,5 +97,28 @@ class SuggestionCategorie
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set inscrit
+     *
+     * @param \EchangeoBundle\Entity\Inscrit $inscrit
+     * @return SuggestionCategorie
+     */
+    public function setInscrit(\EchangeoBundle\Entity\Inscrit $inscrit = null)
+    {
+        $this->inscrit = $inscrit;
+
+        return $this;
+    }
+
+    /**
+     * Get inscrit
+     *
+     * @return \EchangeoBundle\Entity\Inscrit 
+     */
+    public function getInscrit()
+    {
+        return $this->inscrit;
     }
 }

@@ -79,6 +79,12 @@ class Inscrit extends BaseUser
      */
     private $evaluations;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="SuggestionCategorie", mappedBy="Inscrit", cascade={"remove", "persist"})
+     */
+    private $suggestions;
+
     public function __construct()
     {
         parent::__construct();
@@ -360,5 +366,38 @@ class Inscrit extends BaseUser
     public function getEvaluations()
     {
         return $this->evaluations;
+    }
+
+    /**
+     * Add suggestions
+     *
+     * @param \EchangeoBundle\Entity\SuggestionCategorie $suggestions
+     * @return Inscrit
+     */
+    public function addSuggestion(\EchangeoBundle\Entity\SuggestionCategorie $suggestions)
+    {
+        $this->suggestions[] = $suggestions;
+
+        return $this;
+    }
+
+    /**
+     * Remove suggestions
+     *
+     * @param \EchangeoBundle\Entity\SuggestionCategorie $suggestions
+     */
+    public function removeSuggestion(\EchangeoBundle\Entity\SuggestionCategorie $suggestions)
+    {
+        $this->suggestions->removeElement($suggestions);
+    }
+
+    /**
+     * Get suggestions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSuggestions()
+    {
+        return $this->suggestions;
     }
 }
