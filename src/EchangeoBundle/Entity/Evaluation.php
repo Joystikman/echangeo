@@ -35,6 +35,26 @@ class Evaluation
      */
     private $commentaire;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\JoinColumn(name="Inscrit_id_notant", referencedColumnName="id")
+     */
+    private $inscritNotant;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\JoinColumn(name="Inscrit_id_note", referencedColumnName="id")
+     */
+    private $inscritNote;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Service", cascade={"remove"})
+     * @ORM\JoinColumn(name="Service_id", referencedColumnName="id")
+     */
+    private $service;
 
     /**
      * Get id
@@ -90,5 +110,74 @@ class Evaluation
     public function getCommentaire()
     {
         return $this->commentaire;
+    }
+
+    /**
+     * Set inscritNotant
+     *
+     * @param \EchangeoBundle\Entity\Inscrit $inscritNotant
+     * @return Evaluation
+     */
+    public function setInscritNotant(\EchangeoBundle\Entity\Inscrit $inscritNotant = null)
+    {
+        $this->inscritNotant = $inscritNotant;
+
+        return $this;
+    }
+
+    /**
+     * Get inscritNotant
+     *
+     * @return \EchangeoBundle\Entity\Inscrit 
+     */
+    public function getInscritNotant()
+    {
+        return $this->inscritNotant;
+    }
+
+    /**
+     * Set inscritNote
+     *
+     * @param \EchangeoBundle\Entity\Inscrit $inscritNote
+     * @return Evaluation
+     */
+    public function setInscritNote(\EchangeoBundle\Entity\Inscrit $inscritNote = null)
+    {
+        $this->inscritNote = $inscritNote;
+
+        return $this;
+    }
+
+    /**
+     * Get inscritNote
+     *
+     * @return \EchangeoBundle\Entity\Inscrit 
+     */
+    public function getInscritNote()
+    {
+        return $this->inscritNote;
+    }
+
+    /**
+     * Set service
+     *
+     * @param \EchangeoBundle\Entity\Service $service
+     * @return Evaluation
+     */
+    public function setService(\EchangeoBundle\Entity\Service $service = null)
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return \EchangeoBundle\Entity\Service 
+     */
+    public function getService()
+    {
+        return $this->service;
     }
 }

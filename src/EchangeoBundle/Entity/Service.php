@@ -86,6 +86,28 @@ class Service
      */
     private $sousCategorie;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="Service", cascade={"remove", "persist"})
+     */
+    private $reponses;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="Evaluation", cascade={"remove"})
+     * @ORM\JoinColumn(name="Evaluation_id_notant", referencedColumnName="id")
+     *
+     */
+    private $evaluationNotant;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="Evaluation", cascade={"remove"})
+     * @ORM\JoinColumn(name="Evaluation_id_note", referencedColumnName="id")
+     *
+     */
+    private $evaluationNote;
+
 
     /**
      * Get id
@@ -302,5 +324,134 @@ class Service
     public function getSousCategorie()
     {
         return $this->sousCategorie;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponse = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reponse
+     *
+     * @param \EchangeoBundle\Entity\Reponse $reponse
+     * @return Service
+     */
+    public function addReponse(\EchangeoBundle\Entity\Reponse $reponse)
+    {
+        $this->reponse[] = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponse
+     *
+     * @param \EchangeoBundle\Entity\Reponse $reponse
+     */
+    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponse)
+    {
+        $this->reponse->removeElement($reponse);
+    }
+
+    /**
+     * Get reponse
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReponse()
+    {
+        return $this->reponse;
+    }
+
+    /**
+     * Get reponses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReponses()
+    {
+        return $this->reponses;
+    }
+
+    /**
+     * Set evaluationNotant
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluationNotant
+     * @return Service
+     */
+    public function setEvaluationNotant(\EchangeoBundle\Entity\Evaluation $evaluationNotant = null)
+    {
+        $this->evaluationNotant = $evaluationNotant;
+
+        return $this;
+    }
+
+    /**
+     * Get evaluationNotant
+     *
+     * @return \EchangeoBundle\Entity\Evaluation 
+     */
+    public function getEvaluationNotant()
+    {
+        return $this->evaluationNotant;
+    }
+
+    /**
+     * Set evaluationNote
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluationNote
+     * @return Service
+     */
+    public function setEvaluationNote(\EchangeoBundle\Entity\Evaluation $evaluationNote = null)
+    {
+        $this->evaluationNote = $evaluationNote;
+
+        return $this;
+    }
+
+    /**
+     * Get evaluationNote
+     *
+     * @return \EchangeoBundle\Entity\Evaluation 
+     */
+    public function getEvaluationNote()
+    {
+        return $this->evaluationNote;
+    }
+
+    /**
+     * Add evaluations
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluations
+     * @return Service
+     */
+    public function addEvaluation(\EchangeoBundle\Entity\Evaluation $evaluations)
+    {
+        $this->evaluations[] = $evaluations;
+
+        return $this;
+    }
+
+    /**
+     * Remove evaluations
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluations
+     */
+    public function removeEvaluation(\EchangeoBundle\Entity\Evaluation $evaluations)
+    {
+        $this->evaluations->removeElement($evaluations);
+    }
+
+    /**
+     * Get evaluations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvaluations()
+    {
+        return $this->evaluations;
     }
 }

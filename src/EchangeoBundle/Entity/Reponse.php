@@ -35,6 +35,27 @@ class Reponse
      */
     private $etat;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
+     */
+    private $inscrit;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Service", cascade={"remove"})
+     * @ORM\JoinColumn(name="Service_id", referencedColumnName="id")
+     */
+    private $service;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="Conversation", cascade={"remove"})
+     * @ORM\JoinColumn(name="Conversation_id", referencedColumnName="id")
+     */
+    private $conversation ;
+
 
     /**
      * Get id
@@ -90,5 +111,74 @@ class Reponse
     public function getEtat()
     {
         return $this->etat;
+    }
+
+    /**
+     * Set inscrit
+     *
+     * @param \EchangeoBundle\Entity\Inscrit $inscrit
+     * @return Reponse
+     */
+    public function setInscrit(\EchangeoBundle\Entity\Inscrit $inscrit = null)
+    {
+        $this->inscrit = $inscrit;
+
+        return $this;
+    }
+
+    /**
+     * Get inscrit
+     *
+     * @return \EchangeoBundle\Entity\Inscrit 
+     */
+    public function getInscrit()
+    {
+        return $this->inscrit;
+    }
+
+    /**
+     * Set service
+     *
+     * @param \EchangeoBundle\Entity\Service $service
+     * @return Reponse
+     */
+    public function setService(\EchangeoBundle\Entity\Service $service = null)
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return \EchangeoBundle\Entity\Service 
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
+
+    /**
+     * Set conversation
+     *
+     * @param \EchangeoBundle\Entity\Conversation $conversation
+     * @return Reponse
+     */
+    public function setConversation(\EchangeoBundle\Entity\Conversation $conversation = null)
+    {
+        $this->conversation = $conversation;
+
+        return $this;
+    }
+
+    /**
+     * Get conversation
+     *
+     * @return \EchangeoBundle\Entity\Conversation 
+     */
+    public function getConversation()
+    {
+        return $this->conversation;
     }
 }

@@ -48,6 +48,12 @@ class SousCategorie
      */
     private $Categorie;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="SousCategorie", cascade={"remove", "persist"})
+     */
+    private $services;
+
 
     /**
      * Get id
@@ -126,5 +132,45 @@ class SousCategorie
     public function getCategorie()
     {
         return $this->Categorie;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add services
+     *
+     * @param \EchangeoBundle\Entity\Service $services
+     * @return SousCategorie
+     */
+    public function addService(\EchangeoBundle\Entity\Service $services)
+    {
+        $this->services[] = $services;
+
+        return $this;
+    }
+
+    /**
+     * Remove services
+     *
+     * @param \EchangeoBundle\Entity\Service $services
+     */
+    public function removeService(\EchangeoBundle\Entity\Service $services)
+    {
+        $this->services->removeElement($services);
+    }
+
+    /**
+     * Get services
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServices()
+    {
+        return $this->services;
     }
 }

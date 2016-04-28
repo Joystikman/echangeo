@@ -28,6 +28,20 @@ class Message
      */
     private $contenu;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Conversation", cascade={"remove"})
+     * @ORM\JoinColumn(name="Conversation_id", referencedColumnName="id")
+     */
+    private $conversation;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
+     */
+    private $inscrit;
+
 
     /**
      * Get id
@@ -60,5 +74,51 @@ class Message
     public function getContenu()
     {
         return $this->contenu;
+    }
+
+    /**
+     * Set conversation
+     *
+     * @param \EchangeoBundle\Entity\Conversation $conversation
+     * @return Message
+     */
+    public function setConversation(\EchangeoBundle\Entity\Conversation $conversation = null)
+    {
+        $this->conversation = $conversation;
+
+        return $this;
+    }
+
+    /**
+     * Get conversation
+     *
+     * @return \EchangeoBundle\Entity\Conversation 
+     */
+    public function getConversation()
+    {
+        return $this->conversation;
+    }
+
+    /**
+     * Set inscrit
+     *
+     * @param \EchangeoBundle\Entity\Inscrit $inscrit
+     * @return Message
+     */
+    public function setInscrit(\EchangeoBundle\Entity\Inscrit $inscrit = null)
+    {
+        $this->inscrit = $inscrit;
+
+        return $this;
+    }
+
+    /**
+     * Get inscrit
+     *
+     * @return \EchangeoBundle\Entity\Inscrit 
+     */
+    public function getInscrit()
+    {
+        return $this->inscrit;
     }
 }
