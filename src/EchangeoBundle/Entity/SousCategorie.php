@@ -46,11 +46,11 @@ class SousCategorie
      * @ORM\ManyToOne(targetEntity="Categorie", cascade={"remove"})
      * @ORM\JoinColumn(name="Categorie_id", referencedColumnName="id")
      */
-    private $Categorie;
+    private $categorie;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Service", mappedBy="SousCategorie", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="sousCategorie", cascade={"remove", "persist"})
      */
     private $services;
 

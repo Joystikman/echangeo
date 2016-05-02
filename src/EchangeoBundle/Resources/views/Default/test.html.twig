@@ -19,9 +19,8 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
-  <link rel="stylesheet" href="css/sofc.css">
+  <link href="{{ asset('css/test.css') }}" rel="stylesheet">
+
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -34,33 +33,53 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
   	<div class="en-tete">
-  		<h1>Page de Test</h1>
+  		<h1>Echangeo-test</h1>
   	</div>
-  </div>
-    <div class="paragraphe1">
-      <div class="presentation">
-        <h2>Les Catégorie :</h2>
-        	<ul>
-        	{% for categorie in categories %}
-        		<li>{{categorie.libelle}}</li>
-        		<li>{{categorie.description}}</li>
-        		<li>Sous-catégorie :</li>
-        		{% for sc in categorie.sousCategorie %}
-        			<li>{{sc.libelle}}</li>
-        			<li>{{sc.description}}</li>
-        			<li>........................</li>
+      <div class="test">
+        <h2>Liste des services :</h2>
+        	<!-- <th>Service</th>
+        	<th>Auteur</th>
+        	<th>Réponse</th>
+        	<th>Evaluation Auteur</th>
+        	<th>Evaluation Réponse</th> -->
+        	{% for service in services %}
+        	<div>
+        		<h3>{{service.titre}}</h3>
+        		<p>{{service.description}}</p>
+        		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
+        		<p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+        		<h4>Les Réponses :</h4>
+        		<ul>
+        		{% for reponse in service.reponses %}
+        		<li>
+        			<h4>Réponse de {{reponse.inscrit.username}}</h4>
+        			<p>{{reponse.dateRendezVous|date("m/d/Y")}}</p>
+        		</li>
         		{% endfor %}
-        		<p>_ _ _ _ _ _ _ _ _ _ _ _ _ _ </p>
+        		</ul>        		
+        	</div>
         	{% endfor %}
       </div>
-    <div class="presentationLieu">
-      <h2>Cartes interactive !</h2>
-      <p>Ceci est une carte de la ville !</p>
+      <div class="test">
+        <h2>Liste des utilisateurs :</h2>
+        	{% for inscrit in inscrits %}
+        	<div>
+        		<h3>{{inscrit.username}}</h3>
+        		<p>{{inscrit.nom}} {{inscrit.prenom}}</p>
+        		<h4>Ses Services :</h4>
+        		<ul>
+        		{% for service in inscrit.services %}
+        		<li>
+        			<h4>{{service.titre}}</h4>
+        			<p>{{service.description}}</p>
+        			<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+        		</li>
+        		{% endfor %}        		
+        		</ul>
+        	</div>
+        	{% endfor %}
+      </div>
     </div>
-    <div class="paragraphe3" id="googlemaps">
-    </div>
-
-  </div>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->

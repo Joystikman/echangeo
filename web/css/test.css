@@ -1,0 +1,52 @@
+/*style de test*/
+
+body{
+	margin:40px auto;
+	max-width:650px;
+	line-height:1.6;
+	font-size:18px;
+	color:#444;
+	padding:0 10px
+}
+
+
+h1,h2,h3,h4{
+	color:  #3D3D3D;
+	line-height:1.2;
+}
+
+h1{font-size: 35px;}
+h2{font-size: 30px;}
+h3{font-size: 25px;}
+h4{font-size: 20px;}
+
+/*.container{
+	padding: 5% 25%;
+	min-width: 300px;
+	height: auto;
+}*/
+
+.container h1{
+	text-align: center;
+}
+
+.test{
+	margin-bottom: 15%;
+}
+
+.test div{
+	margin-left: 30px;
+	margin-bottom: 15px;
+	padding: 0px 30px;
+	border: solid 3px #3D3D3D;	
+}
+
+
+
+.test p{
+	padding-left: 15px;
+}
+
+.test li{
+	border-bottom: solid 1px #3D3D3D;
+}

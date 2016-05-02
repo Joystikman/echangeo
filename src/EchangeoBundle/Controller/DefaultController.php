@@ -4,6 +4,9 @@ namespace EchangeoBundle\Controller;
 
 /*appel des entitées*/
 use EchangeoBundle\Entity\Categorie;
+use EchangeoBundle\Entity\Service;
+use EchangeoBundle\Entity\Reponse;
+use EchangeoBundle\Entity\Inscrit;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,12 +26,12 @@ class DefaultController extends Controller
      */
     public function testAction()
     {
-    	$docCategorie = $this->getDoctrine()->getRepository('EchangeoBundle:Categorie');
-		$categories = $docCategorie->findAll();
-		$docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
-		$sc = $docSC->findAll();
+    	$docService = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+		$services = $docService->findAll();
+		$docUser = $this->getDoctrine()->getRepository('EchangeoBundle:Inscrit');
+		$inscrits = $docUser->findAll();
         return $this->render('EchangeoBundle:Default:test.html.twig', array(
-        		"categories"=>$categories,
-        		"souscategories"=>$sc));
+        		"services"=>$services,
+        		"inscrits"=>$inscrits));
     }
 }

@@ -23,65 +23,65 @@ class Inscrit extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string", length=255)
+     * @ORM\Column(name="nom", type="string", length=255, nullable=true)
      */
     private $nom;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prenom", type="string", length=255)
+     * @ORM\Column(name="prenom", type="string", length=255, nullable=true)
      */
     private $prenom;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_de_naissance", type="date")
+     * @ORM\Column(name="date_de_naissance", type="date", nullable=true)
      */
     private $dateNaissance;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="adresse", type="string", length=255)
+     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
      */
     private $adresse;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Service", mappedBy="Inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Service", mappedBy="inscrit", cascade={"remove", "persist"})
      */
     private $services;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="Inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="inscrit", cascade={"remove", "persist"})
      */
     private $reponses;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="Inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="inscrit", cascade={"remove", "persist"})
      */
     private $conversations;
 
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Message", mappedBy="Inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="inscrit", cascade={"remove", "persist"})
      */
     private $messages;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="Inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="inscrit", cascade={"remove", "persist"})
      */
     private $evaluations;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="SuggestionCategorie", mappedBy="Inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="SuggestionCategorie", mappedBy="inscrit", cascade={"remove", "persist"})
      */
     private $suggestions;
 
@@ -305,10 +305,10 @@ class Inscrit extends BaseUser
     /**
      * Add messages
      *
-     * @param \EchangeoBundle\Entity\Massage $messages
+     * @param \EchangeoBundle\Entity\Message $messages
      * @return Inscrit
      */
-    public function addMessage(\EchangeoBundle\Entity\Massage $messages)
+    public function addMessage(\EchangeoBundle\Entity\Message $messages)
     {
         $this->messages[] = $messages;
 
@@ -318,9 +318,9 @@ class Inscrit extends BaseUser
     /**
      * Remove messages
      *
-     * @param \EchangeoBundle\Entity\Massage $messages
+     * @param \EchangeoBundle\Entity\Message $messages
      */
-    public function removeMessage(\EchangeoBundle\Entity\Massage $messages)
+    public function removeMessage(\EchangeoBundle\Entity\Message $messages)
     {
         $this->messages->removeElement($messages);
     }

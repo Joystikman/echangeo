@@ -23,7 +23,7 @@ class Conversation
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="Reponse", mappedBy="Inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToOne(targetEntity="Reponse", mappedBy="conversation", cascade={"remove", "persist"})
      */
     private $reponse;
 

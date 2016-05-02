@@ -88,7 +88,7 @@ class Service
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="Service", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="service", cascade={"remove", "persist"})
      */
     private $reponses;
 

@@ -1,2 +1,83 @@
-Hello World!
-coucou toi !
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Echangeo</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="{{ asset('css/index.css') }}" rel="stylesheet">
+
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body onload="getLocation()">
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+  	<div class="en-tete">
+  		<h1>Echangeo</h1>
+  		<div id="carte"></div>
+  		<input></input>
+  	</div>
+    <div class="annonces">
+    </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+<script type="text/javascript">
+	function getLocation() {
+		console.log("debut getLocation");
+	    if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(showPosition, showError);
+	    } else {
+	        console.log("Geolocation is not supported by this browser.");
+	    }
+	}
+
+	function showPosition(position) {
+		console.log("debut showPosition");
+	    var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+	    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+	    +latlon+"&zoom=14&size=1000x1000&sensor=false";
+	    document.getElementById("carte").innerHTML = "<img src='"+img_url+"'>";
+	}
+
+	function showError(error) {
+		console.log("debut showError");
+	    switch(error.code) {
+	        case error.PERMISSION_DENIED:
+	            console.log("User denied the request for Geolocation.")
+	            break;
+	        case error.POSITION_UNAVAILABLE:
+	            console.log("Location information is unavailable.")
+	            break;
+	        case error.TIMEOUT:
+	            console.log("The request to get user location timed out.")
+	            break;
+	        case error.UNKNOWN_ERROR:
+	            console.log("An unknown error occurred.")
+	            break;
+	    }
+	}
+</script>
+</html>

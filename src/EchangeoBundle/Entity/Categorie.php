@@ -40,7 +40,7 @@ class Categorie
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="SousCategorie", mappedBy="Categorie", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="SousCategorie", mappedBy="categorie", cascade={"remove", "persist"})
      */
     private $sousCategorie;
 
