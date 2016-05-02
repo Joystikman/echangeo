@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Test Echangeo</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="{{ asset('css/test.css') }}" rel="stylesheet">
+
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+  	<div class="en-tete">
+  		<h1>Echangeo-test</h1>
+  	</div>
+      <div class="test">
+        <h2>Liste des services :</h2>
+        	<!-- <th>Service</th>
+        	<th>Auteur</th>
+        	<th>Réponse</th>
+        	<th>Evaluation Auteur</th>
+        	<th>Evaluation Réponse</th> -->
+        	{% for service in services %}
+        	<div>
+        		<h3>{{service.titre}}</h3>
+        		<p>{{service.description}}</p>
+        		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
+        		<p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+        		<h4>Les Réponses :</h4>
+        		<ul>
+        		{% for reponse in service.reponses %}
+        		<li>
+        			<h4>Réponse de {{reponse.inscrit.username}}</h4>
+        			<p>{{reponse.dateRendezVous|date("m/d/Y")}}</p>
+        		</li>
+        		{% endfor %}
+        		</ul>        		
+        	</div>
+        	{% endfor %}
+      </div>
+      <div class="test">
+        <h2>Liste des utilisateurs :</h2>
+        	{% for inscrit in inscrits %}
+        	<div>
+        		<h3>{{inscrit.username}}</h3>
+        		<p>{{inscrit.nom}} {{inscrit.prenom}}</p>
+        		<h4>Ses Services :</h4>
+        		<ul>
+        		{% for service in inscrit.services %}
+        		<li>
+        			<h4>{{service.titre}}</h4>
+        			<p>{{service.description}}</p>
+        			<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+        		</li>
+        		{% endfor %}        		
+        		</ul>
+        	</div>
+        	{% endfor %}
+      </div>
+    </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript"> 
+  // The latitude and longitude of your business / place
+  var p = [47.8451434, 1.9396573];
+  /*navigator.geolocation.getCurrentPosition(showGoogleMaps); */
+
+  function showGoogleMaps(position) {
+
+  	console.log(position);
+
+  	if(typeof position.coords != 'undefined'){
+      var latLng = new google.maps.LatLng(p[0], p[1]);
+  	}
+  	else{   
+      var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+   	}
+      var mapOptions = {
+          zoom: 16, // initialize zoom level - the max value is 21
+          streetViewControl: false, // hide the yellow Street View pegman
+          scaleControl: true, // allow users to zoom the Google Map
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: latLng
+      };
+   
+      map = new google.maps.Map(document.getElementById('googlemaps'),
+          mapOptions);
+   
+      // Show the default red marker at the location
+      marker = new google.maps.Marker({
+          position: latLng,
+          map: map,
+          draggable: false,
+          animation: google.maps.Animation.DROP
+      });
+  }
+   
+  /*google.maps.event.addDomListener(window, 'load', showGoogleMaps);*/
+</script>
+</html>
