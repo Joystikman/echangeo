@@ -1,0 +1,57 @@
+/*CSS page Recherche*/
+
+.container{
+	position: relative;
+ 	width: 100%;
+ 	/*max-width: 960px;*/
+  	margin: 0 auto;
+  	padding: 0 0px;
+  	box-sizing: border-box;
+}
+
+header {
+	text-align: center;
+	background-color: #FFFFFF;
+	color: #E3C32E;
+}
+
+nav{
+	text-align: center;
+	padding: 20px 10px;
+	margin: 10px 0px;
+	border-top: 2px solid #808080;
+	border-bottom: 2px solid #808080;
+}
+
+.colonnes{
+	width: 100%;
+ 	float: left;
+ 	box-sizing: border-box;
+}
+
+.selectCat {
+	width: 30%;
+	min-width: 100px;
+	border: 3px solid #808080;
+	padding: 20px;
+	z-index: 10;
+	/*float: left;
+	margin: 30px 0px;
+	max-width: 500px;
+	height: auto;
+	padding: 20px;
+	background-color: #FFFFFF;
+	border-top: 10px solid #78BF4C;*/
+}
+
+.carte{
+	width: 70%;
+	background-color: #E1E1E1;/*#E1E1E1; #A5FF68; #284E88;*/
+	color: #000000;
+	z-index: 0;
+}
+
+.carte div{
+	padding: 20px;
+	border-bottom: 2px solid #808080;
+}

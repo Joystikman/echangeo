@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Echangeo</title>
+  <title>Echangeo-Recherche</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -19,7 +19,7 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="{{ asset('css/index.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/recherche.css') }}" rel="stylesheet">
   <link href="{{ asset('css/normalize.css') }}" rel="stylesheet">
 
 
@@ -28,17 +28,28 @@
   <link rel="icon" type="image/png" href="images/favicon.png">
 
 </head>
-<body onload="getLocation()">
+<body onload="showGoogleMaps()">
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
-  	<div id="map" class="headermap">
+  	<header>
   		<h1>Echangeo</h1>
   		<div></div>
-  		<a href="{{ path('recherche_service') }}">voir les annonces</a>
+  	</header>
+  	<nav>
+  		<input> Recherche</input>
+  	</nav>
+  	<div class="colonnes selectCat">
+  		<select>
+  			{% for categorie in categories %}	
+  				<option>{{categorie.libelle}}</option>
+  			{% endfor %}
+  		</select>
   	</div>
-    <div class="annonces">
+    <div class="colonnes carte">
+    	<h2>Les derniers services ajouté : </h2>
+  		<a href="{{ path('getAllServices') }}">Voir tous les services</a>
     	{% for service in services %}
         	<div>
         		<h3>{{service.titre}}</h3>
@@ -48,56 +59,44 @@
         	</div>
         {% endfor %}
     </div>
+    <!-- <div class="carte" id="googlemaps"> -->
    </div>	
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
-<script type="text/javascript">
-	function getLocation() {
-		console.log("debut getLocation");
-	    if (navigator.geolocation) {
-	    	/*action par defaut*/
-			console.log("carte par défaut - Paris");
-			var pos = "48.854934,2.347636";
-			var img_deft = "http://maps.googleapis.com/maps/api/staticmap?center="
-	    	+pos+"&zoom=14&size=1000x1000&sensor=false";
-	    	var myElement = document.getElementById("map");
-			myElement.style.backgroundImage = "url("+img_deft+")";
-			/*affichage de la carte de l'utilisateur*/
-			console.log("Appel de la fonction d'acces à la position gps");
-	        navigator.geolocation.getCurrentPosition(showPosition, showError);
-	    } else {
-	        console.log("Geolocation is not supported by this browser.");
-	    }
-	}
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+<script type="text/javascript"> 
+  // The latitude and longitude of your business / place
+  var position = [48.854934, 2.347636];
+   
+  function showGoogleMaps() {
 
-	function showPosition(position) {
-		console.log("debut showPosition");
-	    var latlon = position.coords.latitude + "," + position.coords.longitude;
-	    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
-	    +latlon+"&zoom=14&size=1000x1000&sensor=false";/*
-	    document.getElementById("carte").innerHTML = "<img src='"+img_url+"'>";*/
-	    var myElement = document.getElementById("map");
-		myElement.style.backgroundImage = "url("+img_url+")";
-	}
-
-	function showError(error) {
-		console.log("debut showError");
-	    switch(error.code) {
-	        case error.PERMISSION_DENIED:
-	            console.log("User denied the request for Geolocation.")
-	            break;
-	        case error.POSITION_UNAVAILABLE:
-	            console.log("Location information is unavailable.")
-	            break;
-	        case error.TIMEOUT:
-	            console.log("The request to get user location timed out.")
-	            break;
-	        case error.UNKNOWN_ERROR:
-	            console.log("An unknown error occurred.")
-	            break;
-	    }
-	}
+  	console.log("start affichage de la carte");
+   
+      var latLng = new google.maps.LatLng(position[0], position[1]);
+   
+      var mapOptions = {
+          zoom: 16, // initialize zoom level - the max value is 21
+          streetViewControl: false, // hide the yellow Street View pegman
+          scaleControl: true, // allow users to zoom the Google Map
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: latLng
+      };
+   
+      map = new google.maps.Map(document.getElementById('googlemaps'),
+          mapOptions);
+   
+      // Show the default red marker at the location
+      marker = new google.maps.Marker({
+          position: latLng,
+          map: map,
+          draggable: true,
+          animation: google.maps.Animation.DROP
+      });
+  	console.log("fin affichage de la carte");
+  }
+   
+  /*google.maps.event.addDomListener(window, 'load', showGoogleMaps);*/
 </script>
 </html>

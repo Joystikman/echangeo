@@ -13,16 +13,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class DefaultController extends Controller
 {
+/*FONCTIONS DE TEST*/
+    /*@Security("has_role('ROLE_ADMIN')")*/
     /**
-     * @Route("/")
-     */
-    public function indexAction()
-    {
-        return $this->render('EchangeoBundle:Default:index.html.twig');
-    }
-
-    /**
-     * @Route("/test")
+     * @Route("/test",
+              name="test")
      */
     public function testAction()
     {
@@ -34,4 +29,45 @@ class DefaultController extends Controller
         		"services"=>$services,
         		"inscrits"=>$inscrits));
     }
+    
+/*ACCUEIL*/ 
+
+    /**
+     * Page d'accueil
+     * @Route("/",
+              name="index")
+     */
+    public function indexAction()
+    {
+        $docService = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        $services = $docService->findAll();
+        return $this->render('EchangeoBundle:Default:index.html.twig',array(
+                "services"=>$services)
+                );
+    }
+
+/*RECHERCHE DE SERVICES*/
+    /**
+     * Page de recherche de service
+     * @Route("/recherche",
+              name="recherche_service")
+     */
+    public function rechercheAction()
+    {
+    /*On récupère les categories*/
+        $docCategories = $this->getDoctrine()->getRepository('EchangeoBundle:Categorie');
+        $categories = $docCategories->findAll();
+    /*On recupère les derniers services*/
+        $em = $this->getDoctrine()->getEntityManager();
+        $query = $em->createQuery(
+        'SELECT s FROM EchangeoBundle:Service s ORDER BY s.id DESC');
+        $services = $query->setMaxResults(4)->getResult();
+    /*rendu*/
+        return $this->render('EchangeoBundle:Default:recherche.html.twig',array(
+                "categories"=>$categories,
+                "services"=>$services)
+                );
+    }
+
+
 }
