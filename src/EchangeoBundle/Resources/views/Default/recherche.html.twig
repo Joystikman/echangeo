@@ -1,37 +1,15 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+{% extends 'EchangeoBundle:Default:base.html.twig' %}
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>Echangeo-Recherche</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
+{% block title %}Recherche{% endblock %}
 
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="{{ asset('css/recherche.css') }}" rel="stylesheet">
-  <link href="{{ asset('css/normalize.css') }}" rel="stylesheet">
+{% block css %}
+	<link href="{{ asset('css/recherche.css') }}" rel="stylesheet">
+{% endblock css %}
 
 
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="images/favicon.png">
 
-</head>
-<body onload="showGoogleMaps()">
 
-  <!-- Primary Page Layout
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+{% block content %}
   <div class="container">
   	<header>
   		<h1>Echangeo</h1>
@@ -41,7 +19,7 @@
   		<input> Recherche</input>
   	</nav>
   	<div class="colonnes selectCat">
-  		<select>
+  		<select onchange="displaySousCategorie.call()">
   			{% for categorie in categories %}	
   				<option>{{categorie.libelle}}</option>
   			{% endfor %}
@@ -61,42 +39,46 @@
     </div>
     <!-- <div class="carte" id="googlemaps"> -->
    </div>	
+{% endblock content %}
 
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-</body>
-<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
-<script type="text/javascript"> 
-  // The latitude and longitude of your business / place
-  var position = [48.854934, 2.347636];
-   
-  function showGoogleMaps() {
+{% block footer %}{{ parent() }}{% endblock footer %}
 
-  	console.log("start affichage de la carte");
-   
-      var latLng = new google.maps.LatLng(position[0], position[1]);
-   
-      var mapOptions = {
-          zoom: 16, // initialize zoom level - the max value is 21
-          streetViewControl: false, // hide the yellow Street View pegman
-          scaleControl: true, // allow users to zoom the Google Map
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          center: latLng
-      };
-   
-      map = new google.maps.Map(document.getElementById('googlemaps'),
-          mapOptions);
-   
-      // Show the default red marker at the location
-      marker = new google.maps.Marker({
-          position: latLng,
-          map: map,
-          draggable: true,
-          animation: google.maps.Animation.DROP
-      });
-  	console.log("fin affichage de la carte");
-  }
-   
-  /*google.maps.event.addDomListener(window, 'load', showGoogleMaps);*/
-</script>
-</html>
+{% block script %}
+	<script src="{{ asset('script/recherche.js') }}"></script> 
+	<!-- fonction googleMaps -->
+	<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+	<script type="text/javascript"> 
+	  // The latitude and longitude of your business / place
+	  var position = [48.854934, 2.347636];
+	   
+	  function showGoogleMaps() {
+
+	  	console.log("start affichage de la carte");
+	   
+	      var latLng = new google.maps.LatLng(position[0], position[1]);
+	   
+	      var mapOptions = {
+	          zoom: 16, // initialize zoom level - the max value is 21
+	          streetViewControl: false, // hide the yellow Street View pegman
+	          scaleControl: true, // allow users to zoom the Google Map
+	          mapTypeId: google.maps.MapTypeId.ROADMAP,
+	          center: latLng
+	      };
+	   
+	      map = new google.maps.Map(document.getElementById('googlemaps'),
+	          mapOptions);
+	   
+	      // Show the default red marker at the location
+	      marker = new google.maps.Marker({
+	          position: latLng,
+	          map: map,
+	          draggable: true,
+	          animation: google.maps.Animation.DROP
+	      });
+	  	console.log("fin affichage de la carte");
+	  }
+	   
+	  /*google.maps.event.addDomListener(window, 'load', showGoogleMaps);*/
+	</script>
+{% endblock script %}
+

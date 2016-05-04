@@ -29,9 +29,8 @@ class ApiController extends Controller
     /*lien vers la fonction {{ path('nomFonction',{ 'nomParam': entite.attribut }) }}*/
     public function getSousCategories($id)
     {
-        $docService = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-        $services = $docService->findAll();
-        print_r($services);
-        return $services;
+        $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
+        $sousCategories = $docSC->findBy(array('categorie' => $id), array(), null, null);
+        return $sousCategories;
     }
 }

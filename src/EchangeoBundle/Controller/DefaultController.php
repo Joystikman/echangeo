@@ -58,10 +58,8 @@ class DefaultController extends Controller
         $docCategories = $this->getDoctrine()->getRepository('EchangeoBundle:Categorie');
         $categories = $docCategories->findAll();
     /*On recupère les derniers services*/
-        $em = $this->getDoctrine()->getEntityManager();
-        $query = $em->createQuery(
-        'SELECT s FROM EchangeoBundle:Service s ORDER BY s.id DESC');
-        $services = $query->setMaxResults(4)->getResult();
+        $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        $services = $docServices->findBy(array(), array('id' => 'desc'), 4, null);
     /*rendu*/
         return $this->render('EchangeoBundle:Default:recherche.html.twig',array(
                 "categories"=>$categories,

@@ -1,37 +1,11 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+{% extends 'EchangeoBundle:Default:base.html.twig' %}
+{% block title %}Accueil{% endblock %}
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>Echangeo</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+{% block css %}
   <link href="{{ asset('css/index.css') }}" rel="stylesheet">
-  <link href="{{ asset('css/normalize.css') }}" rel="stylesheet">
+{% endblock css %}
 
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="images/favicon.png">
-
-</head>
-<body onload="getLocation()">
-
-  <!-- Primary Page Layout
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+{% block content %}
   <div class="container">
   	<div id="map" class="headermap">
   		<h1>Echangeo</h1>
@@ -40,64 +14,64 @@
   	</div>
     <div class="annonces">
     	{% for service in services %}
-        	<div>
-        		<h3>{{service.titre}}</h3>
-        		<p>{{service.description}}</p>
-        		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
-        		<p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
-        	</div>
-        {% endfor %}
-    </div>
-   </div>	
+      	<div>
+       		<h3>{{service.titre}}</h3>
+       		<p>{{service.description}}</p>
+       		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
+       		<p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+       	</div>
+      {% endfor %}
+  	</div>
+  </div>	
+{% endblock content %}
 
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-</body>
-<script type="text/javascript">
-	function getLocation() {
-		console.log("debut getLocation");
-	    if (navigator.geolocation) {
-	    	/*action par defaut*/
-			console.log("carte par défaut - Paris");
-			var pos = "48.854934,2.347636";
-			var img_deft = "http://maps.googleapis.com/maps/api/staticmap?center="
-	    	+pos+"&zoom=14&size=1000x1000&sensor=false";
-	    	var myElement = document.getElementById("map");
-			myElement.style.backgroundImage = "url("+img_deft+")";
-			/*affichage de la carte de l'utilisateur*/
-			console.log("Appel de la fonction d'acces à la position gps");
-	        navigator.geolocation.getCurrentPosition(showPosition, showError);
-	    } else {
-	        console.log("Geolocation is not supported by this browser.");
-	    }
-	}
+{% block script %}
+	<script type="text/javascript">
+		function getLocation() {
+			console.log("debut getLocation");
+		    if (navigator.geolocation) {
+		    	/*action par defaut*/
+				console.log("carte par défaut - Paris");
+				var pos = "48.854934,2.347636";
+				var img_deft = "http://maps.googleapis.com/maps/api/staticmap?center="
+		    	+pos+"&zoom=14&size=1000x1000&sensor=false";
+		    	var myElement = document.getElementById("map");
+				myElement.style.backgroundImage = "url("+img_deft+")";
+				/*affichage de la carte de l'utilisateur*/
+				console.log("Appel de la fonction d'acces à la position gps");
+		        navigator.geolocation.getCurrentPosition(showPosition, showError);
+		    } else {
+		        console.log("Geolocation is not supported by this browser.");
+		    }
+		}
 
-	function showPosition(position) {
-		console.log("debut showPosition");
-	    var latlon = position.coords.latitude + "," + position.coords.longitude;
-	    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
-	    +latlon+"&zoom=14&size=1000x1000&sensor=false";/*
-	    document.getElementById("carte").innerHTML = "<img src='"+img_url+"'>";*/
-	    var myElement = document.getElementById("map");
-		myElement.style.backgroundImage = "url("+img_url+")";
-	}
+		function showPosition(position) {
+			console.log("debut showPosition");
+		    var latlon = position.coords.latitude + "," + position.coords.longitude;
+		    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+		    +latlon+"&zoom=14&size=1000x1000&sensor=false";/*
+		    document.getElementById("carte").innerHTML = "<img src='"+img_url+"'>";*/
+		    var myElement = document.getElementById("map");
+			myElement.style.backgroundImage = "url("+img_url+")";
+		}
 
-	function showError(error) {
-		console.log("debut showError");
-	    switch(error.code) {
-	        case error.PERMISSION_DENIED:
-	            console.log("User denied the request for Geolocation.")
-	            break;
-	        case error.POSITION_UNAVAILABLE:
-	            console.log("Location information is unavailable.")
-	            break;
-	        case error.TIMEOUT:
-	            console.log("The request to get user location timed out.")
-	            break;
-	        case error.UNKNOWN_ERROR:
-	            console.log("An unknown error occurred.")
-	            break;
-	    }
-	}
-</script>
-</html>
+		function showError(error) {
+			console.log("debut showError");
+		    switch(error.code) {
+		        case error.PERMISSION_DENIED:
+		            console.log("User denied the request for Geolocation.")
+		            break;
+		        case error.POSITION_UNAVAILABLE:
+		            console.log("Location information is unavailable.")
+		            break;
+		        case error.TIMEOUT:
+		            console.log("The request to get user location timed out.")
+		            break;
+		        case error.UNKNOWN_ERROR:
+		            console.log("An unknown error occurred.")
+		            break;
+		    }
+		}
+		window.onload = getLocation;
+	</script>
+{% endblock script %}
