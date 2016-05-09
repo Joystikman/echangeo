@@ -19,9 +19,9 @@
   		<input> Recherche</input>
   	</nav>
   	<div class="colonnes selectCat">
-  		<select onchange="displaySousCategorie.call()">
+  		<select onchange="displaySousCategorie.call(this,event)">
   			{% for categorie in categories %}	
-  				<option>{{categorie.libelle}}</option>
+  				<option value="{{categorie.id}}">{{categorie.libelle}}</option>
   			{% endfor %}
   		</select>
   	</div>
@@ -44,7 +44,9 @@
 {% block footer %}{{ parent() }}{% endblock footer %}
 
 {% block script %}
-	<script src="{{ asset('script/recherche.js') }}"></script> 
+	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+	<!-- include fonction de recherche	 -->
+	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}
 	<!-- fonction googleMaps -->
 	<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
 	<script type="text/javascript"> 

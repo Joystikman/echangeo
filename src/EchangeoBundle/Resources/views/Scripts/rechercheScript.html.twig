@@ -1,0 +1,16 @@
+<!-- /* =======================================================
+ * Ensembles des fonction utile à la recherche de services
+ * par Guiraud Maxime
+ * =======================================================*/ -->
+<script type="text/javascript">
+	function displaySousCategorie(event) {
+		console.log("display sous categorie | numéro catégorie choisie :");
+		var id = this.options[this.selectedIndex].value;
+		console.log(id);
+		var url = "{{ path('getSousCategories',{ 'id': "idPlaceholder"}) }}";
+		url = url.replace("idPlaceholder", id);
+		console.log("url :");
+		console.log(url);
+	}
+</script>
+
