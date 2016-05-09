@@ -184,69 +184,26 @@ class Inscrit extends BaseUser
     }
 
     /**
-     * Add service
+     * Add services
      *
-     * @param \EchangeoBundle\Entity\Service $service
+     * @param \EchangeoBundle\Entity\Service $services
      * @return Inscrit
      */
-    public function addService(\EchangeoBundle\Entity\Service $service)
+    public function addService(\EchangeoBundle\Entity\Service $services)
     {
-        $this->service[] = $service;
+        $this->services[] = $services;
 
         return $this;
     }
 
     /**
-     * Remove service
+     * Remove services
      *
-     * @param \EchangeoBundle\Entity\Service $service
+     * @param \EchangeoBundle\Entity\Service $services
      */
-    public function removeService(\EchangeoBundle\Entity\Service $service)
+    public function removeService(\EchangeoBundle\Entity\Service $services)
     {
-        $this->service->removeElement($service);
-    }
-
-    /**
-     * Get service
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    /**
-     * Add reponse
-     *
-     * @param \EchangeoBundle\Entity\Reponse $reponse
-     * @return Inscrit
-     */
-    public function addReponse(\EchangeoBundle\Entity\Reponse $reponse)
-    {
-        $this->reponse[] = $reponse;
-
-        return $this;
-    }
-
-    /**
-     * Remove reponse
-     *
-     * @param \EchangeoBundle\Entity\Reponse $reponse
-     */
-    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponse)
-    {
-        $this->reponse->removeElement($reponse);
-    }
-
-    /**
-     * Get reponse
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getReponse()
-    {
-        return $this->reponse;
+        $this->services->removeElement($services);
     }
 
     /**
@@ -257,6 +214,29 @@ class Inscrit extends BaseUser
     public function getServices()
     {
         return $this->services;
+    }
+
+    /**
+     * Add reponses
+     *
+     * @param \EchangeoBundle\Entity\Reponse $reponses
+     * @return Inscrit
+     */
+    public function addReponse(\EchangeoBundle\Entity\Reponse $reponses)
+    {
+        $this->reponses[] = $reponses;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponses
+     *
+     * @param \EchangeoBundle\Entity\Reponse $reponses
+     */
+    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponses)
+    {
+        $this->reponses->removeElement($reponses);
     }
 
     /**

@@ -42,7 +42,7 @@ class Categorie
      *
      * @ORM\OneToMany(targetEntity="SousCategorie", mappedBy="categorie", cascade={"remove", "persist"})
      */
-    private $sousCategorie;
+    private $sousCategories;
 
 
     /**
@@ -105,39 +105,39 @@ class Categorie
      */
     public function __construct()
     {
-        $this->sousCategorie = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sousCategories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add sousCategorie
+     * Add sousCategories
      *
-     * @param \EchangeoBundle\Entity\SousCategorie $sousCategorie
+     * @param \EchangeoBundle\Entity\SousCategorie $sousCategories
      * @return Categorie
      */
-    public function addSousCategorie(\EchangeoBundle\Entity\SousCategorie $sousCategorie)
+    public function addSousCategory(\EchangeoBundle\Entity\SousCategorie $sousCategories)
     {
-        $this->sousCategorie[] = $sousCategorie;
+        $this->sousCategories[] = $sousCategories;
 
         return $this;
     }
 
     /**
-     * Remove sousCategorie
+     * Remove sousCategories
      *
-     * @param \EchangeoBundle\Entity\SousCategorie $sousCategorie
+     * @param \EchangeoBundle\Entity\SousCategorie $sousCategories
      */
-    public function removeSousCategorie(\EchangeoBundle\Entity\SousCategorie $sousCategorie)
+    public function removeSousCategory(\EchangeoBundle\Entity\SousCategorie $sousCategories)
     {
-        $this->sousCategorie->removeElement($sousCategorie);
+        $this->sousCategories->removeElement($sousCategories);
     }
 
     /**
-     * Get sousCategorie
+     * Get sousCategories
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSousCategorie()
+    public function getSousCategories()
     {
-        return $this->sousCategorie;
+        return $this->sousCategories;
     }
 }

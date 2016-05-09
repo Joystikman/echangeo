@@ -19,13 +19,16 @@
   		<input> Recherche</input>
   	</nav>
   	<div class="colonnes selectCat">
+  		<div id="select1">
   		<select onchange="displaySousCategorie.call(this,event)">
   			{% for categorie in categories %}	
   				<option value="{{categorie.id}}">{{categorie.libelle}}</option>
   			{% endfor %}
   		</select>
+  		</div>
+  		<div id="select2"></div>
   	</div>
-    <div class="colonnes carte">
+    <div id="services" class="colonnes carte">
     	<h2>Les derniers services ajouté : </h2>
   		<a href="{{ path('getAllServices') }}">Voir tous les services</a>
     	{% for service in services %}
@@ -48,7 +51,7 @@
 	<!-- include fonction de recherche	 -->
 	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}
 	<!-- fonction googleMaps -->
-	<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+	<!--<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> -->
 	<script type="text/javascript"> 
 	  // The latitude and longitude of your business / place
 	  var position = [48.854934, 2.347636];

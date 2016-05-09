@@ -3,14 +3,44 @@
  * par Guiraud Maxime
  * =======================================================*/ -->
 <script type="text/javascript">
+	/*scripts de recherche*/
 	function displaySousCategorie(event) {
+		/*récupération de la catégorie choisie*/
 		console.log("display sous categorie | numéro catégorie choisie :");
 		var id = this.options[this.selectedIndex].value;
 		console.log(id);
-		var url = "{{ path('getSousCategories',{ 'id': "idPlaceholder"}) }}";
+		/*création de l'url*/ 
+		var url = "{{ path('getSousCategories',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 		url = url.replace("idPlaceholder", id);
 		console.log("url :");
 		console.log(url);
+		/*fonction ajax*/
+		$("#services").empty();	
+		$.ajax({
+			url: url,
+			type: "GET",
+			dataType: "json",
+			success: function(data){
+				console.log('test get data');
+				console.log(data);
+				$('#select2').empty();
+				$('#select2').append($("<h2>").text("ça marche"));
+				/*for(var i=0; i<data.length; i++){
+					$('#sondages')
+					.append($('<li id="itemSondage">')
+					.append($('<a data-toggle="tab">')
+						.text(data.sondages[i].name)
+						.append($('<span class="glyphicon glyphicon-pencil pull-right"></span>')
+						.on("click", data.sondages[i] , editSondage)))
+						.on("click", data.sondages[i], questions)
+						);
+					}*/
+				},
+				error: function (req, status, err){
+					$("#sondages").html("<b>Impossible de récuperer les sondages</b>");
+				}
+			});
+
 	}
 </script>
 

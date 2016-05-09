@@ -99,6 +99,7 @@ class SuggestionCategorie
         return $this->description;
     }
 
+
     /**
      * Set inscrit
      *
