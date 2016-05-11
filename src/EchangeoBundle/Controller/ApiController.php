@@ -56,14 +56,39 @@ class ApiController extends Controller
         $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
         $sousCategories = $docSC->findBy(array('categorie' => $id), array(), null, null);
         /*passage en JSON avec Serializer*/
-        /*$encoder = new JsonEncoder();
-		$normalizer = new GetSetMethodNormalizer();
-		$normalizer->setIgnoredAttributes(array('match'));
-		$serializer = new Serializer(array($normalizer), array($encoder));
-        $jsonContent = $serializer->serialize($sousCategories, 'json');*/
-        /*Avec JMSSerializer*/
         $serializer = $this->get('serializer');
 		$jsonContent = $serializer->serialize($sousCategories, 'json');
+
+        return new Response(
+            $jsonContent,
+            200,
+            array('Content-Type' => 'application/json')
+        );
+    }
+
+    /**
+     * Fonction d'obtention des services d'une sous-categories choisie
+     * @Route("/api/serviceSousCategorie/{id}.{_format}",
+     		  defaults = {"_format"="json"},
+     		  requirements = { "_format" = "html|json" },
+              name="getServicesSousCategories",
+     *  )
+     * @Method({"GET"})
+     */
+    public function getServicesSousCategories($id)
+    {
+    	/*Requete*/
+        $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        /*Parse des arguments*/
+        $ids = explode(",", $id);
+        /*Requetes*/
+        $services = array();
+        foreach ($ids as $categorie ) {        	
+        	array_push($services, $docS->findBy(array('sousCategorie' => $categorie), array(), null, null));
+        }
+        /*passage en JSON avec Serializer*/
+        $serializer = $this->get('serializer');
+		$jsonContent = $serializer->serialize($services, 'json');
 
         return new Response(
             $jsonContent,
