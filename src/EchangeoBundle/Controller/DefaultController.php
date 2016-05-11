@@ -39,8 +39,8 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $docService = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-        $services = $docService->findAll();
+        $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        $services = $docServices->findBy(array(), array('id' => 'desc'), 4, null);
         return $this->render('EchangeoBundle:Default:index.html.twig',array(
                 "services"=>$services)
                 );

@@ -6,72 +6,61 @@
 {% endblock css %}
 
 {% block content %}
-  <div class="container">
-  	<div id="map" class="headermap">
-  		<h1>Echangeo</h1>
-  		<div></div>
-  		<a href="{{ path('recherche_service') }}">voir les annonces</a>
-  	</div>
+<div class="container">
+  <div id="googlemaps" class="googlemaps"></div>
+  <h1 class="titre">Echangeo</h1>
+  <div class="link"><a href="{{ path('recherche_service') }}" class="link">voir les annonces</a></div>
+<!-- dernières annonces -->
+  <div class="main">
+    <h2>Dernières annonces passées :</h2>
     <div class="annonces">
-    	{% for service in services %}
-      	<div>
-       		<h3>{{service.titre}}</h3>
-       		<p>{{service.description}}</p>
-       		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
-       		<p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
-       	</div>
+      {% for service in services %}
+        <div class="annonce">
+          <h3>{{service.titre}}</h3>
+          <p>{{service.description}}</p>
+          <p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>          
+          <p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+        </div>
       {% endfor %}
-  	</div>
-  </div>	
+    </div>
+  </div>
+</div>  
 {% endblock content %}
 
 {% block script %}
-	<script type="text/javascript">
-		function getLocation() {
-			console.log("debut getLocation");
-		    if (navigator.geolocation) {
-		    	/*action par defaut*/
-				console.log("carte par défaut - Paris");
-				var pos = "48.854934,2.347636";
-				var img_deft = "http://maps.googleapis.com/maps/api/staticmap?center="
-		    	+pos+"&zoom=14&size=1000x1000&sensor=false";
-		    	var myElement = document.getElementById("map");
-				myElement.style.backgroundImage = "url("+img_deft+")";
-				/*affichage de la carte de l'utilisateur*/
-				console.log("Appel de la fonction d'acces à la position gps");
-		        navigator.geolocation.getCurrentPosition(showPosition, showError);
-		    } else {
-		        console.log("Geolocation is not supported by this browser.");
-		    }
-		}
-
-		function showPosition(position) {
-			console.log("debut showPosition");
-		    var latlon = position.coords.latitude + "," + position.coords.longitude;
-		    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
-		    +latlon+"&zoom=14&size=1000x1000&sensor=false";/*
-		    document.getElementById("carte").innerHTML = "<img src='"+img_url+"'>";*/
-		    var myElement = document.getElementById("map");
-			myElement.style.backgroundImage = "url("+img_url+")";
-		}
-
-		function showError(error) {
-			console.log("debut showError");
-		    switch(error.code) {
-		        case error.PERMISSION_DENIED:
-		            console.log("User denied the request for Geolocation.")
-		            break;
-		        case error.POSITION_UNAVAILABLE:
-		            console.log("Location information is unavailable.")
-		            break;
-		        case error.TIMEOUT:
-		            console.log("The request to get user location timed out.")
-		            break;
-		        case error.UNKNOWN_ERROR:
-		            console.log("An unknown error occurred.")
-		            break;
-		    }
-		}
-		window.onload = getLocation;
-	</script>
+<!-- Include the Google Maps API library - required for embedding maps -->
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
+   
+<script type="text/javascript">
+     
+  // The latitude and longitude of your business / place
+  var position = [48.858727, 2.344376];
+   
+  function showGoogleMapsDefaut() {
+    console.log("display map");
+     
+    var latLng = new google.maps.LatLng(position[0], position[1]);
+     
+    var mapOptions = {
+      zoom: 14, // initialize zoom level - the max value is 21
+      streetViewControl: false, // hide the yellow Street View pegman
+      scaleControl: true, // allow users to zoom the Google Map
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: latLng
+    };
+     
+    map = new google.maps.Map(document.getElementById('googlemaps'),
+        mapOptions);
+     
+    // Show the default red marker at the location
+    marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            draggable: false,
+            animation: google.maps.Animation.DROP
+    });
+  }
+  console.log("fin display map");
+  google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
+</script>
 {% endblock script %}

@@ -6,43 +6,43 @@
 	<link href="{{ asset('css/recherche.css') }}" rel="stylesheet">
 {% endblock css %}
 
-
-
-
 {% block content %}
   <div class="container">
   	<header>
-  		<h1>Echangeo</h1>
-  		<div></div>
+  		<h1 class="logo"><span>E</span></h1>
   	</header>
-  	<nav>
-  		<input> Recherche</input>
-  	</nav>
-  	<div class="colonnes selectCat">
-    	<h2>Catégories : </h2>
-  		<div id="select1">
-  		<select onchange="displaySousCategorie.call(this,event)">
-  			{% for categorie in categories %}	
-  				<option value="{{categorie.id}}">{{categorie.libelle}}</option>
-  			{% endfor %}
-  		</select>
+  	<div class="main">
+  	<!-- Block de recherche -->
+  		<div class="recherche">
+	  		<input placeholder="Recherche"></input>
+	    	<h2>Catégories : </h2>
+	  		<div id="select1">
+	  		<select onchange="displaySousCategorie.call(this,event)">
+	  			{% for categorie in categories %}	
+	  				<option value="{{categorie.id}}">{{categorie.libelle}}</option>
+	  			{% endfor %}
+	  		</select>
+	  		</div>
+	  		<div id="select2"></div>  	
   		</div>
-  		<div id="select2"></div>
-  	</div>
-    <div id="services" class="colonnes carte">
-    	<h2>Les derniers services ajouté : </h2>
-  		<a href="{{ path('getAllServices') }}">Voir tous les services</a>
-    	{% for service in services %}
-        	<div>
-        		<h3>{{service.titre}}</h3>
-        		<p>{{service.description}}</p>
-        		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
-        		<p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
-        	</div>
-        {% endfor %}
-    </div>
-    <!-- <div class="carte" id="googlemaps"> -->
-   </div>	
+  	<!-- Block Services -->
+	    <div id="services" class="services">
+	    	<h2>Les derniers services ajouté : </h2>
+	  		<a href="{{ path('getAllServices') }}">Voir tous les services</a>
+	    	{% for service in services %}
+	        	<div>
+	        		<h3>{{service.titre}}</h3>
+	        		<p>{{service.description}}</p>
+	        		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
+	        		<p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+	        	</div>
+	        {% endfor %}
+	    </div>
+	    <div class="carte">
+	    	<div id="googlemaps"></div>
+	    </div>
+  </div>	
+ </div>	
 {% endblock content %}
 
 {% block footer %}{{ parent() }}{% endblock footer %}
@@ -51,40 +51,40 @@
 	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
 	<!-- include fonction de recherche	 -->
 	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}
-	<!-- fonction googleMaps -->
-	<!--<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> -->
-	<script type="text/javascript"> 
+	
+	<!-- MAP GOOGLE -->
+	<!-- Include the Google Maps API library - required for embedding maps -->
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
+   
+	<script type="text/javascript">
+	     
 	  // The latitude and longitude of your business / place
-	  var position = [48.854934, 2.347636];
+	  var position = [48.858727, 2.344376];
 	   
-	  function showGoogleMaps() {
-
-	  	console.log("start affichage de la carte");
-	   
-	      var latLng = new google.maps.LatLng(position[0], position[1]);
-	   
-	      var mapOptions = {
-	          zoom: 16, // initialize zoom level - the max value is 21
-	          streetViewControl: false, // hide the yellow Street View pegman
-	          scaleControl: true, // allow users to zoom the Google Map
-	          mapTypeId: google.maps.MapTypeId.ROADMAP,
-	          center: latLng
-	      };
-	   
-	      map = new google.maps.Map(document.getElementById('googlemaps'),
-	          mapOptions);
-	   
-	      // Show the default red marker at the location
-	      marker = new google.maps.Marker({
-	          position: latLng,
-	          map: map,
-	          draggable: true,
-	          animation: google.maps.Animation.DROP
-	      });
-	  	console.log("fin affichage de la carte");
+	  function showGoogleMapsDefaut() {
+	    console.log("display map");
+	     
+	    var latLng = new google.maps.LatLng(position[0], position[1]);
+	     
+	    var mapOptions = {
+	      zoom: 14, // initialize zoom level - the max value is 21
+	      streetViewControl: false, // hide the yellow Street View pegman
+	      scaleControl: true, // allow users to zoom the Google Map
+	      mapTypeId: google.maps.MapTypeId.ROADMAP,
+	      center: latLng
+	    };
+	     
+	    map = new google.maps.Map(document.getElementById('googlemaps'),mapOptions);
+	     
+	    // Show the default red marker at the location
+	    marker = new google.maps.Marker({
+	            position: latLng,
+	            map: map,
+	            draggable: false,
+	            animation: google.maps.Animation.DROP
+	    });
 	  }
-	   
-	  /*google.maps.event.addDomListener(window, 'load', showGoogleMaps);*/
+	  console.log("fin display map");
+	  google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
 	</script>
 {% endblock script %}
-
