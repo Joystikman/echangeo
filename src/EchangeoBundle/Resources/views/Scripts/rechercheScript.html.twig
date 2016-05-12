@@ -1,0 +1,78 @@
+<!-- /* =======================================================
+ * Ensembles des fonction utile à la recherche de services
+ * par Guiraud Maxime
+ * =======================================================*/ -->
+<!-- exemple de checkbox -->
+<!-- <input type="checkbox" value="test"></input -->>
+<script type="text/javascript">
+	/*scripts de recherche*/
+	function displaySousCategorie(event) {
+		/*récupération de la catégorie choisie*/
+		console.log("display sous categorie | numéro catégorie choisie :");
+		var id = this.options[this.selectedIndex].value;
+		console.log(id);
+		/*création de l'url*/ 
+		var url = "{{ path('getSousCategories',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+		url = url.replace("idPlaceholder", id);
+		console.log("url :");
+		console.log(url);
+		/*fonction ajax*/
+		$("#services").empty();	
+		$.ajax({
+			url: url,
+			type: "GET",
+			dataType: "json",
+			success: function(data){
+				console.log('test get data');
+				console.log(data);
+				$('#select2').empty();
+				$('#select2').append($("<form id='formSousCategorie' method='get'>"));
+				for(var i=0; i<data.length; i++){
+					$('#formSousCategorie').append($("<h4>").text(data[i].libelle).append($("<input type='checkbox' value="+data[i].id+"  onchange='displayServices()'>")));
+					for(var j=0; j<data[i].services.length; j++){
+						$('#services').append($("<div>").append($("<h2>").text(data[i].services[j].titre)));
+					}
+				}
+			},
+			error: function (req, status, err){
+				console.log("erreur");
+				console.log(err);
+			}
+		});
+
+	}
+
+	function displayServices(){
+		console.log("activation displayServices");
+		var selectedId = [];
+		$('#formSousCategorie input:checked').each(function() {
+    		selectedId.push($(this).attr('value'));
+		});
+		console.log('liste des sousCatégorie choisie(s) :');
+		console.log(selectedId);
+		/*création de l'url*/ 
+		var url = "{{ path('getServicesSousCategories',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+		url = url.replace("idPlaceholder", selectedId);
+		console.log("url :");
+		console.log(url);
+		/*AJAX*/
+		$("#services").empty();	
+		$.ajax({
+			url: url,
+			type: "GET",
+			dataType: "json",
+			success: function(data){
+				console.log('test rqt Ajax');
+				console.log(data);
+				for(var i=0; i<data.length; i++){
+					$('#services').append($("<div>").append($("<h2>").text(data[i][0].titre)));
+				}
+			},
+			error: function (req, status, err){
+				console.log("erreur");
+				console.log(err);
+			}
+		});
+	}
+</script>
+

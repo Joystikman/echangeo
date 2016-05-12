@@ -76,6 +76,7 @@ class Message
         return $this->contenu;
     }
 
+
     /**
      * Set conversation
      *

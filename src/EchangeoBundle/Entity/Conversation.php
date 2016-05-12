@@ -23,7 +23,7 @@ class Conversation
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="Reponse", mappedBy="conversation", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="conversation", cascade={"remove", "persist"})
      */
     private $reponse;
 
@@ -53,22 +53,40 @@ class Conversation
     }
 
     /**
-     * Set reponse
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponse = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reponse
      *
      * @param \EchangeoBundle\Entity\Reponse $reponse
      * @return Conversation
      */
-    public function setReponse(\EchangeoBundle\Entity\Reponse $reponse = null)
+    public function addReponse(\EchangeoBundle\Entity\Reponse $reponse)
     {
-        $this->reponse = $reponse;
+        $this->reponse[] = $reponse;
 
         return $this;
     }
 
     /**
+     * Remove reponse
+     *
+     * @param \EchangeoBundle\Entity\Reponse $reponse
+     */
+    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponse)
+    {
+        $this->reponse->removeElement($reponse);
+    }
+
+    /**
      * Get reponse
      *
-     * @return \EchangeoBundle\Entity\Reponse 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getReponse()
     {

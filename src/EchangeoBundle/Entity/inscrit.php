@@ -62,9 +62,15 @@ class Inscrit extends BaseUser
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Conversation", mappedBy="interlocuteur1", cascade={"remove", "persist"})
      */
-    private $conversations;
+    private $conversations1;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Conversation", mappedBy="interlocuteur2", cascade={"remove", "persist"})
+     */
+    private $conversations2;
 
 
     /**
@@ -75,9 +81,15 @@ class Inscrit extends BaseUser
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="inscrit", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="inscritNotant", cascade={"remove", "persist"})
      */
-    private $evaluations;
+    private $evaluationsDonnees;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="inscritNote", cascade={"remove", "persist"})
+     */
+    private $evaluationsRecus;
 
     /**
      *
@@ -184,69 +196,26 @@ class Inscrit extends BaseUser
     }
 
     /**
-     * Add service
+     * Add services
      *
-     * @param \EchangeoBundle\Entity\Service $service
+     * @param \EchangeoBundle\Entity\Service $services
      * @return Inscrit
      */
-    public function addService(\EchangeoBundle\Entity\Service $service)
+    public function addService(\EchangeoBundle\Entity\Service $services)
     {
-        $this->service[] = $service;
+        $this->services[] = $services;
 
         return $this;
     }
 
     /**
-     * Remove service
+     * Remove services
      *
-     * @param \EchangeoBundle\Entity\Service $service
+     * @param \EchangeoBundle\Entity\Service $services
      */
-    public function removeService(\EchangeoBundle\Entity\Service $service)
+    public function removeService(\EchangeoBundle\Entity\Service $services)
     {
-        $this->service->removeElement($service);
-    }
-
-    /**
-     * Get service
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    /**
-     * Add reponse
-     *
-     * @param \EchangeoBundle\Entity\Reponse $reponse
-     * @return Inscrit
-     */
-    public function addReponse(\EchangeoBundle\Entity\Reponse $reponse)
-    {
-        $this->reponse[] = $reponse;
-
-        return $this;
-    }
-
-    /**
-     * Remove reponse
-     *
-     * @param \EchangeoBundle\Entity\Reponse $reponse
-     */
-    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponse)
-    {
-        $this->reponse->removeElement($reponse);
-    }
-
-    /**
-     * Get reponse
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getReponse()
-    {
-        return $this->reponse;
+        $this->services->removeElement($services);
     }
 
     /**
@@ -260,6 +229,29 @@ class Inscrit extends BaseUser
     }
 
     /**
+     * Add reponses
+     *
+     * @param \EchangeoBundle\Entity\Reponse $reponses
+     * @return Inscrit
+     */
+    public function addReponse(\EchangeoBundle\Entity\Reponse $reponses)
+    {
+        $this->reponses[] = $reponses;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponses
+     *
+     * @param \EchangeoBundle\Entity\Reponse $reponses
+     */
+    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponses)
+    {
+        $this->reponses->removeElement($reponses);
+    }
+
+    /**
      * Get reponses
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -267,39 +259,6 @@ class Inscrit extends BaseUser
     public function getReponses()
     {
         return $this->reponses;
-    }
-
-    /**
-     * Add conversations
-     *
-     * @param \EchangeoBundle\Entity\Reponse $conversations
-     * @return Inscrit
-     */
-    public function addConversation(\EchangeoBundle\Entity\Reponse $conversations)
-    {
-        $this->conversations[] = $conversations;
-
-        return $this;
-    }
-
-    /**
-     * Remove conversations
-     *
-     * @param \EchangeoBundle\Entity\Reponse $conversations
-     */
-    public function removeConversation(\EchangeoBundle\Entity\Reponse $conversations)
-    {
-        $this->conversations->removeElement($conversations);
-    }
-
-    /**
-     * Get conversations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getConversations()
-    {
-        return $this->conversations;
     }
 
     /**
@@ -336,39 +295,6 @@ class Inscrit extends BaseUser
     }
 
     /**
-     * Add evaluations
-     *
-     * @param \EchangeoBundle\Entity\Evaluation $evaluations
-     * @return Inscrit
-     */
-    public function addEvaluation(\EchangeoBundle\Entity\Evaluation $evaluations)
-    {
-        $this->evaluations[] = $evaluations;
-
-        return $this;
-    }
-
-    /**
-     * Remove evaluations
-     *
-     * @param \EchangeoBundle\Entity\Evaluation $evaluations
-     */
-    public function removeEvaluation(\EchangeoBundle\Entity\Evaluation $evaluations)
-    {
-        $this->evaluations->removeElement($evaluations);
-    }
-
-    /**
-     * Get evaluations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getEvaluations()
-    {
-        return $this->evaluations;
-    }
-
-    /**
      * Add suggestions
      *
      * @param \EchangeoBundle\Entity\SuggestionCategorie $suggestions
@@ -399,5 +325,141 @@ class Inscrit extends BaseUser
     public function getSuggestions()
     {
         return $this->suggestions;
+    }
+
+    /**
+     * Add evaluationsDonnee
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluationsDonnee
+     *
+     * @return Inscrit
+     */
+    public function addEvaluationsDonnee(\EchangeoBundle\Entity\Evaluation $evaluationsDonnee)
+    {
+        $this->evaluationsDonnees[] = $evaluationsDonnee;
+
+        return $this;
+    }
+
+    /**
+     * Remove evaluationsDonnee
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluationsDonnee
+     */
+    public function removeEvaluationsDonnee(\EchangeoBundle\Entity\Evaluation $evaluationsDonnee)
+    {
+        $this->evaluationsDonnees->removeElement($evaluationsDonnee);
+    }
+
+    /**
+     * Get evaluationsDonnees
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvaluationsDonnees()
+    {
+        return $this->evaluationsDonnees;
+    }
+
+    /**
+     * Add evaluationsRecus
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluationsRecus
+     *
+     * @return Inscrit
+     */
+    public function addEvaluationsRecus(\EchangeoBundle\Entity\Evaluation $evaluationsRecus)
+    {
+        $this->evaluationsRecus[] = $evaluationsRecus;
+
+        return $this;
+    }
+
+    /**
+     * Remove evaluationsRecus
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluationsRecus
+     */
+    public function removeEvaluationsRecus(\EchangeoBundle\Entity\Evaluation $evaluationsRecus)
+    {
+        $this->evaluationsRecus->removeElement($evaluationsRecus);
+    }
+
+    /**
+     * Get evaluationsRecus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvaluationsRecus()
+    {
+        return $this->evaluationsRecus;
+    }
+
+    /**
+     * Add conversations1
+     *
+     * @param \EchangeoBundle\Entity\Conversation $conversations1
+     *
+     * @return Inscrit
+     */
+    public function addConversations1(\EchangeoBundle\Entity\Conversation $conversations1)
+    {
+        $this->conversations1[] = $conversations1;
+
+        return $this;
+    }
+
+    /**
+     * Remove conversations1
+     *
+     * @param \EchangeoBundle\Entity\Conversation $conversations1
+     */
+    public function removeConversations1(\EchangeoBundle\Entity\Conversation $conversations1)
+    {
+        $this->conversations1->removeElement($conversations1);
+    }
+
+    /**
+     * Get conversations1
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConversations1()
+    {
+        return $this->conversations1;
+    }
+
+    /**
+     * Add conversations2
+     *
+     * @param \EchangeoBundle\Entity\Conversation $conversations2
+     *
+     * @return Inscrit
+     */
+    public function addConversations2(\EchangeoBundle\Entity\Conversation $conversations2)
+    {
+        $this->conversations2[] = $conversations2;
+
+        return $this;
+    }
+
+    /**
+     * Remove conversations2
+     *
+     * @param \EchangeoBundle\Entity\Conversation $conversations2
+     */
+    public function removeConversations2(\EchangeoBundle\Entity\Conversation $conversations2)
+    {
+        $this->conversations2->removeElement($conversations2);
+    }
+
+    /**
+     * Get conversations2
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConversations2()
+    {
+        return $this->conversations2;
     }
 }

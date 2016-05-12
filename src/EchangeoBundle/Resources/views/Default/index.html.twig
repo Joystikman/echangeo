@@ -1,83 +1,66 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
+{% extends 'EchangeoBundle:Default:base.html.twig' %}
+{% block title %}Accueil{% endblock %}
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>Echangeo</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+{% block css %}
   <link href="{{ asset('css/index.css') }}" rel="stylesheet">
+{% endblock css %}
 
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="images/favicon.png">
-
-</head>
-<body onload="getLocation()">
-
-  <!-- Primary Page Layout
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="container">
-  	<div class="en-tete">
-  		<h1>Echangeo</h1>
-  		<div id="carte"></div>
-  		<input></input>
-  	</div>
+{% block content %}
+<div class="container">
+  <div id="googlemaps" class="googlemaps"></div>
+  <h1 class="titre">Echangeo</h1>
+  <div class="link"><a href="{{ path('recherche_service') }}" class="link">voir les annonces</a></div>
+<!-- dernières annonces -->
+  <div class="main">
+    <h2>Dernières annonces passées :</h2>
     <div class="annonces">
+      {% for service in services %}
+        <div class="annonce">
+          <h3>{{service.titre}}</h3>
+          <p>{{service.description}}</p>
+          <p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>          
+          <p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+        </div>
+      {% endfor %}
     </div>
+  </div>
+</div>  
+{% endblock content %}
 
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-</body>
+{% block script %}
+<!-- Include the Google Maps API library - required for embedding maps -->
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
+   
 <script type="text/javascript">
-	function getLocation() {
-		console.log("debut getLocation");
-	    if (navigator.geolocation) {
-	        navigator.geolocation.getCurrentPosition(showPosition, showError);
-	    } else {
-	        console.log("Geolocation is not supported by this browser.");
-	    }
-	}
-
-	function showPosition(position) {
-		console.log("debut showPosition");
-	    var latlon = position.coords.latitude + "," + position.coords.longitude;
-
-	    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
-	    +latlon+"&zoom=14&size=1000x1000&sensor=false";
-	    document.getElementById("carte").innerHTML = "<img src='"+img_url+"'>";
-	}
-
-	function showError(error) {
-		console.log("debut showError");
-	    switch(error.code) {
-	        case error.PERMISSION_DENIED:
-	            console.log("User denied the request for Geolocation.")
-	            break;
-	        case error.POSITION_UNAVAILABLE:
-	            console.log("Location information is unavailable.")
-	            break;
-	        case error.TIMEOUT:
-	            console.log("The request to get user location timed out.")
-	            break;
-	        case error.UNKNOWN_ERROR:
-	            console.log("An unknown error occurred.")
-	            break;
-	    }
-	}
+     
+  // The latitude and longitude of your business / place
+  var position = [48.858727, 2.344376];
+   
+  function showGoogleMapsDefaut() {
+    console.log("display map");
+     
+    var latLng = new google.maps.LatLng(position[0], position[1]);
+     
+    var mapOptions = {
+      zoom: 14, // initialize zoom level - the max value is 21
+      streetViewControl: false, // hide the yellow Street View pegman
+      scaleControl: true, // allow users to zoom the Google Map
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: latLng
+    };
+     
+    map = new google.maps.Map(document.getElementById('googlemaps'),
+        mapOptions);
+     
+    // Show the default red marker at the location
+    marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            draggable: false,
+            animation: google.maps.Animation.DROP
+    });
+  }
+  console.log("fin display map");
+  google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
 </script>
-</html>
+{% endblock script %}

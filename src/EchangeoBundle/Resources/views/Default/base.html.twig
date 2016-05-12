@@ -1,0 +1,52 @@
+<!-- Echangeo - 2016
+     par Guiraud Maxime
+-->
+<!DOCTYPE html>
+<html lang="fr">
+
+<!-- HEAD –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Echangeo-{% block title %}{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="author" content="Guiraud Maxime">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="{{ asset('css/normalize.css') }}" rel="stylesheet">
+    {% block css %}{% endblock css%}
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+
+<!-- BODY –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<body>
+  {% block content %}
+    le body 
+  {% endblock content %}
+  {% block footer %}
+    <footer>
+      <div> Echangéo - 2016 </div>
+    </footer>    
+  {% endblock footer %}
+</body>
+
+<!-- SCRIPT –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+{% block script %}
+{% endblock script %}
+
+<!-- Fin –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</html>
+

@@ -281,6 +281,14 @@ class Service
     }
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Set inscrit
      *
      * @param \EchangeoBundle\Entity\Inscrit $inscrit
@@ -325,45 +333,28 @@ class Service
     {
         return $this->sousCategorie;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->reponse = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add reponse
+     * Add reponses
      *
-     * @param \EchangeoBundle\Entity\Reponse $reponse
+     * @param \EchangeoBundle\Entity\Reponse $reponses
      * @return Service
      */
-    public function addReponse(\EchangeoBundle\Entity\Reponse $reponse)
+    public function addReponse(\EchangeoBundle\Entity\Reponse $reponses)
     {
-        $this->reponse[] = $reponse;
+        $this->reponses[] = $reponses;
 
         return $this;
     }
 
     /**
-     * Remove reponse
+     * Remove reponses
      *
-     * @param \EchangeoBundle\Entity\Reponse $reponse
+     * @param \EchangeoBundle\Entity\Reponse $reponses
      */
-    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponse)
+    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponses)
     {
-        $this->reponse->removeElement($reponse);
-    }
-
-    /**
-     * Get reponse
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getReponse()
-    {
-        return $this->reponse;
+        $this->reponses->removeElement($reponses);
     }
 
     /**
@@ -420,38 +411,5 @@ class Service
     public function getEvaluationNote()
     {
         return $this->evaluationNote;
-    }
-
-    /**
-     * Add evaluations
-     *
-     * @param \EchangeoBundle\Entity\Evaluation $evaluations
-     * @return Service
-     */
-    public function addEvaluation(\EchangeoBundle\Entity\Evaluation $evaluations)
-    {
-        $this->evaluations[] = $evaluations;
-
-        return $this;
-    }
-
-    /**
-     * Remove evaluations
-     *
-     * @param \EchangeoBundle\Entity\Evaluation $evaluations
-     */
-    public function removeEvaluation(\EchangeoBundle\Entity\Evaluation $evaluations)
-    {
-        $this->evaluations->removeElement($evaluations);
-    }
-
-    /**
-     * Get evaluations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getEvaluations()
-    {
-        return $this->evaluations;
     }
 }

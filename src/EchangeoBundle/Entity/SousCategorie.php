@@ -112,33 +112,34 @@ class SousCategorie
     }
 
     /**
-     * Set Categorie
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set categorie
      *
      * @param \EchangeoBundle\Entity\Categorie $categorie
      * @return SousCategorie
      */
     public function setCategorie(\EchangeoBundle\Entity\Categorie $categorie = null)
     {
-        $this->Categorie = $categorie;
+        $this->categorie = $categorie;
 
         return $this;
     }
 
     /**
-     * Get Categorie
+     * Get categorie
      *
      * @return \EchangeoBundle\Entity\Categorie 
      */
     public function getCategorie()
     {
-        return $this->Categorie;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->categorie;
     }
 
     /**
