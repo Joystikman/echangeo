@@ -11,8 +11,8 @@
   	<header>
   		<h1 class="logo"><span>E</span></h1>
   	</header>
-  	<div class="main">
-  	<!-- Block de recherche -->
+  	<div id="main" class="main">
+  	 <!-- Block de recherche -->
   		<div class="recherche">
 	  		<input placeholder="Recherche"></input>
 	    	<h2>Catégories : </h2>
@@ -25,24 +25,25 @@
 	  		</div>
 	  		<div id="select2"></div>  	
   		</div>
-  	<!-- Block Services -->
+  	 <!-- Block Services -->
 	    <div id="services" class="services">
-	    	<h2>Les derniers services ajouté : </h2>
-	  		<a href="{{ path('getAllServices') }}">Voir tous les services</a>
-	    	{% for service in services %}
-	        	<div>
-	        		<h3>{{service.titre}}</h3>
-	        		<p>{{service.description}}</p>
-	        		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
-	        		<p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
-	        	</div>
-	        {% endfor %}
+	    	<div class="liste">
+		    	<h2>Les derniers services ajoutés : </h2>
+		    	{% for service in services %}
+		       	<div>
+		       		<h3>{{service.titre}}</h3>
+		       		<p>{{service.description}}</p>
+		       		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
+		       		<p>Proposé par :{{service.inscrit.username}}</p>
+		       	</div>
+		      {% endfor %}
+		    </div>
 	    </div>
-	    <div class="carte">
+	    <div id="carte" class="carte">
 	    	<div id="googlemaps"></div>
 	    </div>
+    </div>	
   </div>	
- </div>	
 {% endblock content %}
 
 {% block footer %}{{ parent() }}{% endblock footer %}
@@ -63,9 +64,11 @@
 	   
 	  function showGoogleMapsDefaut() {
 	    console.log("display map");
-	     
+
+	    $('#googlemaps').height($('#main').height());
+	     	     
+	    /*paramètres de la map*/
 	    var latLng = new google.maps.LatLng(position[0], position[1]);
-	     
 	    var mapOptions = {
 	      zoom: 14, // initialize zoom level - the max value is 21
 	      streetViewControl: false, // hide the yellow Street View pegman
