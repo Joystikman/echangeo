@@ -71,6 +71,7 @@
 
 footer{
 	z-index: 1;
+	min-height: 50px;
 	position:fixed;
 	left:0px;
 	bottom:0px;

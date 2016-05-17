@@ -1,0 +1,29 @@
+/*CSS du dashboard*/
+
+.container {
+
+}
+
+header {
+	z-index: 1;
+	padding : 20px 0px;
+	text-align: center;
+	border-bottom: 2px solid #B87731;
+}
+
+.logo {
+	text-align: center;
+}
+
+.logo span{
+	padding: 20px 32px;
+	color: white;
+	background-color: #E47C1F;
+	font-size: 32px;
+	font-weight: bold;
+	border-radius: 100%;	
+}
+
+.navbar{
+
+}

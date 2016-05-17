@@ -6,61 +6,61 @@
 {% endblock css %}
 
 {% block content %}
-<div class="container">
-  <div id="googlemaps" class="googlemaps"></div>
-  <h1 class="titre">Echangeo</h1>
-  <div class="link"><a href="{{ path('recherche_service') }}" class="link">voir les annonces</a></div>
-<!-- dernières annonces -->
-  <div class="main">
-    <h2>Dernières annonces passées :</h2>
-    <div class="annonces">
-      {% for service in services %}
-        <div class="annonce">
-          <h3>{{service.titre}}</h3>
-          <p>{{service.description}}</p>
-          <p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>          
-          <p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
-        </div>
-      {% endfor %}
+  <div class="container">
+    <div id="googlemaps" class="googlemaps"></div>
+    <h1 class="titre">Echangeo</h1>
+    <div class="link"><a href="{{ path('recherche_service') }}" class="link">voir les annonces</a></div>
+  <!-- dernières annonces -->
+    <div class="main">
+      <h2>Dernières annonces passées :</h2>
+      <div class="annonces">
+        {% for service in services %}
+          <div class="annonce">
+            <h3>{{service.titre}}</h3>
+            <p>{{service.description}}</p>
+            <p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>          
+            <p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+          </div>
+        {% endfor %}
+      </div>
     </div>
-  </div>
-</div>  
+  </div>  
 {% endblock content %}
 
 {% block script %}
-<!-- Include the Google Maps API library - required for embedding maps -->
-<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
-   
-<script type="text/javascript">
+  <!-- Include the Google Maps API library - required for embedding maps -->
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
      
-  // The latitude and longitude of your business / place
-  var position = [48.858727, 2.344376];
-   
-  function showGoogleMapsDefaut() {
-    console.log("display map");
+  <script type="text/javascript">
+       
+    // The latitude and longitude of your business / place
+    var position = [48.858727, 2.344376];
      
-    var latLng = new google.maps.LatLng(position[0], position[1]);
-     
-    var mapOptions = {
-      zoom: 14, // initialize zoom level - the max value is 21
-      streetViewControl: false, // hide the yellow Street View pegman
-      scaleControl: true, // allow users to zoom the Google Map
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      center: latLng
-    };
-     
-    map = new google.maps.Map(document.getElementById('googlemaps'),
-        mapOptions);
-     
-    // Show the default red marker at the location
-    marker = new google.maps.Marker({
-            position: latLng,
-            map: map,
-            draggable: false,
-            animation: google.maps.Animation.DROP
-    });
-  }
-  console.log("fin display map");
-  google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
-</script>
+    function showGoogleMapsDefaut() {
+      console.log("display map");
+       
+      var latLng = new google.maps.LatLng(position[0], position[1]);
+       
+      var mapOptions = {
+        zoom: 14, // initialize zoom level - the max value is 21
+        streetViewControl: false, // hide the yellow Street View pegman
+        scaleControl: true, // allow users to zoom the Google Map
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: latLng
+      };
+       
+      map = new google.maps.Map(document.getElementById('googlemaps'),
+          mapOptions);
+       
+      // Show the default red marker at the location
+      marker = new google.maps.Marker({
+              position: latLng,
+              map: map,
+              draggable: false,
+              animation: google.maps.Animation.DROP
+      });
+    }
+    console.log("fin display map");
+    google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
+  </script>
 {% endblock script %}

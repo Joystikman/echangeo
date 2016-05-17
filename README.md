@@ -19,6 +19,7 @@ Exemple de paramètre utilisant les valeur pas défaut de phpMyAdmin :
 	    database_name:     echangeo
 	    database_user:     root
 	    database_password: ~    
+	    
 ###Création des tables
 Une fois la BD créée, on créé les table grâce à doctrine. Il faut exécuter la commande :
 `php app/console doctrine:schema:update --force`
@@ -29,6 +30,7 @@ Une fois la BD créée, on créé les table grâce à doctrine. Il faut exécute
 | indexAction            | ANY         | /                                      | index                          |
 | testAction             | ANY         | /test                                  | test                           |
 | rechercheAction        | ANY         | /recherche                             | recherche_service              |
+| login(FOSU)            | ANY         | /login                                 | login                          |
 
 ##Notes
 Pensez à utiliser la commande `composer update` à chaque pull.

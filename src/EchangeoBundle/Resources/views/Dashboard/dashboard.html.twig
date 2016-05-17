@@ -1,0 +1,24 @@
+{% extends 'EchangeoBundle:Default:base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block css %}	
+	<link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+	<div class="container">
+		<header>
+  		<h2 class="logo"><span>E</span></h2>
+  	</header>
+		<nav class="navbar">
+		<input type="submit" name="" value="mes services">
+		<input type="submit" name="" value="mes réponses">
+		</nav>
+		<div>
+			<p> block de d'affichage - {{ test }}</p>
+		</div>
+	</div>
+{% endblock content %}
+
+{% block footer %}{{ parent() }}{% endblock footer %}

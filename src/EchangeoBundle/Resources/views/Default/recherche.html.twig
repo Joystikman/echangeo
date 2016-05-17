@@ -17,11 +17,11 @@
 	  		<input placeholder="Recherche"></input>
 	    	<h2>Catégories : </h2>
 	  		<div id="select1">
-	  		<select onchange="displaySousCategorie.call(this,event)">
-	  			{% for categorie in categories %}	
-	  				<option value="{{categorie.id}}">{{categorie.libelle}}</option>
-	  			{% endfor %}
-	  		</select>
+		  		<select onchange="displaySousCategorie.call(this,event)">
+		  			{% for categorie in categories %}	
+		  				<option value="{{categorie.id}}">{{categorie.libelle}}</option>
+		  			{% endfor %}
+		  		</select>
 	  		</div>
 	  		<div id="select2"></div>  	
   		</div>
