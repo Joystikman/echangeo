@@ -96,4 +96,31 @@ class ApiController extends Controller
             array('Content-Type' => 'application/json')
         );
     }
+
+    /*DASHBOARD*/
+    /**
+     * Fonction d'obtention d'un service par son id
+     * @Route("/api/service/{id}.{_format}",
+              defaults = {"_format"="json"},
+              requirements = { "_format" = "html|json" },
+              name="getservicesID",
+     *  )
+     * @Method({"GET"})
+     */
+    public function getServicesID($id)
+    {
+        /*Requete*/
+        $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        $services = $docS->find($id);
+        /*passage en JSON avec Serializer*/
+        $serializer = $this->get('serializer');
+        $jsonContent = $serializer->serialize($services, 'json');
+
+        return new Response(
+            $jsonContent,
+            200,
+            array('Content-Type' => 'application/json')
+        );
+    }
+
 }

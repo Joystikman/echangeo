@@ -22,10 +22,27 @@ class DashboardController extends Controller
      */
     public function dashboardAction()
     {
-        /*$docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-        $services = $docServices->findBy(array(), array('id' => 'desc'), 4, null);*/
+        $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        $id = $this->getUser()->getId();
+        $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), 1, null);
         return $this->render('EchangeoBundle:Dashboard:dashboard.html.twig',array(
-                "test"=>"test")
+                "services"=>$services)
+                );
+    }
+
+/*SERVICES*/ 
+	/**
+     * Page des services
+     * @Route("/dashboard/services",
+              name="servicesUser")
+     */
+    public function servicesUserAction()
+    {
+        $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        $id = $this->getUser()->getId();
+        $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
+        return $this->render('EchangeoBundle:Dashboard:dashboardServices.html.twig',array(
+                "services"=>$services)
                 );
     }
 

@@ -1,0 +1,51 @@
+{% extends 'EchangeoBundle:Dashboard:dashboard.html.twig' %}
+
+{% block title %}Services Utilisateur{% endblock %}
+
+{% block liste %}
+	<a href="" class="button">Crée une nouvelle annonce</a>
+	<div><p> block de d'affichage</p></div>
+	{% for service in services %}
+		<div id="{{service.id}}" class="service">
+	   		<h3>{{service.titre}}</h3>
+	   		<p>{{service.description}}</p>
+	   		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+	   	</div>
+	{% endfor %}
+{% endblock liste %}
+
+{% block affichage %}
+		
+{% endblock affichage %}
+
+{% block script %}
+<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+<script type="text/javascript">
+/*on click service*/
+	$(".service").on("click", function(){
+		console.log('display');
+		console.log(this.id);
+		/*création de l'url*/ 
+		var url = "{{ path('getservicesID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+		url = url.replace("idPlaceholder", this.id);
+		/*console.log(url);*/
+		/*fonction ajax*/
+		$.ajax({
+			url: url,
+			type: "GET",
+			dataType: "json",
+			success: function(data){
+				console.log('test get data');
+				console.log(data);
+				$("#cadre").empty();
+				$("#cadre").append($("<div id='service' class='service'>"));
+				$("#service").append($("<input type='submit' name='modifier' value='modifier'>"));
+				$("#service").append($("<h2>").text(data.titre));
+				$("#service").append($("<p>").text(data.description));
+				$("#service").append($("<p>").text(data.debut+" - "+data.fin));
+				$("#service").append($("<p>").text(data.lieu));
+			}
+		});
+	}); 
+</script>
+{% endblock script %}	
