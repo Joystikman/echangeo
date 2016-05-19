@@ -27,10 +27,18 @@ Une fois la BD créée, on créé les table grâce à doctrine. Il faut exécute
 ##Les Routes :
 | Fonction               | Methodes    | Chemin                                 | Nom de la route                |
 | -----------------------|-------------|----------------------------------------|--------------------------------|
+| ###Accueil             |             |                                        |                                |
 | indexAction            | ANY         | /                                      | index                          |
 | testAction             | ANY         | /test                                  | test                           |
 | rechercheAction        | ANY         | /recherche                             | recherche_service              |
-| login(FOSU)            | ANY         | /login                                 | login                          |
+| ###FOSU                |             |                                        |                                |
+| login                  | ANY         | /login                                 | login                          |
+| logout                 | ANY         | /logout                                | logout                         |
+| logout                 | ANY         | /logout                                | logout                         |
+| ###Dashboard           |             |                                        |                                |
+| dashboardAction        | ANY         | /dashboard                             | dashboard                      |
+| servicesUserAction     | ANY         | /dashboard/services                    | servicesUser                   |
+| addServicesAction      | ANY         | /dashboard/services/new                | addServices                    |
 
 ##Notes
 Pensez à utiliser la commande `composer update` à chaque pull.

@@ -3,7 +3,7 @@
 {% block title %}Services Utilisateur{% endblock %}
 
 {% block liste %}
-	<a href="" class="button">Crée une nouvelle annonce</a>
+	<a href="{{ path('addServices') }}" class="button">Crée une nouvelle annonce</a>
 	<div><p> block de d'affichage</p></div>
 	{% for service in services %}
 		<div id="{{service.id}}" class="service">
