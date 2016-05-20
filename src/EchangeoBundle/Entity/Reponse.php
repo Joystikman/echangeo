@@ -37,14 +37,14 @@ class Reponse
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
      */
     private $inscrit;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Service", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Service")
      * @ORM\JoinColumn(name="Service_id", referencedColumnName="id")
      */
     private $service;

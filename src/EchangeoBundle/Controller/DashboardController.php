@@ -119,4 +119,69 @@ class DashboardController extends Controller
               );
     }
 
+    /**
+     * Modification et suppression de services
+     * @Route("/dashboard/services/edit/{id}",
+              name="editServices")
+     */
+    public function editServicesAction(Request $request, $id)
+    {
+      /*$service = new Service();*/
+
+      $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+      $service = $docS->find($id);
+
+      /*creer le formulaire*/
+      $formulaire = $this->createFormBuilder($service)
+                ->add('titre', TextType::class)
+                ->add('sousCategorie', EntityType::class,array('mapped' => true,
+                                                         'required' => true,
+                                                         'multiple' => false,
+                                                         'expanded' => false,
+                                                         'class' => 'EchangeoBundle:SousCategorie',
+                                                         /*'choice_value' => 'id',*/
+                                                         'choice_label' => 'libelle' ))
+                ->add('description', TextareaType::class)
+                ->add('debut', DateType::class, array(
+                            'widget'  => 'single_text',
+                            'format' => 'dd/MM/yyyy',
+                        ))
+                ->add('fin', DateType::class, array(
+                            'widget'  => 'single_text',
+                            'format' => 'dd/MM/yyyy',
+                        ))
+                ->add('type', ChoiceType::class, array('choices' => array(
+                      'propose' => 'propose',
+                      'demande' => 'demande')))
+                ->add('lieu', TextareaType::class)
+                ->add('distance', IntegerType::class)
+                ->add('save', SubmitType::class, array('label' => "enregistrer les modifications"))
+                ->add('delete', SubmitType::class, array('label' => "supprimer"))
+                ->getForm();
+
+      /*gestion des réponses*/
+      $formulaire->handleRequest($request);
+
+      if ($formulaire->isSubmitted() && $formulaire->isValid() && $formulaire->get('save')->isClicked()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
+      elseif ($formulaire->isSubmitted() && $formulaire->isValid() && $formulaire->get('delete')->isClicked()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($service);
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
+
+      /*get des service de l'utilisateur*/
+      $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+      $id = $this->getUser()->getId();
+      $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
+      return $this->render('EchangeoBundle:Dashboard:dashboardServicesAjout.html.twig',array(
+              "form"=>$formulaire->createView(),
+              "services"=>$services)
+              );
+    }
+
 }

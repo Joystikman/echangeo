@@ -27,6 +27,8 @@
 		/*création de l'url*/ 
 		var url = "{{ path('getservicesID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 		url = url.replace("idPlaceholder", this.id);
+		var urlEdit = "{{ path('editServices',{ 'id': "idPlaceholder"}) }}";
+		urlEdit = urlEdit.replace("idPlaceholder", this.id);
 		/*console.log(url);*/
 		/*fonction ajax*/
 		$.ajax({
@@ -38,7 +40,7 @@
 				console.log(data);
 				$("#cadre").empty();
 				$("#cadre").append($("<div id='service' class='service'>"));
-				$("#service").append($("<input type='submit' name='modifier' value='modifier'>"));
+				$("#service").append($("<a href="+urlEdit+" class='button'>").text("modifier"));
 				$("#service").append($("<h2>").text(data.titre));
 				$("#service").append($("<p>").text(data.description));
 				$("#service").append($("<p>").text(data.debut+" - "+data.fin));

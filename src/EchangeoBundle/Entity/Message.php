@@ -30,14 +30,14 @@ class Message
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Conversation", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Conversation")
      * @ORM\JoinColumn(name="Conversation_id", referencedColumnName="id")
      */
     private $conversation;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
      */
     private $inscrit;

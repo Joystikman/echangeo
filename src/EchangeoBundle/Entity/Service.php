@@ -72,7 +72,7 @@ class Service
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
      *
      */
@@ -80,7 +80,7 @@ class Service
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="SousCategorie", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="SousCategorie")
      * @ORM\JoinColumn(name="SousCategorie_id", referencedColumnName="id")
      *
      */
@@ -94,7 +94,7 @@ class Service
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="Evaluation", cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Evaluation")
      * @ORM\JoinColumn(name="Evaluation_id_notant", referencedColumnName="id")
      *
      */
@@ -102,7 +102,7 @@ class Service
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="Evaluation", cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Evaluation")
      * @ORM\JoinColumn(name="Evaluation_id_note", referencedColumnName="id")
      *
      */
