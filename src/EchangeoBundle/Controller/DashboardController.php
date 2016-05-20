@@ -16,11 +16,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
+/*appel des gestionnaires*/
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
 {
@@ -62,7 +63,7 @@ class DashboardController extends Controller
      * @Route("/dashboard/services/new",
               name="addServices")
      */
-    public function addServicesAction()
+    public function addServicesAction(Request $request)
     {
       $service = new Service();
 
@@ -77,7 +78,7 @@ class DashboardController extends Controller
                                                          'multiple' => false,
                                                          'expanded' => false,
                                                          'class' => 'EchangeoBundle:SousCategorie',
-                                                         'choice_value' => 'id',
+                                                         /*'choice_value' => 'id',*/
                                                          'choice_label' => 'libelle' ))
                 ->add('description', TextareaType::class)
                 ->add('debut', DateType::class, array(
@@ -95,6 +96,18 @@ class DashboardController extends Controller
                 ->add('distance', IntegerType::class)
                 ->add('save', SubmitType::class, array('label' => 'Creer une annonce'))
                 ->getForm();
+
+      /*gestion des réponses*/
+      $formulaire->handleRequest($request);
+
+      if ($formulaire->isSubmitted() && $formulaire->isValid()) {
+        $service->setInscrit($this->getUser());
+        print_r("ça marche");
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($service);
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
 
       /*get des service de l'utilisateur*/
       $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');

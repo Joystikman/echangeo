@@ -3,5 +3,7 @@
 {% block title %}Services Utilisateur - Nouvelle annonce{% endblock %}
 
 {% block affichage %}
-		{{ form_widget(form) }}
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	{{ form_end(form) }}
 {% endblock affichage %}

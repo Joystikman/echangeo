@@ -61,21 +61,49 @@ header {
 	flex-direction: column;
 	overflow-y: auto;
 	height: 100vh;
-	background-color: #D77575;
+	background-color: #D0D0D0;
 	border-right: 2px solid #7C7C7C;
 }
 
 .liste div{
 	padding: 10px;
-	background-color: #FBA0A0;
-	border-bottom: 2px solid #7C7C7C;	
+	background-color: #F3ECE3;
+	border-bottom: 2px solid #AC6E15;	
 }
 
 .cadre{
 	flex: 3;
     /*height: 100%;*/
-    background-color: #98B2EE;
+    background-color: #F3ECE3;
     padding: 10px;
+}
+
+.cadre label{
+	font-size: 16px;
+	margin: 10px 15px;
+}
+
+.cadre input{
+	margin: 10px 0px;
+    margin-bottom: 10px;
+    width: 50%;
+    padding: 7px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background: transparent;
+    color: #000000;
+    font: 16px;
+    height: 45px;
+}
+
+.cadre button{
+	/*margin: 10px 0px;
+	padding: 8px 18px;
+	color: white;
+	font-size: 16px;
+	background-color:#007CB0 ;
+	border: none;		
+	border-bottom: solid 3px #005B8C;*/
 }
 
 footer{
