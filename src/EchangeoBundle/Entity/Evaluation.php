@@ -44,7 +44,7 @@ class Evaluation
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit"=)
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id_note", referencedColumnName="id")
      */
     private $inscritNote;
