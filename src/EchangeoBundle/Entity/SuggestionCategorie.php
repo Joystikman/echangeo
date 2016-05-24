@@ -37,7 +37,7 @@ class SuggestionCategorie
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
      */
     private $inscrit;

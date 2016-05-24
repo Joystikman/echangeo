@@ -23,20 +23,20 @@ class Conversation
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="conversation", cascade={"remove", "persist"})
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="conversation")
      */
     private $reponse;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id1", referencedColumnName="id")
      */
     private $interlocuteur1;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id2", referencedColumnName="id")
      */
     private $interlocuteur2;

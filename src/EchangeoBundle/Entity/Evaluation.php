@@ -37,21 +37,21 @@ class Evaluation
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id_notant", referencedColumnName="id")
      */
     private $inscritNotant;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Inscrit")
      * @ORM\JoinColumn(name="Inscrit_id_note", referencedColumnName="id")
      */
     private $inscritNote;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Service", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Service")
      * @ORM\JoinColumn(name="Service_id", referencedColumnName="id")
      */
     private $service;

@@ -1,0 +1,119 @@
+/*CSS du dashboard*/
+
+.container {
+
+}
+
+header {
+	z-index: 1;
+	padding : 20px 0px;
+	text-align: center;
+	border-bottom: 2px solid #B87731;
+}
+
+.logo {
+	text-align: center;
+}
+
+.logo span{
+	padding: 20px 32px;
+	color: white;
+	background-color: #E47C1F;
+	font-size: 32px;
+	font-weight: bold;
+	border-radius: 100%;	
+}
+
+.navbar{
+	padding: 20px 5px;
+	margin: 5px 0px;
+	border-top: 2px solid #B87731;	
+	border-bottom: 2px solid #B87731;	
+}
+
+.button{
+	/*width: 100%;*/
+	margin: 10px 0px;
+	padding: 8px 18px;
+	color: white;
+	font-size: 16px;
+	background-color:#007CB0 ;
+	border: none;		
+	border-bottom: solid 3px #005B8C;
+	/*box-shadow: 0px 2px 3px #E0E0E0;*/
+}
+
+.main{
+	margin-top: 10px;
+	display: -ms-flex;
+  	display: -webkit-flex;
+  	display: flex;
+  	flex-direction: row;
+  	flex-wrap: wrap;
+  	height: 100%;
+  	min-height: 750px;
+}
+
+.liste{
+	padding: 0px 15px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	height: 100vh;
+	background-color: #D0D0D0;
+	border-right: 2px solid #7C7C7C;
+}
+
+.liste div{
+	padding: 10px;
+	background-color: #F3ECE3;
+	border-bottom: 2px solid #AC6E15;	
+}
+
+.cadre{
+	flex: 3;
+    /*height: 100%;*/
+    background-color: #F3ECE3;
+    padding: 10px;
+}
+
+.cadre label{
+	font-size: 16px;
+	margin: 10px 15px;
+}
+
+.cadre input{
+	margin: 10px 0px;
+    margin-bottom: 10px;
+    width: 50%;
+    padding: 7px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background: transparent;
+    color: #000000;
+    font: 16px;
+    height: 45px;
+}
+
+.cadre button{
+	/*margin: 10px 0px;
+	padding: 8px 18px;
+	color: white;
+	font-size: 16px;
+	background-color:#007CB0 ;
+	border: none;		
+	border-bottom: solid 3px #005B8C;*/
+}
+
+footer{
+	z-index: 1;
+	min-height: 50px;
+	left:0px;
+	bottom:0px;
+	height:30px;
+	width:100%;	
+	text-align: center;
+	background: #1B2ABA;
+	color: white;
+}

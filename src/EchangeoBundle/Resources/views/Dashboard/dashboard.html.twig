@@ -1,0 +1,43 @@
+{% extends 'EchangeoBundle:Default:base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block css %}	
+	<link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+	<div class="container">
+		<header>
+  		<h2 class="logo"><span>E</span></h2>
+  	</header>
+		<nav class="navbar">
+			<a href="{{ path('servicesUser') }}" class="button">Mes Services</a>
+			<a href="" class="button">Mes Réponses</a>
+		</nav>
+		<div class="main">
+			<div class="liste">
+				{% block liste %}
+					<div><p> block de liste</p></div>
+				{% endblock liste %}
+			</div>
+			<div id="cadre" class="cadre">
+				{% block affichage %}
+					<div><p> block de d'affichage</p></div>
+					{% for service in services %}
+						<div>
+		       		<h3>{{service.titre}}</h3>
+		       		<p>{{service.description}}</p>
+		       		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+		       	</div>
+					{% endfor %}	
+				{% endblock affichage %}	
+			</div>	
+		</div>
+	</div>
+{% endblock content %}
+
+{% block footer %}{{ parent() }}{% endblock footer %}
+
+{% block script %}
+{% endblock script %}
