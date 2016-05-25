@@ -27,14 +27,13 @@
   		</div>
   	 	<!-- Block Services -->
 	    <div id="services" class="services">
-	    	<div class="liste">
-		    	<h2>Les derniers services ajoutés : </h2>
+		    <h2 id="titre">Les derniers services ajoutés : </h2>
+	    	<div id="liste" class="liste">
 		    	{% for service in services %}
 		       	<div>
-		       		<h3>{{service.titre}}</h3>
-		       		<p>{{service.description}}</p>
-		       		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>        	
-		       		<p>Proposé par :{{service.inscrit.username}}</p>
+		       		<h3>{{service.titre}}</h3>       	
+		       		<p>Proposé par : {{service.inscrit.username}}</p>
+		       		<a id="{{service.id}}" href="#" class="button_details">voir en détails</a>
 		       	</div>
 		      {% endfor %}
 		    </div>

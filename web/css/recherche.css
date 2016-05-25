@@ -47,17 +47,23 @@ header {
 	flex: 1 2;
 }
 
+.services h2{
+	border-bottom: 2px solid #E47C1F;	
+}
+
 .liste{
 	overflow-y: auto;
 	height: 100vh;
 }
 
-.liste h2{
-	border-bottom: 2px solid #E47C1F;	
+.liste div{
+	padding: 10px 15px;
+	border-top: 2px solid #808080;
+	border-bottom: 2px solid #808080;
 }
 
-.liste div{
-	border-bottom: 2px solid #808080;
+.liste div:hover{
+	background-color: #F3F3F3;
 }
 
 .liste div p{
@@ -67,6 +73,18 @@ header {
 .carte{
     flex: 2;
     height: 100%;
+}
+
+.button_details{
+	/*width: 100%;*/
+	margin: 10px 0px;
+	padding: 8px 18px;
+	color: white;
+	font-size: 16px;
+	background-color:#007CB0 ;
+	border: none;		
+	border-bottom: solid 3px #005B8C;
+	/*box-shadow: 0px 2px 3px #E0E0E0;*/
 }
 
 footer{

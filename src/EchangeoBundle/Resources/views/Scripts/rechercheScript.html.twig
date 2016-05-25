@@ -17,7 +17,8 @@
 		console.log("url :");
 		console.log(url);
 		/*fonction ajax*/
-		$("#services").empty();	
+		$("#titre").empty();	
+		$("#liste").empty();	
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -30,7 +31,12 @@
 				for(var i=0; i<data.length; i++){
 					$('#formSousCategorie').append($("<h4>").text(data[i].libelle).append($("<input type='checkbox' value="+data[i].id+"  onchange='displayServices()'>")));
 					for(var j=0; j<data[i].services.length; j++){
-						$('#services').append($("<div>").append($("<h2>").text(data[i].services[j].titre)));
+						$('#titre').text("Annonces disponibles :")
+						$('#liste').append($("<div>")
+							.append($("<h3>").text(data[i].services[j].titre))
+							.append($("<p>").text("Proposé par : "+data[i].services[j].inscrit.username))
+							.append($("<a id="+data[i].services[j].id+" href='#' class='button_details'>").text('voir en détails'))
+						);
 					}
 				}
 			},
@@ -56,7 +62,8 @@
 		console.log("url :");
 		console.log(url);
 		/*AJAX*/
-		$("#services").empty();	
+		/*$("#titre").empty();*/	
+		$("#liste").empty();	
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -65,7 +72,11 @@
 				console.log('test rqt Ajax');
 				console.log(data);
 				for(var i=0; i<data.length; i++){
-					$('#services').append($("<div>").append($("<h2>").text(data[i][0].titre)));
+					$('#liste').append($("<div>")
+						.append($("<h3>").text(data[i][0].titre))
+						.append($("<p>").text("Proposé par : "+data[i][0].inscrit.username))
+						.append($("<a id="+data[i][0].id+" href='#' class='button_details'>").text('voir en détails'))
+					);
 				}
 			},
 			error: function (req, status, err){
@@ -74,5 +85,44 @@
 			}
 		});
 	}
+
+	//Details des services
+	$(document).ready(function(){
+    	$('#liste a').click(function(){
+        	var selectedId = $(this).attr("id");
+        	console.log("Service n°: "+selectedId);  
+        	/*création de l'url*/ 
+			var url = "{{ path('getservicesID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+			url = url.replace("idPlaceholder", selectedId);
+			console.log("url :");
+			console.log(url);
+			/*AJAX*/
+			$("#titre").empty();	
+			$("#liste").empty();	
+			$.ajax({
+				url: url,
+				type: "GET",
+				dataType: "json",
+				success: function(data){
+					console.log('test rqt Ajax');
+					console.log(data);
+					/*$('#titre').text("<- retour");*/
+					$('#liste').append($("<div>")
+						.append($("<h3>").text(data.titre))
+						.append($("<p>").text("Proposé par : "+data.inscrit.username))
+						.append($("<p>").text(""+data.description))
+						.append($("<form action='#' method='POST'>")
+							.append($("<input type='text' name='message'>"))
+							.append($("<input type='submit' name='envoie' value='répondre'>"))
+						)
+					);
+				},
+				error: function (req, status, err){
+					console.log("erreur");
+					console.log(err);
+				}
+			});        
+    	});
+	});
 </script>
 
