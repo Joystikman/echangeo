@@ -7,9 +7,13 @@ use EchangeoBundle\Entity\Categorie;
 use EchangeoBundle\Entity\Service;
 use EchangeoBundle\Entity\Reponse;
 use EchangeoBundle\Entity\Inscrit;
+use EchangeoBundle\Entity\Conversation;
+use EchangeoBundle\Entity\Message;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -62,6 +66,50 @@ class DefaultController extends Controller
         $services = $docServices->findBy(array(), array('id' => 'desc'), 4, null);
     /*rendu*/
         return $this->render('EchangeoBundle:Default:recherche.html.twig',array(
+                "categories"=>$categories,
+                "services"=>$services)
+                );
+    }
+
+    /**
+     * Répondre recherche de service
+     * @Route("/recherche/reponse",
+              name="reponse_service")
+     * @Method({"POST"})
+     */
+    public function reponseAction(Request $request)
+    {
+      print_r($request->request->get('message'));
+    /*On enregistre le réponse*/
+      $reponse = new Reponse();
+      $conversation = new Conversation();
+      $message = new Message();
+      $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+      $service = $docS->find($request->request->get('idService'));
+      
+      //$reponse->setDateRendezVous( strtotime($request->request->get('dateRDV')));
+      print_r(strtotime($request->request->get('dateRDV')));
+      $reponse->setEtat('attente');
+      $reponse->setInscrit($this->getUser());
+      $reponse->setService($service);
+
+      $conversation->setInterlocuteur1($service->getInscrit());
+      $conversation->setInterlocuteur2($this->getUser());
+      $conversation->setReponse($reponse);
+
+      $message->setContenu($request->request->get('message'));
+      $message->setInscrit($this->getUser());
+      $message->setConversation($conversation);
+
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($reponse);
+      $em->persist($conversation);
+      $em->persist($message);
+      $em->flush();
+
+    /*On renvoie vers la page de recherche*/
+      return $this->redirectToRoute('recherche_service');
+      return $this->render('EchangeoBundle:Default:recherche.html.twig',array(
                 "categories"=>$categories,
                 "services"=>$services)
                 );

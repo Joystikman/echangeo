@@ -24,7 +24,7 @@ class Reponse
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateRendezVous", type="date")
+     * @ORM\Column(name="dateRendezVous", type="date", nullable=true)
      */
     private $dateRendezVous;
 
@@ -70,10 +70,10 @@ class Reponse
     /**
      * Set dateRendezVous
      *
-     * @param \DateTime $dateRendezVous
+     * @param \Date $dateRendezVous
      * @return Reponse
      */
-    public function setDateRendezVous($dateRendezVous)
+    public function setDateRendezVous($dateRendezVous = null)
     {
         $this->dateRendezVous = $dateRendezVous;
 
@@ -83,7 +83,7 @@ class Reponse
     /**
      * Get dateRendezVous
      *
-     * @return \DateTime 
+     * @return \Date 
      */
     public function getDateRendezVous()
     {

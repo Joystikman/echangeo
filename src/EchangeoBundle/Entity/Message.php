@@ -76,30 +76,6 @@ class Message
         return $this->contenu;
     }
 
-
-    /**
-     * Set conversation
-     *
-     * @param \EchangeoBundle\Entity\Conversation $conversation
-     * @return Message
-     */
-    public function setConversation(\EchangeoBundle\Entity\Conversation $conversation = null)
-    {
-        $this->conversation = $conversation;
-
-        return $this;
-    }
-
-    /**
-     * Get conversation
-     *
-     * @return \EchangeoBundle\Entity\Conversation 
-     */
-    public function getConversation()
-    {
-        return $this->conversation;
-    }
-
     /**
      * Set inscrit
      *
@@ -121,5 +97,29 @@ class Message
     public function getInscrit()
     {
         return $this->inscrit;
+    }
+
+    /**
+     * Set conversation
+     *
+     * @param \EchangeoBundle\Entity\Conversation $conversation
+     *
+     * @return Message
+     */
+    public function setConversation(\EchangeoBundle\Entity\Conversation $conversation = null)
+    {
+        $this->conversation = $conversation;
+
+        return $this;
+    }
+
+    /**
+     * Get conversation
+     *
+     * @return \EchangeoBundle\Entity\Conversation
+     */
+    public function getConversation()
+    {
+        return $this->conversation;
     }
 }

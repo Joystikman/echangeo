@@ -94,6 +94,7 @@
         	/*création de l'url*/ 
 			var url = "{{ path('getservicesID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 			url = url.replace("idPlaceholder", selectedId);
+			var urlForm = "{{ path('reponse_service') }}";
 			console.log("url :");
 			console.log(url);
 			/*AJAX*/
@@ -111,8 +112,10 @@
 						.append($("<h3>").text(data.titre))
 						.append($("<p>").text("Proposé par : "+data.inscrit.username))
 						.append($("<p>").text(""+data.description))
-						.append($("<form action='#' method='POST'>")
-							.append($("<input type='text' name='message'>"))
+						.append($("<form action="+urlForm+" method='POST'>")
+							.append($("<input type='hidden' name='idService' value="+data.id+">"))
+							.append($("<input type='date' name='dateRDV' >"))
+							.append($("<input type='text' name='message' placeholder='message'>"))
 							.append($("<input type='submit' name='envoie' value='répondre'>"))
 						)
 					);
