@@ -70,7 +70,7 @@ class Reponse
     /**
      * Set dateRendezVous
      *
-     * @param \Date $dateRendezVous
+     * @param \DateTime $dateRendezVous
      * @return Reponse
      */
     public function setDateRendezVous($dateRendezVous = null)
@@ -83,7 +83,7 @@ class Reponse
     /**
      * Get dateRendezVous
      *
-     * @return \Date 
+     * @return \DateTime 
      */
     public function getDateRendezVous()
     {

@@ -114,7 +114,7 @@
 						.append($("<p>").text(""+data.description))
 						.append($("<form action="+urlForm+" method='POST'>")
 							.append($("<input type='hidden' name='idService' value="+data.id+">"))
-							.append($("<input type='date' name='dateRDV' >"))
+							.append($("<input type='text' name='dateRDV' >"))
 							.append($("<input type='text' name='message' placeholder='message'>"))
 							.append($("<input type='submit' name='envoie' value='répondre'>"))
 						)

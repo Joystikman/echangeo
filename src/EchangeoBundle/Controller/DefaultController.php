@@ -79,7 +79,7 @@ class DefaultController extends Controller
      */
     public function reponseAction(Request $request)
     {
-      print_r($request->request->get('message'));
+      //print_r($request->request->get('message'));
     /*On enregistre le réponse*/
       $reponse = new Reponse();
       $conversation = new Conversation();
@@ -87,15 +87,15 @@ class DefaultController extends Controller
       $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
       $service = $docS->find($request->request->get('idService'));
       
-      //$reponse->setDateRendezVous( strtotime($request->request->get('dateRDV')));
-      print_r(strtotime($request->request->get('dateRDV')));
+      $dateRDV = new \DateTime($request->request->get('dateRDV'));
+      $reponse->setDateRendezVous($dateRDV);
       $reponse->setEtat('attente');
       $reponse->setInscrit($this->getUser());
       $reponse->setService($service);
+      $reponse->setConversation($conversation);
 
       $conversation->setInterlocuteur1($service->getInscrit());
       $conversation->setInterlocuteur2($this->getUser());
-      $conversation->setReponse($reponse);
 
       $message->setContenu($request->request->get('message'));
       $message->setInscrit($this->getUser());
