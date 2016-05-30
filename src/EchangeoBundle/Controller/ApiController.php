@@ -103,11 +103,11 @@ class ApiController extends Controller
      * @Route("/api/service/{id}.{_format}",
               defaults = {"_format"="json"},
               requirements = { "_format" = "html|json" },
-              name="getservicesID",
+              name="getserviceID",
      *  )
      * @Method({"GET"})
      */
-    public function getServicesID($id)
+    public function getServiceID($id)
     {
         /*Requete*/
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
@@ -115,6 +115,31 @@ class ApiController extends Controller
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
         $jsonContent = $serializer->serialize($services, 'json');
+
+        return new Response(
+            $jsonContent,
+            200,
+            array('Content-Type' => 'application/json')
+        );
+    }
+
+    /**
+     * Fonction d'obtention d'une réponse par son id
+     * @Route("/api/reponse/{id}.{_format}",
+              defaults = {"_format"="json"},
+              requirements = { "_format" = "html|json" },
+              name="getreponseID",
+     *  )
+     * @Method({"GET"})
+     */
+    public function getReponseID($id)
+    {
+        /*Requete*/
+        $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+        $reponses = $docR->find($id);
+        /*passage en JSON avec Serializer*/
+        $serializer = $this->get('serializer');
+        $jsonContent = $serializer->serialize($reponses, 'json');
 
         return new Response(
             $jsonContent,

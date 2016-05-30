@@ -92,7 +92,7 @@
         	var selectedId = $(this).attr("id");
         	console.log("Service n°: "+selectedId);  
         	/*création de l'url*/ 
-			var url = "{{ path('getservicesID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+			var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 			url = url.replace("idPlaceholder", selectedId);
 			var urlForm = "{{ path('reponse_service') }}";
 			console.log("url :");

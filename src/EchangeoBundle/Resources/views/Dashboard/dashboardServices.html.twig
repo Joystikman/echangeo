@@ -3,6 +3,7 @@
 {% block title %}Services Utilisateur{% endblock %}
 
 {% block liste %}
+	<h2>Mes services</h2>
 	<a href="{{ path('addServices') }}" class="button">Crée une nouvelle annonce</a>
 	{% for service in services %}
 		<div id="{{service.id}}" class="service">
@@ -25,7 +26,7 @@
 		console.log('display');
 		console.log(this.id);
 		/*création de l'url*/ 
-		var url = "{{ path('getservicesID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+		var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 		url = url.replace("idPlaceholder", this.id);
 		var urlEdit = "{{ path('editServices',{ 'id': "idPlaceholder"}) }}";
 		urlEdit = urlEdit.replace("idPlaceholder", this.id);

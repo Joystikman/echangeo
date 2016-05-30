@@ -184,4 +184,20 @@ class DashboardController extends Controller
               );
     }
 
+/*REPONSES*/
+/**
+     * Page des services
+     * @Route("/dashboard/reponses",
+              name="reponsesUser")
+     */
+    public function reponsesUserAction()
+    {
+        $docReponses = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+        $id = $this->getUser()->getId();
+        $reponses = $docReponses->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
+        return $this->render('EchangeoBundle:Dashboard:dashboardReponses.html.twig',array(
+                "reponses"=>$reponses)
+                );
+    } 
+
 }

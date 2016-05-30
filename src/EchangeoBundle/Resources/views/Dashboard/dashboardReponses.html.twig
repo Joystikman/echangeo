@@ -1,0 +1,55 @@
+{% extends 'EchangeoBundle:Dashboard:dashboard.html.twig' %}
+
+{% block title %}Réponse Utilisateur{% endblock %}
+
+{% block liste %}
+	<h2>Mes réponses</h2>
+	{% for reponse in reponses %}
+		<div id="{{reponse.id}}" class="reponse">
+	   		<h3>{{reponse.service.titre}}</h3>
+	   		<p>Date : <b>{{reponse.dateRendezVous|date("d/m/Y")}}</b></p> 
+	   		<p>Etat : {{reponse.etat}}</p>
+	   	</div>
+	{% endfor %}
+{% endblock liste %}
+
+{% block affichage %}
+		
+{% endblock affichage %}
+
+{% block script %}
+<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+<script type="text/javascript">
+/*on click service*/
+	$(".reponse").on("click", function(){
+		console.log('display');
+		console.log(this.id);
+		/*création de l'url*/ 
+		var url = "{{ path('getreponseID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+		url = url.replace("idPlaceholder", this.id);
+		console.log(url);
+		/*fonction ajax*/
+		$.ajax({
+			url: url,
+			type: "GET",
+			dataType: "json",
+			success: function(data){
+				console.log('test get data');
+				console.log(data);
+				$("#cadre").empty();
+				$("#cadre").append($("<div id='reponse' class='reponse'>"));
+				$("#reponse").append($("<div id='annonce' class='annonce'>"));
+				$("#annonce").append($("<h2>").text(data.service.titre));
+				$("#annonce").append($("<p>").text(data.service.description));
+				$("#annonce").append($("<p>").text(data.service.debut+" - "+data.service.fin));
+				$("#annonce").append($("<p>").text(data.service.lieu));
+				for(var i=0; i<data.conversation.messages.length; i++){
+					var id = data.conversation.messages[i].id;
+					$("#reponse").append($("<div id='message"+id+"' class='message'>"));
+					$("#message"+id).append($("<p>").text(data.conversation.messages[i].contenu));
+				}
+			}
+		});
+	}); 
+</script>
+{% endblock script %}	
