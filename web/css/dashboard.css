@@ -106,6 +106,26 @@ header {
 	border-bottom: solid 3px #005B8C;*/
 }
 
+.tuile:hover{
+	background-color: #E6D9C8;
+}
+
+.annonce{
+	margin: 5px;
+	padding: 5px;
+	border : 1px solid #A7A5A5;
+}
+
+.conversation{
+	margin: 5px;
+	padding: 5px;
+	border : 1px solid #D9C067;
+}
+
+.message{
+	background-color: #E6D9C8;	
+}
+
 footer{
 	z-index: 1;
 	min-height: 50px;

@@ -5,7 +5,7 @@
 {% block liste %}
 	<h2>Mes réponses</h2>
 	{% for reponse in reponses %}
-		<div id="{{reponse.id}}" class="reponse">
+		<div id="{{reponse.id}}" class="tuile">
 	   		<h3>{{reponse.service.titre}}</h3>
 	   		<p>Date : <b>{{reponse.dateRendezVous|date("d/m/Y")}}</b></p> 
 	   		<p>Etat : {{reponse.etat}}</p>
@@ -21,12 +21,14 @@
 <script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
 <script type="text/javascript">
 /*on click service*/
-	$(".reponse").on("click", function(){
+	$(".tuile").on("click", function(){
 		console.log('display');
 		console.log(this.id);
 		/*création de l'url*/ 
 		var url = "{{ path('getreponseID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 		url = url.replace("idPlaceholder", this.id);
+		var urlForm = "{{ path('sendMessage') }}";
+		urlForm = urlForm.replace("idPlaceholder", this.id);
 		console.log(url);
 		/*fonction ajax*/
 		$.ajax({
@@ -43,11 +45,18 @@
 				$("#annonce").append($("<p>").text(data.service.description));
 				$("#annonce").append($("<p>").text(data.service.debut+" - "+data.service.fin));
 				$("#annonce").append($("<p>").text(data.service.lieu));
+				$("#reponse").append($("<div id='conversation' class='conversation'>"));
 				for(var i=0; i<data.conversation.messages.length; i++){
 					var id = data.conversation.messages[i].id;
-					$("#reponse").append($("<div id='message"+id+"' class='message'>"));
+					$("#conversation").append($("<div id='message"+id+"' class='message'>"));
+					$("#message"+id).append($("<h4>").text(data.conversation.messages[i].inscrit.username));
 					$("#message"+id).append($("<p>").text(data.conversation.messages[i].contenu));
 				}
+				$("#conversation").append($("<form id='send' action="+urlForm+" method='POST'>"));
+				$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversation.id+">"));
+				$("#send").append($("<input type='hidden' name='page' value='reponse'>"));
+				$("#send").append($("<input type='text' name='message' placeholder='message'>"));
+				$("#send").append($("<input type='submit' name='envoie' value='répondre'>"));
 			}
 		});
 	}); 

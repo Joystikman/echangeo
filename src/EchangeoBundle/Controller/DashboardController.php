@@ -7,6 +7,7 @@ use EchangeoBundle\Entity\Categorie;
 use EchangeoBundle\Entity\Service;
 use EchangeoBundle\Entity\Reponse;
 use EchangeoBundle\Entity\Inscrit;
+use EchangeoBundle\Entity\Message;
 
 /*appel des formulaires*/
 use EchangeoBundle\Form\ServiceType;
@@ -21,6 +22,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 /*appel des gestionnaires*/
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
@@ -199,5 +201,38 @@ class DashboardController extends Controller
                 "reponses"=>$reponses)
                 );
     } 
+
+/*MESSAGES*/
+  /**
+     * envoie de message conversation
+     * @Route("/dashboard/send",
+              name="sendMessage")
+     * @Method({"POST"})
+     */
+    public function sendAction(Request $request)
+    {
+      //print_r($request->request->get('message'));
+    /*On enregistre le réponse*/
+      $message = new Message();
+      $docC = $this->getDoctrine()->getRepository('EchangeoBundle:Conversation');
+      $conversation = $docC->find($request->request->get('idConversation'));
+      
+      $message->setContenu($request->request->get('message'));
+      $message->setInscrit($this->getUser());
+      $message->setConversation($conversation);
+
+      $em = $this->getDoctrine()->getManager();
+      //$em->persist($conversation);
+      $em->persist($message);
+      $em->flush();
+
+    /*On renvoie vers la page de recherche*/
+    if ($request->request->get('page')==="reponse") {
+      return $this->redirectToRoute('reponsesUser');
+    }
+    else{
+      return $this->redirectToRoute('servicesUser');
+    }
+  }
 
 }

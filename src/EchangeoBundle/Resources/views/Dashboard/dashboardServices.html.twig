@@ -6,7 +6,7 @@
 	<h2>Mes services</h2>
 	<a href="{{ path('addServices') }}" class="button">Crée une nouvelle annonce</a>
 	{% for service in services %}
-		<div id="{{service.id}}" class="service">
+		<div id="{{service.id}}" class="tuile">
 	   		<h3>{{service.titre}}</h3>
 	   		<p>{{service.description}}</p>
 	   		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
@@ -22,7 +22,7 @@
 <script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
 <script type="text/javascript">
 /*on click service*/
-	$(".service").on("click", function(){
+	$(".tuile").on("click", function(){
 		console.log('display');
 		console.log(this.id);
 		/*création de l'url*/ 
