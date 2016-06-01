@@ -41,13 +41,79 @@
 				console.log(data);
 				$("#cadre").empty();
 				$("#cadre").append($("<div id='service' class='service'>"));
-				$("#service").append($("<a href="+urlEdit+" class='button'>").text("modifier"));
-				$("#service").append($("<h2>").text(data.titre));
-				$("#service").append($("<p>").text(data.description));
-				$("#service").append($("<p>").text(data.debut+" - "+data.fin));
-				$("#service").append($("<p>").text(data.lieu));
+				$("#service").append($("<div id='annonce' class='annonce'>"));
+				$("#annonce").append($("<a href="+urlEdit+" class='button'>").text("modifier"));
+				$("#annonce").append($("<h2>").text(data.titre));
+				$("#annonce").append($("<p>").text(data.description));
+				$("#annonce").append($("<p>").text(data.debut+" - "+data.fin));
+				$("#annonce").append($("<p>").text(data.lieu));
+				$("#service").append($("<div id='reponse' class='reponse'>"));
+				if(data.reponses.length==0){
+					$("#reponse").append($("<h3>").text("Réponse :"));
+					$("#reponse").append($("<p>").text("Personne n'a encore répondu à votre annonce. Sachez que vous pouvez la modifier à tout moment."));
+				}
+				else{
+					listeReponses(data);
+				}
 			}
 		});
 	}); 
+
+	function listeReponses(data){
+		/*console.log(data);*/
+		var service = data;
+		$("#reponse").empty();
+		$("#reponse").append($("<h3>").text("Réponse :"));
+		$("#reponse").append($("<p>").text("liste des réponse à l'annonce : "));
+		for (var i=0; i<data.reponses.length; i++) {
+			var id = data.reponses[i].id;
+			$("#reponse").append($("<div id='reponse"+id+"' title='"+id+"' class='reponseId'>"));
+			$("#reponse"+id).append($("<h4>").text('de '+data.reponses[i].conversation.interlocuteur2.username));
+			$("#reponse"+id).append($("<p>").text('date proposé pour le service :'+data.reponses[i].date_rendez_vous));			
+			$("#reponse"+id).append($("<p class='linkReponse'>").text("voir en détails."));
+			$("#reponse"+id).on("click", function(){
+				console.log('ça marche');
+				console.log(this.title);
+				/*création de l'url*/ 
+				var url = "{{ path('getreponseID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+				url = url.replace("idPlaceholder", this.title);
+				var urlForm = "{{ path('sendMessage') }}";
+				urlForm = urlForm.replace("idPlaceholder", this.title);
+				console.log(url);
+				/*fonction ajax*/
+				$.ajax({
+					url: url,
+					type: "GET",
+					dataType: "json",
+					success: function(data){
+						console.log('data obtenu');
+						console.log(data);
+						$("#reponse").empty();
+						$("#reponse").append($("<div id='reponseId' class='reponse'>"));
+						$("#reponseId").append($("<h3>").text("Réponse :"));
+						$("#reponseId").append($("<p id='retour'>").text("<- retour"));
+						$("#retour").on("click", function(){listeReponses(service)});
+						$("#reponseId").append($("<h4>").text('de '+data.conversation.interlocuteur2.username));
+						$("#reponseId").append($("<p>").text('date proposé pour le service :'+data.date_rendez_vous));
+						$("#reponseId").append($("<p>").text('etat :'+data.etat));
+						$("#reponseId").append($("<div id='conversation' class='conversation'>"));
+						for(var i=0; i<data.conversation.messages.length; i++){
+							var id = data.conversation.messages[i].id;
+							$("#conversation").append($("<div id='message"+id+"' class='message'>"));
+							$("#message"+id).append($("<h4>").text(data.conversation.messages[i].inscrit.username));
+							$("#message"+id).append($("<p>").text(data.conversation.messages[i].contenu));
+						}
+						$("#conversation").append($("<form id='send' action="+urlForm+" method='POST'>"));
+						$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversation.id+">"));
+						$("#send").append($("<input type='hidden' name='page' value='service'>"));
+						$("#send").append($("<input type='text' name='message' placeholder='message'>"));
+						$("#send").append($("<input type='submit' name='envoie' value='répondre'>"));
+					}
+				});
+			}); 
+		}
+	}
+
+
 </script>
 {% endblock script %}	
