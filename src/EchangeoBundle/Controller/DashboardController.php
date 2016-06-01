@@ -222,7 +222,6 @@ class DashboardController extends Controller
       $message->setConversation($conversation);
 
       $em = $this->getDoctrine()->getManager();
-      //$em->persist($conversation);
       $em->persist($message);
       $em->flush();
 
@@ -235,4 +234,33 @@ class DashboardController extends Controller
     }
   }
 
+/*VALIDATION REPONSE*/
+  /**
+     * validation d'une réponse 
+     * @Route("/dashboard/validation",
+              name="validation")
+     * @Method({"POST"})
+     */
+    public function validationAction(Request $request)
+    {
+      //print_r($request->request->get('message'));
+      /*On enregistre le réponse*/
+      $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+      $reponse = $docR->find($request->request->get('idReponse'));
+
+      print_r($request->request->get('valide'));
+
+      if ($request->request->get('valide')) {
+        $reponse->setEtat('valide');
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
+      elseif ($request->request->get('decline')) {
+        $reponse->setEtat('refuse');
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
+    }
 }

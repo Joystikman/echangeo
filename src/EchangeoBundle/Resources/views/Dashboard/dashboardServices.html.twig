@@ -78,7 +78,7 @@
 				var url = "{{ path('getreponseID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 				url = url.replace("idPlaceholder", this.title);
 				var urlForm = "{{ path('sendMessage') }}";
-				urlForm = urlForm.replace("idPlaceholder", this.title);
+				var urlVal = "{{ path('validation') }}";
 				console.log(url);
 				/*fonction ajax*/
 				$.ajax({
@@ -96,6 +96,10 @@
 						$("#reponseId").append($("<h4>").text('de '+data.conversation.interlocuteur2.username));
 						$("#reponseId").append($("<p>").text('date proposé pour le service :'+data.date_rendez_vous));
 						$("#reponseId").append($("<p>").text('etat :'+data.etat));
+						$("#reponseId").append($("<form id='validation' action="+urlVal+" method='POST'>"));
+						$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
+						$("#validation").append($("<input type='submit' name='valide' value='accepter'>"));
+						$("#validation").append($("<input type='submit' name='decline' value='decliner'>"));
 						$("#reponseId").append($("<div id='conversation' class='conversation'>"));
 						for(var i=0; i<data.conversation.messages.length; i++){
 							var id = data.conversation.messages[i].id;
