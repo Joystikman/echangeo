@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
+use \Datetime;
 /*Serializer*/
 /*use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -136,10 +137,14 @@ class ApiController extends Controller
     {
         /*Requete*/
         $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
-        $reponses = $docR->find($id);
+        $reponse = $docR->find($id);
+        /*Activation de la notation*/
+        if ($reponse->getEtat() === "valide" && ($reponse->getDateRendezVous()->diff(new DateTime())->format("%d days, %h hours and %i minuts")) ) {
+            $reponse->setEtat("notation");
+        }
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
-        $jsonContent = $serializer->serialize($reponses, 'json');
+        $jsonContent = $serializer->serialize($reponse, 'json');
 
         return new Response(
             $jsonContent,

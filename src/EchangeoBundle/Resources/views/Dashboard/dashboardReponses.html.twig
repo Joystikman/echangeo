@@ -48,8 +48,8 @@
 				$("#service").append($("<div id='reponse' class='reponse'>"));
 				$("#reponse").append($("<h3>").text("Réponse :"));
 				$("#reponse").append($("<h4>").text('de '+data.conversation.interlocuteur2.username));
-				$("#reponse").append($("<p>").text('date proposé pour le service :'+data.dateRendezVous));
-				$("#reponse").append($("<p>").text('etat :'+data.etat));
+				$("#reponse").append($("<p>").text('date proposé pour le service :'+data.date_rendez_vous));
+				validation(data);
 				$("#service").append($("<div id='conversation' class='conversation'>"));
 				for(var i=0; i<data.conversation.messages.length; i++){
 					var id = data.conversation.messages[i].id;
@@ -57,13 +57,48 @@
 					$("#message"+id).append($("<h4>").text(data.conversation.messages[i].inscrit.username));
 					$("#message"+id).append($("<p>").text(data.conversation.messages[i].contenu));
 				}
-				$("#conversation").append($("<form id='send' action="+urlForm+" method='POST'>"));
-				$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversation.id+">"));
-				$("#send").append($("<input type='hidden' name='page' value='reponse'>"));
-				$("#send").append($("<input type='text' name='message' placeholder='message'>"));
-				$("#send").append($("<input type='submit' name='envoie' value='répondre'>"));
+				if (data.etat=="cloture") {
+					$("#conversation").append($("<p>").text("Le service est cloture"))
+				}
+				else{
+					$("#conversation").append($("<form id='send' action="+urlForm+" method='POST'>"));
+					$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversation.id+">"));
+					$("#send").append($("<input type='hidden' name='page' value='reponse'>"));
+					$("#send").append($("<input type='text' name='message' placeholder='message'>"));
+					$("#send").append($("<input type='submit' name='envoie' value='répondre'>"));
+				}
 			}
 		});
 	}); 
+
+	function validation(data){
+		if (data.etat=="attente") {
+			$("#reponse").append($("<div id='validation'>"));
+			$("#validation").append($("<p>").text("votre proposition n'a pas encore été validé"));
+		}
+		if (data.etat=="valide"){
+			$("#reponse").append($("<div id='validation'>"));
+			$("#validation").append($("<p>").text("votre proposition a été validé. Un fois le service rendu, pensez à noter"));
+		}
+		if (data.etat=="notation"){
+			var urlNote = "{{ path('notation') }}";
+			$("#reponse").append($("<form id='validation' action="+urlNote+" method='POST'>"));
+			$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
+			$("#validation").append($("<input type='hidden' name='page' value='reponses'>"));
+			$("#validation").append($("<label for='note'>Note : </label>"));
+			$("#validation").append($("<input type='radio' name='note' value=1>"));
+			$("#validation").append($("<input type='radio' name='note' value=2>"));
+			$("#validation").append($("<input type='radio' name='note' value=3>"));
+			$("#validation").append($("<input type='radio' name='note' value=4>"));
+			$("#validation").append($("<input type='radio' name='note' value=5>"));
+			$("#validation").append($("<input type='text' name='commentaire' placeholder='commentaire'>"));
+			$("#validation").append($("<input type='submit' name='noter' value='noter'>"));
+		}
+		if (data.etat=="refuser"){
+			$("#reponse").append($("<div>"));
+			$("#reponse").append($("<p>").text("Votre proposition a été refusée. "));
+		}
+	}
+
 </script>
 {% endblock script %}	

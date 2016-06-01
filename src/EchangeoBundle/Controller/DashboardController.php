@@ -8,6 +8,7 @@ use EchangeoBundle\Entity\Service;
 use EchangeoBundle\Entity\Reponse;
 use EchangeoBundle\Entity\Inscrit;
 use EchangeoBundle\Entity\Message;
+use EchangeoBundle\Entity\Evaluation;
 
 /*appel des formulaires*/
 use EchangeoBundle\Form\ServiceType;
@@ -261,6 +262,41 @@ class DashboardController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->flush();
         return $this->redirectToRoute('servicesUser');
+      }
+    }
+
+/*NOTATION*/
+  /**
+     * notation d'un service 
+     * @Route("/dashboard/notation",
+              name="notation")
+     * @Method({"POST"})
+     */
+    public function notationAction(Request $request)
+    {
+      /*On enregistre le réponse*/
+      $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+      $reponse = $docR->find($request->request->get('idReponse'));
+
+      $evaluation = new Evaluation();
+      $evaluation->setNote($request->request->get('note'));
+      $evaluation->setCommentaire($request->request->get('commentaire'));
+      $evaluation->setInscritNotant($this->getUser());
+      $evaluation->setService($reponse->getService());
+
+      if ($request->request->get('page')=="services") {
+        $evaluation->setInscritNote($reponse->getInscrit());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($evaluation);
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
+      elseif ($request->request->get('page')=="reponses") {
+        $evaluation->setInscritNote($reponse->getService()->getInscrit());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($evaluation);
+        $em->flush();
+        //return $this->redirectToRoute('reponsesUser');
       }
     }
 }
