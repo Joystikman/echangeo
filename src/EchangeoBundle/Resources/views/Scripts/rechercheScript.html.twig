@@ -2,8 +2,6 @@
  * Ensembles des fonction utile à la recherche de services
  * par Guiraud Maxime
  * =======================================================*/ -->
-<!-- exemple de checkbox -->
-<!-- <input type="checkbox" value="test"></input -->>
 <script type="text/javascript">
 	/*scripts de recherche*/
 	function displaySousCategorie(event) {
@@ -19,6 +17,7 @@
 		/*fonction ajax*/
 		$("#titre").empty();	
 		$("#liste").empty();	
+		$("#liste").append($("<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>"));	
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -26,6 +25,7 @@
 			success: function(data){
 				console.log('test get data');
 				console.log(data);
+				$("#liste").empty();
 				$('#select2').empty();
 				$('#select2').append($("<form id='formSousCategorie' method='get'>"));
 				for(var i=0; i<data.length; i++){

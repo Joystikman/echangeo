@@ -5,10 +5,11 @@
 }
 
 header {
-	z-index: 1;
-	padding : 20px 0px;
+	z-index: 5;
+	padding : 10px 0px;
 	text-align: center;
-	border-bottom: 2px solid #B87731;
+	background-color: #2F3140;
+	/*border-bottom: 2px solid #B87731;*/
 }
 
 .logo {
@@ -18,33 +19,48 @@ header {
 .logo span{
 	padding: 20px 32px;
 	color: white;
-	background-color: #E47C1F;
+	background-color: #ea7317;
 	font-size: 32px;
 	font-weight: bold;
 	border-radius: 100%;	
 }
 
 .navbar{
-	padding: 20px 5px;
-	margin: 5px 0px;
-	border-top: 2px solid #B87731;	
-	border-bottom: 2px solid #B87731;	
+	padding: 15px 0px;
+	background-color: #2F3140;
+	/*border-top: 2px solid #B87731;	
+	border-bottom: 2px solid #B87731;*/	
 }
 
-.button{
-	/*width: 100%;*/
-	margin: 10px 0px;
-	padding: 8px 18px;
-	color: white;
-	font-size: 16px;
-	background-color:#007CB0 ;
+.menu{
+	z-index: 4;
+	text-decoration: none;
+	padding: 20px 25px;
+	color: #FFFFFF;
+	font-size: 20px;
+	background-color:#2F3140;
 	border: none;		
-	border-bottom: solid 3px #005B8C;
+	border-bottom: solid 12px #2F3140;
+	/*border-radius: 10px;*/
 	/*box-shadow: 0px 2px 3px #E0E0E0;*/
 }
 
+.menu:hover{
+	border-bottom: solid 12px #73B4D9;
+}
+
+.menu:active{
+	background-color:#20222F;
+}
+
+.button{
+	margin: 10px 0px;
+	padding: 10px 15px;
+	color: #FFFFFF;
+	background-color: #2364aa;
+}
+
 .main{
-	margin-top: 10px;
 	display: -ms-flex;
   	display: -webkit-flex;
   	display: flex;
@@ -55,27 +71,54 @@ header {
 }
 
 .liste{
+	z-index: 1;
 	padding: 0px 15px;
 	flex: 1;
 	display: flex;
 	flex-direction: column;
 	overflow-y: auto;
 	height: 100vh;
-	background-color: #D0D0D0;
-	border-right: 2px solid #7C7C7C;
+	background-color: #FFFFFF;
+	box-shadow: 0px 0px 5px 1px #878787;
 }
 
-.liste div{
+.tuile{	
+	margin: 10px;
 	padding: 10px;
 	background-color: #F3ECE3;
-	border-bottom: 2px solid #AC6E15;	
+}
+
+.tuile:hover{
+	background-color: #E6D9C8;
+}
+
+.attente{
+	border-top: 8px solid #fec601;
+}
+
+.valide{
+	border-top: 8px solid #09E85E;
+}
+
+.notation{
+	border-top: 8px solid #2DE1FC;
+}
+
+.cloture{
+	border-top: 8px solid #7D907C;
 }
 
 .cadre{
+	z-index: -1;
 	flex: 3;
     /*height: 100%;*/
-    background-color: #F3ECE3;
+    background-color: #F1F1F3;
     padding: 10px;
+}
+
+.service{
+	margin: 20px 10%;
+	background-color: #FFFFFF;
 }
 
 .cadre label{
@@ -86,10 +129,10 @@ header {
 .cadre input{
 	margin: 10px 0px;
     margin-bottom: 10px;
-    width: 50%;
-    padding: 7px;
+    /*width: 50%;*/
+    padding: 7px;/*
     border: none;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;*/
     background: transparent;
     color: #000000;
     font: 16px;
@@ -97,23 +140,41 @@ header {
 }
 
 .cadre button{
-	/*margin: 10px 0px;
+	margin: 10px 0px;
 	padding: 8px 18px;
 	color: white;
 	font-size: 16px;
 	background-color:#007CB0 ;
 	border: none;		
-	border-bottom: solid 3px #005B8C;*/
-}
-
-.tuile:hover{
-	background-color: #E6D9C8;
+	border-bottom: solid 3px #005B8C;
 }
 
 .annonce{
-	margin: 5px;
 	padding: 5px;
 	border : 1px solid #A7A5A5;
+}
+
+.loading{
+	text-align: center;
+	margin: 25%;
+}
+
+.reponse{
+	margin: 10px 5%;
+}
+
+.reponseId{
+	padding: 5px;
+	background-color: #ECECEC;
+	border-bottom: 3px solid #F1F1F3;
+}
+
+.responseId:hover{
+	background-color: #9B4545;
+}
+
+.linkreponse:hover{
+	color: #675DEA;
 }
 
 .conversation{
@@ -134,6 +195,6 @@ footer{
 	height:30px;
 	width:100%;	
 	text-align: center;
-	background: #1B2ABA;
+	background: #2F3140;
 	color: white;
 }

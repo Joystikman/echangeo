@@ -81,7 +81,6 @@ class DashboardController extends Controller
                                                          'multiple' => false,
                                                          'expanded' => false,
                                                          'class' => 'EchangeoBundle:SousCategorie',
-                                                         /*'choice_value' => 'id',*/
                                                          'choice_label' => 'libelle' ))
                 ->add('description', TextareaType::class)
                 ->add('debut', DateType::class, array(

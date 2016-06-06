@@ -54,9 +54,20 @@ header {
 .liste{
 	overflow-y: auto;
 	height: 100vh;
+	background-color: #FFFFFF;
 }
 
-.liste div{
+.tuile{	
+	margin: 10px;
+	padding: 10px;
+	background-color: #F3ECE3;
+}
+
+.tuile:hover{
+	background-color: #E6D9C8;
+}
+
+/*.liste div{
 	padding: 10px 15px;
 	border-top: 2px solid #808080;
 	border-bottom: 2px solid #808080;
@@ -68,7 +79,7 @@ header {
 
 .liste div p{
 	padding-left: 15px;
-}
+}*/
 
 .carte{
     flex: 2;
@@ -95,6 +106,6 @@ footer{
 	height:30px;
 	width:100%;	
 	text-align: center;
-	background: #1B2ABA;
+	background: #2F3140;
 	color: white;
 }

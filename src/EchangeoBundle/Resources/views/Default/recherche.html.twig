@@ -14,7 +14,7 @@
   	<div id="main" class="main">
   	 	<!-- Block de recherche -->
   		<div class="recherche">
-	  		<input placeholder="Recherche"></input>
+	  		<!-- <input placeholder="Recherche"></input> -->
 	    	<h2>Catégories : </h2>
 	  		<div id="select1">
 		  		<select onchange="displaySousCategorie.call(this,event)">
@@ -30,7 +30,7 @@
 		    <h2 id="titre">Les derniers services ajoutés : </h2>
 	    	<div id="liste" class="liste">
 		    	{% for service in services %}
-		       	<div>
+		       	<div class="tuile">
 		       		<h3>{{service.titre}}</h3>       	
 		       		<p>Proposé par : {{service.inscrit.username}}</p>
 		       		<a id="{{service.id}}" href="#" class="button_details">voir en détails</a>

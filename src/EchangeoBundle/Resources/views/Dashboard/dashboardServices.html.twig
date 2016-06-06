@@ -3,14 +3,26 @@
 {% block title %}Services Utilisateur{% endblock %}
 
 {% block liste %}
-	<h2>Mes services</h2>
+	<!-- <h2>Mes services</h2> -->
 	<a href="{{ path('addServices') }}" class="button">Crée une nouvelle annonce</a>
 	{% for service in services %}
-		<div id="{{service.id}}" class="tuile">
-	   		<h3>{{service.titre}}</h3>
-	   		<p>{{service.description}}</p>
-	   		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
-	   	</div>
+		{% if service.fin|date('Ymd') < "now"|date('Y-m-d') %}
+			<div id="{{service.id}}" class="tuile cloture">
+		    <h3>{{service.titre}}</h3>
+		   	<p>{{service.description}}</p>
+		   	<p>{{"now"|date('Y-m-d')}}</p>
+		   	<p>{{service.fin|date('Y-m-d')}}</p>
+		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+		  </div>
+		{% else %}
+			<div id="{{service.id}}" class="tuile valide">
+		    <h3>{{service.titre}}</h3>
+		   	<p>{{service.description}}</p>
+		   	<p>{{"now"|date('Y-m-d')}}</p>
+		   	<p>{{service.fin|date('Y-m-d')}}</p>
+		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+		  </div>
+		{% endif %}
 	{% endfor %}
 {% endblock liste %}
 
@@ -20,141 +32,5 @@
 
 {% block script %}
 <script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
-<script type="text/javascript">
-/*on click service*/
-	$(".tuile").on("click", function(){
-		console.log('display');
-		console.log(this.id);
-		/*création de l'url*/ 
-		var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-		url = url.replace("idPlaceholder", this.id);
-		var urlEdit = "{{ path('editServices',{ 'id': "idPlaceholder"}) }}";
-		urlEdit = urlEdit.replace("idPlaceholder", this.id);
-		/*console.log(url);*/
-		/*fonction ajax*/
-		$.ajax({
-			url: url,
-			type: "GET",
-			dataType: "json",
-			success: function(data){
-				console.log('test get data');
-				console.log(data);
-				$("#cadre").empty();
-				$("#cadre").append($("<div id='service' class='service'>"));
-				$("#service").append($("<div id='annonce' class='annonce'>"));
-				$("#annonce").append($("<a href="+urlEdit+" class='button'>").text("modifier"));
-				$("#annonce").append($("<h2>").text(data.titre));
-				$("#annonce").append($("<p>").text(data.description));
-				$("#annonce").append($("<p>").text(data.debut+" - "+data.fin));
-				$("#annonce").append($("<p>").text(data.lieu));
-				$("#service").append($("<div id='reponse' class='reponse'>"));
-				if(data.reponses.length==0){
-					$("#reponse").append($("<h3>").text("Réponse :"));
-					$("#reponse").append($("<p>").text("Personne n'a encore répondu à votre annonce. Sachez que vous pouvez la modifier à tout moment."));
-				}
-				else{
-					listeReponses(data);
-				}
-			}
-		});
-	}); 
-
-	function listeReponses(data){
-		/*console.log(data);*/
-		var service = data;
-		$("#reponse").empty();
-		$("#reponse").append($("<h3>").text("Réponse :"));
-		$("#reponse").append($("<p>").text("liste des réponse à l'annonce : "));
-		for (var i=0; i<data.reponses.length; i++) {
-			var id = data.reponses[i].id;
-			$("#reponse").append($("<div id='reponse"+id+"' title='"+id+"' class='reponseId'>"));
-			$("#reponse"+id).append($("<h4>").text('de '+data.reponses[i].conversation.interlocuteur2.username));
-			$("#reponse"+id).append($("<p>").text('date proposé pour le service :'+data.reponses[i].date_rendez_vous));			
-			$("#reponse"+id).append($("<p class='linkReponse'>").text("voir en détails."));
-			$("#reponse"+id).on("click", function(){
-				console.log('ça marche');
-				console.log(this.title);
-				/*création de l'url*/ 
-				var url = "{{ path('getreponseID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-				url = url.replace("idPlaceholder", this.title);
-				var urlForm = "{{ path('sendMessage') }}";
-				console.log(url);
-				/*fonction ajax*/
-				$.ajax({
-					url: url,
-					type: "GET",
-					dataType: "json",
-					success: function(data){
-						console.log('data obtenu');
-						console.log(data);
-						$("#reponse").empty();
-						$("#reponse").append($("<div id='reponseId' class='reponse'>"));
-						$("#reponseId").append($("<h3>").text("Réponse :"));
-						$("#reponseId").append($("<p id='retour'>").text("<- retour"));
-						$("#retour").on("click", function(){listeReponses(service)});
-						$("#reponseId").append($("<h4>").text('de '+data.conversation.interlocuteur2.username));
-						$("#reponseId").append($("<p>").text('date proposé pour le service :'+data.date_rendez_vous));
-						$("#reponseId").append($("<p>").text('etat :'+data.etat));
-						validation(data);
-						$("#reponseId").append($("<div id='conversation' class='conversation'>"));
-						for(var i=0; i<data.conversation.messages.length; i++){
-							var id = data.conversation.messages[i].id;
-							$("#conversation").append($("<div id='message"+id+"' class='message'>"));
-							$("#message"+id).append($("<h4>").text(data.conversation.messages[i].inscrit.username));
-							$("#message"+id).append($("<p>").text(data.conversation.messages[i].contenu));
-						}
-						if (data.etat=="cloture") {
-							$("#conversation").append($("<p>").text("Le service est cloture"))
-						}
-						else{
-							$("#conversation").append($("<form id='send' action="+urlForm+" method='POST'>"));
-							$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversation.id+">"));
-							$("#send").append($("<input type='hidden' name='page' value='reponse'>"));
-							$("#send").append($("<input type='text' name='message' placeholder='message'>"));
-							$("#send").append($("<input type='submit' name='envoie' value='répondre'>"));
-				}
-					}
-				});
-			}); 
-		}
-	}
-
-	function validation(data){
-		if (data.etat=="attente") {
-			var urlVal = "{{ path('validation') }}";
-			$("#reponseId").append($("<form id='validation' action="+urlVal+" method='POST'>"));
-			$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
-			$("#validation").append($("<input type='submit' name='valide' value='accepter'>"));
-			$("#validation").append($("<input type='submit' name='decline' value='decliner'>"));
-		}
-		if (data.etat=="valide"){
-			var urlVal = "{{ path('validation') }}";
-			$("#reponseId").append($("<div>"));
-			$("#reponseId").append($("<p>").text("La proposition de "+data.inscrit.username+" a été accepter, une fois le service rendu, pensez à venir noter."));
-			$("#reponseId").append($("<form id='validation' action="+urlVal+" method='POST'>"));
-			$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
-			$("#validation").append($("<input type='submit' name='decline' value='annuler'>"));
-		}
-		if (data.etat=="notation"){
-			var urlNote = "{{ path('notation') }}";
-			$("#reponseId").append($("<form id='validation' action="+urlNote+" method='POST'>"));
-			$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
-			$("#validation").append($("<input type='hidden' name='page' value='services'>"));
-			$("#validation").append($("<label for='note'>Note : </label>"));
-			$("#validation").append($("<input type='radio' name='note' value=1>"));
-			$("#validation").append($("<input type='radio' name='note' value=2>"));
-			$("#validation").append($("<input type='radio' name='note' value=3>"));
-			$("#validation").append($("<input type='radio' name='note' value=4>"));
-			$("#validation").append($("<input type='radio' name='note' value=5>"));
-			$("#validation").append($("<input type='text' name='commentaire' placeholder='commentaire'>"));
-			$("#validation").append($("<input type='submit' name='noter' value='noter'>"));
-		}
-		if (data.etat=="refuser"){
-			$("#reponseId").append($("<div>"));
-			$("#reponseId").append($("<p>").text("Vous avez refuser la proposition de "+data.inscrit.username));
-		}
-	}
-
-
-</script>
+{% include 'EchangeoBundle:Scripts:servicesScript.html.twig' %}
 {% endblock script %}	
