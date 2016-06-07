@@ -37,6 +37,44 @@
 							.append($("<p>").text("Proposé par : "+data[i].services[j].inscrit.username))
 							.append($("<a id="+data[i].services[j].id+" href='#' class='button_details'>").text('voir en détails'))
 						);
+						$('#'+data[i].services[j].id).on("click", function(){
+				        	var selectedId = $(this).attr("id");
+				        	console.log("Service n°: "+selectedId);  
+				        	/*création de l'url*/ 
+							var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+							url = url.replace("idPlaceholder", selectedId);
+							var urlForm = "{{ path('reponse_service') }}";
+							console.log("url :");
+							console.log(url);
+							/*AJAX*/
+							$("#titre").empty();	
+							$("#liste").empty();	
+							$.ajax({
+								url: url,
+								type: "GET",
+								dataType: "json",
+								success: function(data){
+									console.log('test rqt Ajax');
+									console.log(data);
+									/*$('#titre').text("<- retour");*/
+									$('#liste').append($("<div>")
+										.append($("<h3>").text(data.titre))
+										.append($("<p>").text("Proposé par : "+data.inscrit.username))
+										.append($("<p>").text(""+data.description))
+										.append($("<form action="+urlForm+" method='POST'>")
+											.append($("<input type='hidden' name='idService' value="+data.id+">"))
+											.append($("<input type='text' name='dateRDV' >"))
+											.append($("<input type='text' name='message' placeholder='message'>"))
+											.append($("<input type='submit' name='envoie' value='répondre'>"))
+										)
+									);
+								},
+								error: function (req, status, err){
+									console.log("erreur");
+									console.log(err);
+								}
+							});        
+				    	});
 					}
 				}
 			},
@@ -63,7 +101,8 @@
 		console.log(url);
 		/*AJAX*/
 		/*$("#titre").empty();*/	
-		$("#liste").empty();	
+		$("#liste").empty();
+		$("#liste").append($("<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>"));	
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -71,12 +110,53 @@
 			success: function(data){
 				console.log('test rqt Ajax');
 				console.log(data);
+				$("#liste").empty();
 				for(var i=0; i<data.length; i++){
 					$('#liste').append($("<div>")
 						.append($("<h3>").text(data[i][0].titre))
 						.append($("<p>").text("Proposé par : "+data[i][0].inscrit.username))
 						.append($("<a id="+data[i][0].id+" href='#' class='button_details'>").text('voir en détails'))
 					);
+					$('#'+data[i][0].id).on("click", function(){
+				        	var selectedId = $(this).attr("id");
+				        	console.log("Service n°: "+selectedId);  
+				        	/*création de l'url*/ 
+							var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+							url = url.replace("idPlaceholder", selectedId);
+							var urlForm = "{{ path('reponse_service') }}";
+							console.log("url :");
+							console.log(url);
+							/*AJAX*/
+							$("#titre").empty();	
+							$("#liste").empty();	
+							$("#liste").append($("<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>"));
+							$.ajax({
+								url: url,
+								type: "GET",
+								dataType: "json",
+								success: function(data){
+									console.log('test rqt Ajax');
+									console.log(data);
+									$("#liste").empty();
+									/*$('#titre').text("<- retour");*/
+									$('#liste').append($("<div>")
+										.append($("<h3>").text(data.titre))
+										.append($("<p>").text("Proposé par : "+data.inscrit.username))
+										.append($("<p>").text(""+data.description))
+										.append($("<form action="+urlForm+" method='POST'>")
+											.append($("<input type='hidden' name='idService' value="+data.id+">"))
+											.append($("<input type='text' name='dateRDV' placeholder='message'>"))
+											.append($("<input type='text' name='message' placeholder='message'>"))
+											.append($("<input type='submit' name='envoie' value='répondre'>"))
+										)
+									);
+								},
+								error: function (req, status, err){
+									console.log("erreur");
+									console.log(err);
+								}
+							});        
+				    	});
 				}
 			},
 			error: function (req, status, err){
@@ -88,44 +168,44 @@
 
 	//Details des services
 	$(document).ready(function(){
-    	$('#liste a').click(function(){
-        	var selectedId = $(this).attr("id");
-        	console.log("Service n°: "+selectedId);  
-        	/*création de l'url*/ 
-			var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-			url = url.replace("idPlaceholder", selectedId);
-			var urlForm = "{{ path('reponse_service') }}";
-			console.log("url :");
-			console.log(url);
-			/*AJAX*/
-			$("#titre").empty();	
-			$("#liste").empty();	
-			$.ajax({
-				url: url,
-				type: "GET",
-				dataType: "json",
-				success: function(data){
-					console.log('test rqt Ajax');
-					console.log(data);
-					/*$('#titre').text("<- retour");*/
-					$('#liste').append($("<div>")
-						.append($("<h3>").text(data.titre))
-						.append($("<p>").text("Proposé par : "+data.inscrit.username))
-						.append($("<p>").text(""+data.description))
-						.append($("<form action="+urlForm+" method='POST'>")
-							.append($("<input type='hidden' name='idService' value="+data.id+">"))
-							.append($("<input type='text' name='dateRDV' >"))
-							.append($("<input type='text' name='message' placeholder='message'>"))
-							.append($("<input type='submit' name='envoie' value='répondre'>"))
-						)
-					);
-				},
-				error: function (req, status, err){
-					console.log("erreur");
-					console.log(err);
-				}
-			});        
-    	});
+    	$('#liste a').on("click", function(){
+				        	var selectedId = $(this).attr("id");
+				        	console.log("Service n°: "+selectedId);  
+				        	/*création de l'url*/ 
+							var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+							url = url.replace("idPlaceholder", selectedId);
+							var urlForm = "{{ path('reponse_service') }}";
+							console.log("url :");
+							console.log(url);
+							/*AJAX*/
+							$("#titre").empty();	
+							$("#liste").empty();	
+							$.ajax({
+								url: url,
+								type: "GET",
+								dataType: "json",
+								success: function(data){
+									console.log('test rqt Ajax');
+									console.log(data);
+									/*$('#titre').text("<- retour");*/
+									$('#liste').append($("<div>")
+										.append($("<h3>").text(data.titre))
+										.append($("<p>").text("Proposé par : "+data.inscrit.username))
+										.append($("<p>").text(""+data.description))
+										.append($("<form action="+urlForm+" method='POST'>")
+											.append($("<input type='hidden' name='idService' value="+data.id+">"))
+											.append($("<input type='text' name='dateRDV' placeholder='date'>"))
+											.append($("<input type='text' name='message' placeholder='message'>"))
+											.append($("<input type='submit' name='envoie' value='répondre'>"))
+										)
+									);
+								},
+								error: function (req, status, err){
+									console.log("erreur");
+									console.log(err);
+								}
+							});        
+				    	});
 	});
 </script>
 
