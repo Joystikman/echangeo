@@ -47,17 +47,34 @@ header {
 	flex: 1 2;
 }
 
-.liste{
-	overflow-y: auto;
-	height: 100vh;
-}
-
-.liste h2{
+.services h2{
 	border-bottom: 2px solid #E47C1F;	
 }
 
+.tuile{	
+	margin: 10px;
+	padding: 10px;
+	background-color: #F3ECE3;
+}
+
+.tuile:hover{
+	background-color: #E6D9C8;
+}
+
+.liste{
+	overflow-y: auto;
+	height: 100vh;
+	background-color: #FFFFFF;
+}
+
 .liste div{
+	padding: 10px 15px;
+	border-top: 2px solid #808080;
 	border-bottom: 2px solid #808080;
+}
+
+.liste div:hover{
+	background-color: #F3F3F3;
 }
 
 .liste div p{
@@ -69,6 +86,16 @@ header {
     height: 100%;
 }
 
+.button_details{
+	margin: 10px 0px;
+	padding: 8px 18px;
+	color: white;
+	font-size: 16px;
+	background-color:#007CB0 ;
+	border: none;		
+	border-bottom: solid 3px #005B8C;
+}
+
 footer{
 	z-index: 1;
 	min-height: 50px;
@@ -77,6 +104,6 @@ footer{
 	height:30px;
 	width:100%;	
 	text-align: center;
-	background: #1B2ABA;
+	background: #2F3140;
 	color: white;
 }

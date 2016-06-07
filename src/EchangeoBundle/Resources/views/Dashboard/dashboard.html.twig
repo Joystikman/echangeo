@@ -12,24 +12,27 @@
   		<h2 class="logo"><span>E</span></h2>
   	</header>
 		<nav class="navbar">
-			<a href="{{ path('servicesUser') }}" class="button">Mes Services</a>
-			<a href="" class="button">Mes Réponses</a>
+		<p>
+			<a id="dashboardMenu" href="{{ path('dashboard') }}" class="menu">🏠</a>
+			<a id="servicesMenu" href="{{ path('servicesUser') }}" class="menu">Mes Services</a>
+			<a id="reponsesMenu" href="{{ path('reponsesUser') }}" class="menu">Mes Réponses</a>
+		</p>
 		</nav>
 		<div class="main">
 			<div class="liste">
 				{% block liste %}
-					<div><p> block de liste</p></div>
+					<!-- <div><p> block de liste</p></div> -->
 				{% endblock liste %}
 			</div>
 			<div id="cadre" class="cadre">
 				{% block affichage %}
-					<div><p> block de d'affichage</p></div>
+					<div><h2> Bonjour {{ app.user.username }}</h2></div>
 					{% for service in services %}
 						<div>
-		       		<h3>{{service.titre}}</h3>
-		       		<p>{{service.description}}</p>
-		       		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
-		       	</div>
+		       				<h3>{{service.titre}}</h3>
+		       				<p>{{service.description}}</p>
+		       				<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+		       			</div>
 					{% endfor %}	
 				{% endblock affichage %}	
 			</div>	
@@ -40,4 +43,10 @@
 {% block footer %}{{ parent() }}{% endblock footer %}
 
 {% block script %}
+<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#dashboardMenu").css({'border-bottom': 'solid 12px #73B4D9'});
+	});
+</script>
 {% endblock script %}

@@ -7,6 +7,8 @@ use EchangeoBundle\Entity\Categorie;
 use EchangeoBundle\Entity\Service;
 use EchangeoBundle\Entity\Reponse;
 use EchangeoBundle\Entity\Inscrit;
+use EchangeoBundle\Entity\Message;
+use EchangeoBundle\Entity\Evaluation;
 
 /*appel des formulaires*/
 use EchangeoBundle\Form\ServiceType;
@@ -21,6 +23,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 /*appel des gestionnaires*/
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
@@ -78,7 +81,6 @@ class DashboardController extends Controller
                                                          'multiple' => false,
                                                          'expanded' => false,
                                                          'class' => 'EchangeoBundle:SousCategorie',
-                                                         /*'choice_value' => 'id',*/
                                                          'choice_label' => 'libelle' ))
                 ->add('description', TextareaType::class)
                 ->add('debut', DateType::class, array(
@@ -139,7 +141,6 @@ class DashboardController extends Controller
                                                          'multiple' => false,
                                                          'expanded' => false,
                                                          'class' => 'EchangeoBundle:SousCategorie',
-                                                         /*'choice_value' => 'id',*/
                                                          'choice_label' => 'libelle' ))
                 ->add('description', TextareaType::class)
                 ->add('debut', DateType::class, array(
@@ -184,4 +185,116 @@ class DashboardController extends Controller
               );
     }
 
+/*REPONSES*/
+/**
+     * Page des services
+     * @Route("/dashboard/reponses",
+              name="reponsesUser")
+     */
+    public function reponsesUserAction()
+    {
+        $docReponses = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+        $id = $this->getUser()->getId();
+        $reponses = $docReponses->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
+        return $this->render('EchangeoBundle:Dashboard:dashboardReponses.html.twig',array(
+                "reponses"=>$reponses)
+                );
+    } 
+
+/*MESSAGES*/
+  /**
+     * envoie de message conversation
+     * @Route("/dashboard/send",
+              name="sendMessage")
+     * @Method({"POST"})
+     */
+    public function sendAction(Request $request)
+    {
+      //print_r($request->request->get('message'));
+    /*On enregistre le réponse*/
+      $message = new Message();
+      $docC = $this->getDoctrine()->getRepository('EchangeoBundle:Conversation');
+      $conversation = $docC->find($request->request->get('idConversation'));
+      
+      $message->setContenu($request->request->get('message'));
+      $message->setInscrit($this->getUser());
+      $message->setConversation($conversation);
+
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($message);
+      $em->flush();
+
+    /*On renvoie vers la page de recherche*/
+    if ($request->request->get('page')==="reponse") {
+      return $this->redirectToRoute('reponsesUser');
+    }
+    else{
+      return $this->redirectToRoute('servicesUser');
+    }
+  }
+
+/*VALIDATION REPONSE*/
+  /**
+     * validation d'une réponse 
+     * @Route("/dashboard/validation",
+              name="validation")
+     * @Method({"POST"})
+     */
+    public function validationAction(Request $request)
+    {
+      //print_r($request->request->get('message'));
+      /*On enregistre le réponse*/
+      $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+      $reponse = $docR->find($request->request->get('idReponse'));
+
+      print_r($request->request->get('valide'));
+
+      if ($request->request->get('valide')) {
+        $reponse->setEtat('valide');
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
+      elseif ($request->request->get('decline')) {
+        $reponse->setEtat('refuse');
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
+    }
+
+/*NOTATION*/
+  /**
+     * notation d'un service 
+     * @Route("/dashboard/notation",
+              name="notation")
+     * @Method({"POST"})
+     */
+    public function notationAction(Request $request)
+    {
+      /*On enregistre le réponse*/
+      $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+      $reponse = $docR->find($request->request->get('idReponse'));
+
+      $evaluation = new Evaluation();
+      $evaluation->setNote($request->request->get('note'));
+      $evaluation->setCommentaire($request->request->get('commentaire'));
+      $evaluation->setInscritNotant($this->getUser());
+      $evaluation->setService($reponse->getService());
+
+      if ($request->request->get('page')=="services") {
+        $evaluation->setInscritNote($reponse->getInscrit());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($evaluation);
+        $em->flush();
+        return $this->redirectToRoute('servicesUser');
+      }
+      elseif ($request->request->get('page')=="reponses") {
+        $evaluation->setInscritNote($reponse->getService()->getInscrit());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($evaluation);
+        $em->flush();
+        //return $this->redirectToRoute('reponsesUser');
+      }
+    }
 }

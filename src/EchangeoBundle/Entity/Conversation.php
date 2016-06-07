@@ -23,7 +23,7 @@ class Conversation
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="conversation")
+     * @ORM\OneToOne(targetEntity="Reponse", mappedBy="conversation")
      */
     private $reponse;
 
@@ -41,6 +41,12 @@ class Conversation
      */
     private $interlocuteur2;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="conversation")
+     */
+    private $messages;
+
 
     /**
      * Get id
@@ -52,46 +58,6 @@ class Conversation
         return $this->id;
     }
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->reponse = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add reponse
-     *
-     * @param \EchangeoBundle\Entity\Reponse $reponse
-     * @return Conversation
-     */
-    public function addReponse(\EchangeoBundle\Entity\Reponse $reponse)
-    {
-        $this->reponse[] = $reponse;
-
-        return $this;
-    }
-
-    /**
-     * Remove reponse
-     *
-     * @param \EchangeoBundle\Entity\Reponse $reponse
-     */
-    public function removeReponse(\EchangeoBundle\Entity\Reponse $reponse)
-    {
-        $this->reponse->removeElement($reponse);
-    }
-
-    /**
-     * Get reponse
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getReponse()
-    {
-        return $this->reponse;
-    }
 
     /**
      * Set interlocuteur1
@@ -99,6 +65,7 @@ class Conversation
      * @param \EchangeoBundle\Entity\Inscrit $interlocuteur1
      * @return Conversation
      */
+    //Pour l'auteur du service
     public function setInterlocuteur1(\EchangeoBundle\Entity\Inscrit $interlocuteur1 = null)
     {
         $this->interlocuteur1 = $interlocuteur1;
@@ -122,6 +89,7 @@ class Conversation
      * @param \EchangeoBundle\Entity\Inscrit $interlocuteur2
      * @return Conversation
      */
+    //Pour l'auteur de la réponse
     public function setInterlocuteur2(\EchangeoBundle\Entity\Inscrit $interlocuteur2 = null)
     {
         $this->interlocuteur2 = $interlocuteur2;
@@ -137,5 +105,70 @@ class Conversation
     public function getInterlocuteur2()
     {
         return $this->interlocuteur2;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set reponse
+     *
+     * @param \EchangeoBundle\Entity\Reponse $reponse
+     *
+     * @return Conversation
+     */
+    public function setReponse(\EchangeoBundle\Entity\Reponse $reponse = null)
+    {
+        $this->reponse = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Get reponse
+     *
+     * @return \EchangeoBundle\Entity\Reponse
+     */
+    public function getReponse()
+    {
+        return $this->reponse;
+    }
+
+    /**
+     * Add message
+     *
+     * @param \EchangeoBundle\Entity\Message $message
+     *
+     * @return Conversation
+     */
+    public function addMessage(\EchangeoBundle\Entity\Message $message)
+    {
+        $this->messages[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Remove message
+     *
+     * @param \EchangeoBundle\Entity\Message $message
+     */
+    public function removeMessage(\EchangeoBundle\Entity\Message $message)
+    {
+        $this->messages->removeElement($message);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }

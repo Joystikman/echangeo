@@ -3,7 +3,12 @@
 {% block title %}Services Utilisateur - Nouvelle annonce{% endblock %}
 
 {% block affichage %}
-	{{ form_start(form) }}
-	{{ form_widget(form) }}
-	{{ form_end(form) }}
+	<div id='service' class='service'>
+		<div id='annonce' class='annonce'>
+		<h2>Créer une annonce</h2>
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		{{ form_end(form) }}
+		</div>
+	</div>
 {% endblock affichage %}

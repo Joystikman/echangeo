@@ -1,0 +1,23 @@
+{% extends 'EchangeoBundle:Dashboard:dashboard.html.twig' %}
+
+{% block title %}Réponse Utilisateur{% endblock %}
+
+{% block liste %}
+	<h2>Mes réponses</h2>
+	{% for reponse in reponses %}
+		<div id="{{reponse.id}}" class="tuile">
+	   		<h3>{{reponse.service.titre}}</h3>
+	   		<p>Date : <b>{{reponse.dateRendezVous|date("d/m/Y")}}</b></p> 
+	   		<p>Etat : {{reponse.etat}}</p>
+	   	</div>
+	{% endfor %}
+{% endblock liste %}
+
+{% block affichage %}
+		
+{% endblock affichage %}
+
+{% block script %}
+<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+{% include 'EchangeoBundle:Scripts:reponsesScript.html.twig' %}
+{% endblock script %}	

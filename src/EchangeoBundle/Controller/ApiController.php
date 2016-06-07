@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
+use \Datetime;
 /*Serializer*/
 /*use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -103,11 +104,11 @@ class ApiController extends Controller
      * @Route("/api/service/{id}.{_format}",
               defaults = {"_format"="json"},
               requirements = { "_format" = "html|json" },
-              name="getservicesID",
+              name="getserviceID",
      *  )
      * @Method({"GET"})
      */
-    public function getServicesID($id)
+    public function getServiceID($id)
     {
         /*Requete*/
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
@@ -115,6 +116,35 @@ class ApiController extends Controller
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
         $jsonContent = $serializer->serialize($services, 'json');
+
+        return new Response(
+            $jsonContent,
+            200,
+            array('Content-Type' => 'application/json')
+        );
+    }
+
+    /**
+     * Fonction d'obtention d'une réponse par son id
+     * @Route("/api/reponse/{id}.{_format}",
+              defaults = {"_format"="json"},
+              requirements = { "_format" = "html|json" },
+              name="getreponseID",
+     *  )
+     * @Method({"GET"})
+     */
+    public function getReponseID($id)
+    {
+        /*Requete*/
+        $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+        $reponse = $docR->find($id);
+        /*Activation de la notation*/
+        if ($reponse->getEtat() === "valide" && ($reponse->getDateRendezVous()->diff(new DateTime())->format("%d days, %h hours and %i minuts")) ) {
+            $reponse->setEtat("notation");
+        }
+        /*passage en JSON avec Serializer*/
+        $serializer = $this->get('serializer');
+        $jsonContent = $serializer->serialize($reponse, 'json');
 
         return new Response(
             $jsonContent,

@@ -3,13 +3,26 @@
 {% block title %}Services Utilisateur{% endblock %}
 
 {% block liste %}
+	<!-- <h2>Mes services</h2> -->
 	<a href="{{ path('addServices') }}" class="button">Crée une nouvelle annonce</a>
 	{% for service in services %}
-		<div id="{{service.id}}" class="service">
-	   		<h3>{{service.titre}}</h3>
-	   		<p>{{service.description}}</p>
-	   		<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
-	   	</div>
+		{% if service.fin|date('Ymd') < "now"|date('Y-m-d') %}
+			<div id="{{service.id}}" class="tuile cloture">
+		    <h3>{{service.titre}}</h3>
+		   	<p>{{service.description}}</p>
+		   	<p>{{"now"|date('Y-m-d')}}</p>
+		   	<p>{{service.fin|date('Y-m-d')}}</p>
+		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+		  </div>
+		{% else %}
+			<div id="{{service.id}}" class="tuile valide">
+		    <h3>{{service.titre}}</h3>
+		   	<p>{{service.description}}</p>
+		   	<p>{{"now"|date('Y-m-d')}}</p>
+		   	<p>{{service.fin|date('Y-m-d')}}</p>
+		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+		  </div>
+		{% endif %}
 	{% endfor %}
 {% endblock liste %}
 
@@ -19,34 +32,5 @@
 
 {% block script %}
 <script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
-<script type="text/javascript">
-/*on click service*/
-	$(".service").on("click", function(){
-		console.log('display');
-		console.log(this.id);
-		/*création de l'url*/ 
-		var url = "{{ path('getservicesID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-		url = url.replace("idPlaceholder", this.id);
-		var urlEdit = "{{ path('editServices',{ 'id': "idPlaceholder"}) }}";
-		urlEdit = urlEdit.replace("idPlaceholder", this.id);
-		/*console.log(url);*/
-		/*fonction ajax*/
-		$.ajax({
-			url: url,
-			type: "GET",
-			dataType: "json",
-			success: function(data){
-				console.log('test get data');
-				console.log(data);
-				$("#cadre").empty();
-				$("#cadre").append($("<div id='service' class='service'>"));
-				$("#service").append($("<a href="+urlEdit+" class='button'>").text("modifier"));
-				$("#service").append($("<h2>").text(data.titre));
-				$("#service").append($("<p>").text(data.description));
-				$("#service").append($("<p>").text(data.debut+" - "+data.fin));
-				$("#service").append($("<p>").text(data.lieu));
-			}
-		});
-	}); 
-</script>
+{% include 'EchangeoBundle:Scripts:servicesScript.html.twig' %}
 {% endblock script %}	
