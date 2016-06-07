@@ -94,7 +94,7 @@ class DashboardController extends Controller
                 ->add('type', ChoiceType::class, array('choices' => array(
                       'propose' => 'propose',
                       'demande' => 'demande')))
-                ->add('lieu', TextareaType::class)
+                ->add('lieu', TextType::class)
                 ->add('distance', IntegerType::class)
                 ->add('save', SubmitType::class, array('label' => 'Creer une annonce'))
                 ->getForm();

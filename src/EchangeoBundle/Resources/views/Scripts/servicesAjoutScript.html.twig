@@ -1,0 +1,71 @@
+<!-- /* =======================================================
+ * Ensembles des fonctions utiles à la gestion de la carte de la page d'ajout de service
+ * par Guiraud Maxime
+ * =======================================================*/ -->
+
+<!-- MAP GOOGLE -->
+<!-- Include the Google Maps API library - required for embedding maps -->
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
+  
+<script type="text/javascript">
+     
+// The latitude and longitude of your business / place
+var position = [48.858727, 2.344376];
+var key = "key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g";
+	   
+function showGoogleMapsDefaut() {
+	console.log("display map");
+	console.log($('#annonce').width());
+
+	/*paramètres de la map*/
+	var latLng = new google.maps.LatLng(position[0], position[1]);
+	var mapOptions = {
+	    zoom: 14, // initialize zoom level - the max value is 21
+	    streetViewControl: false, // hide the yellow Street View pegman
+	    scaleControl: true, // allow users to zoom the Google Map
+	    mapTypeId: google.maps.MapTypeId.ROADMAP,
+	    center: latLng
+	};
+		     
+	map = new google.maps.Map(document.getElementById('googlemaps'),mapOptions);
+		     
+	// Show the default red marker at the location
+	marker = new google.maps.Marker({
+	        position: latLng,
+	        map: map,
+	        draggable: false,
+	        animation: google.maps.Animation.DROP
+		});
+	console.log("fin display map");
+	google.maps.event.addListener(map, "click", function(event){
+		lat = event.latLng.lat();
+		long = event.latLng.lng();
+		var position = new google.maps.LatLng(lat, long);
+		marker.setPosition(position);
+		$("#form_lieu").val(lat+","+long);	
+		editLieu(lat,long);
+	});
+}
+google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
+
+function editLieu(lat,long){
+	console.log("editLieu");
+	var latlng = "latlng="+lat+","+long;
+	var url = "https://maps.googleapis.com/maps/api/geocode/json?"+latlng+"&"+key;
+	console.log(url);
+	$.ajax({
+		url: url,
+		type: "GET",
+		dataType: "json",
+		success: function(data){
+			console.log(data);
+			console.log(data.results[0].formatted_address);
+			$("#form_lieu").val(data.results[0].formatted_address);
+		},
+		error: function (req, status, err){
+			console.log("erreur");
+			console.log(err);
+		}
+	});
+}
+</script>

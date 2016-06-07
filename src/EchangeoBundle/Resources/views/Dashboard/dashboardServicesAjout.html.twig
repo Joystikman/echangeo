@@ -7,8 +7,22 @@
 		<div id='annonce' class='annonce'>
 		<h2>Créer une annonce</h2>
 		{{ form_start(form) }}
-		{{ form_widget(form) }}
+			{{ form_row(form.titre) }}
+			{{ form_row(form.sousCategorie) }}
+			{{ form_row(form.description) }}
+			{{ form_row(form.debut) }}
+			{{ form_row(form.fin) }}
+			{{ form_row(form.type) }}
+			{{ form_row(form.lieu) }}
+			<div id="googlemaps" class="carteAjout"></div>
+			{{ form_row(form.distance) }}
+			{{ form_row(form.save) }}
 		{{ form_end(form) }}
 		</div>
 	</div>
 {% endblock affichage %}
+
+{% block script %}
+<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+{% include 'EchangeoBundle:Scripts:servicesAjoutScript.html.twig' %}
+{% endblock script %}	
