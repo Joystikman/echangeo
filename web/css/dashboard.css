@@ -123,14 +123,16 @@ header {
 	margin: 10px 15px;
 }
 
-.cadre input{
+.cadre input,textarea,select{
 	margin: 10px 0px;
     margin-bottom: 10px;
-    padding: 7px;
+    padding: 5px 10px;
     background: transparent;
     color: #000000;
     font: 16px;
-    height: 45px;
+    width: 50%;
+    border : none;
+    border-bottom: solid 2px #EA7317;
 }
 
 .cadre button{
