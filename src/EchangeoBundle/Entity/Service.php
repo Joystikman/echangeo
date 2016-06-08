@@ -59,6 +59,13 @@ class Service
     /**
      * @var string
      *
+     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
+     */
+    private $adresse;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="lieu", type="string", length=255)
      */
     private $lieu;
@@ -411,5 +418,29 @@ class Service
     public function getEvaluationNote()
     {
         return $this->evaluationNote;
+    }
+
+    /**
+     * Set adresse
+     *
+     * @param string $adresse
+     *
+     * @return Service
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return string
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
     }
 }

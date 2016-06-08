@@ -9,14 +9,22 @@
   
 <script type="text/javascript">
      
-// The latitude and longitude of your business / place
+// variables
 var position = [48.858727, 2.344376];
 var key = "key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g";
+var cityCircle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: null,
+      center: null,
+      radius: Math.sqrt(0) * 100
+    });
 	   
 function showGoogleMapsDefaut() {
 	console.log("display map");
-	console.log($('#annonce').width());
-
 	/*paramètres de la map*/
 	var latLng = new google.maps.LatLng(position[0], position[1]);
 	var mapOptions = {
@@ -26,41 +34,53 @@ function showGoogleMapsDefaut() {
 	    mapTypeId: google.maps.MapTypeId.ROADMAP,
 	    center: latLng
 	};
-		     
+	//création de la map
 	map = new google.maps.Map(document.getElementById('googlemaps'),mapOptions);
 		     
-	// Show the default red marker at the location
+	// Ajout du marker sur la map
 	marker = new google.maps.Marker({
 	        position: latLng,
 	        map: map,
 	        draggable: false,
 	        animation: google.maps.Animation.DROP
 		});
-	console.log("fin display map");
+	// Ajout d'un listener pour deplacer le marker en cliquant
 	google.maps.event.addListener(map, "click", function(event){
-		lat = event.latLng.lat();
-		long = event.latLng.lng();
+		var lat = event.latLng.lat();
+		var long = event.latLng.lng();
 		var position = new google.maps.LatLng(lat, long);
 		marker.setPosition(position);
-		$("#form_lieu").val(lat+","+long);	
-		editLieu(lat,long);
+		//creation du cercle de zone
+		radius = $("#form_distance").val();
+		cityCircle.setMap(null);
+		cityCircle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      center: position,
+      radius: Math.sqrt(radius) * 100
+    });
+    //ajout des coordonnees au champs caché lieu
+		$("#form_lieu").val(lat+","+long);
+		//appel de editAdresse
+		editAdresse(lat,long);
 	});
 }
 google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
 
-function editLieu(lat,long){
+function editAdresse(lat,long){
 	console.log("editLieu");
 	var latlng = "latlng="+lat+","+long;
 	var url = "https://maps.googleapis.com/maps/api/geocode/json?"+latlng+"&"+key;
-	console.log(url);
 	$.ajax({
 		url: url,
 		type: "GET",
 		dataType: "json",
 		success: function(data){
-			console.log(data);
-			console.log(data.results[0].formatted_address);
-			$("#form_lieu").val(data.results[0].formatted_address);
+			$("#form_adresse").val(data.results[0].formatted_address);
 		},
 		error: function (req, status, err){
 			console.log("erreur");

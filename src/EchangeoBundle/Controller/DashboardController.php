@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /*appel des gestionnaires*/
@@ -94,7 +95,8 @@ class DashboardController extends Controller
                 ->add('type', ChoiceType::class, array('choices' => array(
                       'propose' => 'propose',
                       'demande' => 'demande')))
-                ->add('lieu', TextType::class)
+                ->add('adresse', TextType::class)
+                ->add('lieu', HiddenType::class)
                 ->add('distance', IntegerType::class)
                 ->add('save', SubmitType::class, array('label' => 'Creer une annonce'))
                 ->getForm();
@@ -154,7 +156,8 @@ class DashboardController extends Controller
                 ->add('type', ChoiceType::class, array('choices' => array(
                       'propose' => 'propose',
                       'demande' => 'demande')))
-                ->add('lieu', TextareaType::class)
+                ->add('adresse', TextType::class)
+                ->add('lieu', HiddenType::class)
                 ->add('distance', IntegerType::class)
                 ->add('save', SubmitType::class, array('label' => "enregistrer les modifications"))
                 ->add('delete', SubmitType::class, array('label' => "supprimer"))
