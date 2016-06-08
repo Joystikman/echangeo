@@ -2,8 +2,8 @@
  * Ensembles des fonction utile à la gestion des reponses
  * par Guiraud Maxime
  * =======================================================*/ -->
-
- <script type="text/javascript">
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
+<script type="text/javascript">
 	$(document).ready(function(){
 		$("#reponsesMenu").css({'border-bottom': 'solid 12px #73B4D9'});
 	});
@@ -33,7 +33,9 @@
 				$("#annonce").append($("<h2>").text(data.service.titre));
 				$("#annonce").append($("<p>").text(data.service.description));
 				$("#annonce").append($("<p>").text(data.service.debut+" - "+data.service.fin));
-				$("#annonce").append($("<p>").text(data.service.lieu));
+				$("#annonce").append($("<input id='lieu' hidden value="+data.service.lieu+">"));
+				$("#annonce").append($("<input id='distance' hidden value="+data.service.distance+">"));
+				$("#annonce").append($("<div id='googlemaps' class='carteAjout'>"));
 				$("#service").append($("<div id='reponse' class='reponse'>"));
 				$("#reponse").append($("<h3>").text("Réponse :"));
 				$("#reponse").append($("<h4>").text('de '+data.conversation.interlocuteur2.username));
@@ -56,6 +58,7 @@
 					$("#send").append($("<input type='text' name='message' placeholder='message'>"));
 					$("#send").append($("<input type='submit' name='envoie' value='répondre'>"));
 				}
+				displayMap();
 			}
 		});
 	}); 
@@ -87,6 +90,42 @@
 			$("#reponse").append($("<div>"));
 			$("#reponse").append($("<p>").text("Votre proposition a été refusée. "));
 		}
+	}
+
+	function displayMap(){
+		console.log("displayMap");
+		//affichage de la carte :
+		var key = "key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g";
+		var position = $("#lieu").val().split(",");
+		console.log(position);
+		var latLng = new google.maps.LatLng(position[0], position[1]);
+		var mapOptions = {
+	  	zoom: 14, // initialize zoom level - the max value is 21
+	  	streetViewControl: false, // hide the yellow Street View pegman
+	  	scaleControl: true, // allow users to zoom the Google Map
+	  	mapTypeId: google.maps.MapTypeId.ROADMAP,
+	  	center: latLng
+		};
+    	map = new google.maps.Map(document.getElementById('googlemaps'),mapOptions);
+    	// Ajout du marker sur la map
+		marker = new google.maps.Marker({
+	      position: latLng,
+	      map: map,
+	      draggable: false,
+	      animation: google.maps.Animation.DROP
+		});
+		var radius = $("#distance").val();
+		cityCircle = new google.maps.Circle({
+		    strokeColor: '#FF0000',
+		    strokeOpacity: 0.8,
+		    strokeWeight: 2,
+		    fillColor: '#FF0000',
+		    fillOpacity: 0.35,
+		    map: map,
+		    center: latLng,
+				radius: radius * 1000
+		});
+		console.log("fin displayMap");
 	}
 
 </script>

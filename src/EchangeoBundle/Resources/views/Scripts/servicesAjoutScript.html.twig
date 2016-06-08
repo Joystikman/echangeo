@@ -27,11 +27,11 @@ var cityCircle = new google.maps.Circle({
       fillOpacity: 0.35,
       map: null,
       center: null,
-      radius: Math.sqrt(0) * 100
+      radius: 0 * 1000
     });
 	   
 function showGoogleMapsDefaut() {
-	
+
 	/*paramètres de la map*/
 	var latLng = new google.maps.LatLng(position[0], position[1]);
 	var mapOptions = {
@@ -66,11 +66,12 @@ function showGoogleMapsDefaut() {
       fillOpacity: 0.35,
       map: map,
       center: position,
-      radius: radius * 100
+      radius: radius * 1000
     });
 
 	// Ajout d'un listener pour deplacer le marker en cliquant
 	google.maps.event.addListener(map, "click", function(event){
+		radius = $("#form_distance").val();
 		var lat = event.latLng.lat();
 		var long = event.latLng.lng();
 		var position = new google.maps.LatLng(lat, long);
