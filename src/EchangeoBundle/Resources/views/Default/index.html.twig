@@ -8,8 +8,14 @@
 {% block content %}
   <div class="container">
     <div id="googlemaps" class="googlemaps"></div>
+    {% if app.user %}
+      <p class="login"><a href="{{ path('dashboard') }}">dashboard</a>
+        <a href="{{ path('fos_user_security_logout') }}">deconnexion</a>
+    {% else %}
+      <p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    
+    {% endif %}
     <h1 class="titre">Echangeo</h1>
-    <div class="link"><a href="{{ path('recherche_service') }}" class="link">voir les annonces</a></div>
+    <div class="link"><a href="{{ path('recherche_service') }}" class="button">voir les annonces</a></div>
   <!-- dernières annonces -->
     <div class="main">
       <h2>Dernières annonces passées :</h2>
@@ -20,6 +26,7 @@
             <p>{{service.description}}</p>
             <p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>          
             <p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+            <a href="{{ path('recherche_service_id',{ 'id': service.id }) }}" class="button_details">voir en detail</a>
           </div>
         {% endfor %}
       </div>
@@ -52,15 +59,22 @@
       map = new google.maps.Map(document.getElementById('googlemaps'),
           mapOptions);
        
-      // Show the default red marker at the location
-      marker = new google.maps.Marker({
-              position: latLng,
-              map: map,
-              draggable: false,
-              animation: google.maps.Animation.DROP
-      });
+      markerServices();
     }
-    console.log("fin display map");
+    function markerServices(defaut,service){
+      {% for service in services %}
+        var position = "{{service.lieu}}".split(",");
+        var latLng = new google.maps.LatLng(position[0], position[1]);
+        console.log(position);
+        var marker = new google.maps.Marker({
+                  position: latLng,
+                  map: map,
+                  draggable: false,
+                  animation: google.maps.Animation.DROP
+          });
+      {% endfor %}
+      //markers.push(marker);
+    }
     google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
   </script>
 {% endblock script %}

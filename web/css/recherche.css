@@ -3,10 +3,30 @@
 .container{
 }
 
+.login{
+    position: relative; 
+	z-index: 1;
+	text-align: right;
+	padding : 5px 10px;
+	color: #E47C1F;
+	font-weight: bold;
+}
+
+.login:a{
+	background-color: #4C5DE0;
+	color: #FFFFFF;
+}
+
 header {
 	z-index: 1;
 	padding : 20px 0px;
 	text-align: center;
+}
+
+nav{
+	margin-top: 30px;
+	height: 10px;
+	background-color: #D3D3D3;
 }
 
 .logo {
@@ -22,8 +42,7 @@ header {
 	border-radius: 100%;	
 }
 
-.main{
-	margin-top: 30px;
+.main{	
 	display: -ms-flex;
   	display: -webkit-flex;
   	display: flex;
@@ -106,4 +125,37 @@ footer{
 	text-align: center;
 	background: #2F3140;
 	color: white;
+}
+
+@media (max-width: 641px) {
+	.main{
+		display: flex;
+  		flex-direction: column;
+  		flex-wrap: wrap;
+  		width: 100%;
+  		min-height: 550px;
+	}
+
+	.Recherche {
+		padding: 0px 15px;
+		flex: 1;
+		order: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.services{
+		background-color: #E1E1E1;
+		color: #000000;
+		padding: 0 5px;
+		flex: 1 2;
+		order: 3;
+	}
+
+	.carte{
+	    flex: 2;
+	    order: 2;
+	    width: 100%;
+	    height: 250px;
+	}
 }
