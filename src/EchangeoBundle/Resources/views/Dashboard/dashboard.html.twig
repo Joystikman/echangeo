@@ -8,6 +8,12 @@
 
 {% block content %}
 	<div class="container">
+		{% if app.user %}
+	      <p class="login"><a href="{{ path('dashboard') }}">dashboard</a>
+	        <a href="{{ path('fos_user_security_logout') }}">deconnexion</a>
+	    {% else %}
+	      <p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    
+	    {% endif %}
 		<header>
   		<h2 class="logo"><span>E</span></h2>
   	</header>
@@ -27,8 +33,9 @@
 			<div id="cadre" class="cadre">
 				{% block affichage %}
 					<div><h2> Bonjour {{ app.user.username }}</h2></div>
+					<div><h4> Vos dernières annonces</h4></div>
 					{% for service in services %}
-						<div>
+						<div class="tuile">
 		       				<h3>{{service.titre}}</h3>
 		       				<p>{{service.description}}</p>
 		       				<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 

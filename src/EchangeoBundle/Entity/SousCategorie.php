@@ -40,6 +40,13 @@ class SousCategorie
      */
     private $description;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="icone", type="string", length=255, nullable=true)
+     */
+    private $icone;
+
 
     /**
      *
@@ -173,5 +180,29 @@ class SousCategorie
     public function getServices()
     {
         return $this->services;
+    }
+
+    /**
+     * Set icone
+     *
+     * @param string $icone
+     *
+     * @return SousCategorie
+     */
+    public function setIcone($icone)
+    {
+        $this->icone = $icone;
+
+        return $this;
+    }
+
+    /**
+     * Get icone
+     *
+     * @return string
+     */
+    public function getIcone()
+    {
+        return $this->icone;
     }
 }

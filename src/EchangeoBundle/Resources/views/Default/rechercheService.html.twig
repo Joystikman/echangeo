@@ -7,12 +7,12 @@
 {% endblock css %}
 
 {% block content %}
-  <div class="container">
+<div class="container">
   	{% if app.user %}
       <p class="login"><a href="{{ path('dashboard') }}">dashboard</a>
         <a href="{{ path('fos_user_security_logout') }}">deconnexion</a>
     {% else %}
-      <p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    
+    	<p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    
     {% endif %}
   	<header>
   		<h1 class="logo"><span>E</span></h1>
@@ -34,15 +34,23 @@
   		</div>
   	 	<!-- Block Services -->
 	    <div id="services" class="services">
-		    <h2 id="titre">Les derniers services ajoutés : </h2>
+		    <h2 id="titre"></h2>
 	    	<div id="liste" class="liste">
-		    	{% for service in services %}
-		       	<div class="tuile">
-		       		<h3>{{service.titre}}</h3>       	
-		       		<p>Proposé par : {{service.inscrit.username}}</p>
-		       		<a id="{{service.id}}" href="#" class="button_details">voir en détails</a>
-		       	</div>
-		      {% endfor %}
+	    		<div>
+	    			<h3>{{services.titre}}</h3>
+	    			<p>Proposé par : {{services.inscrit.username}}</p>
+	    			<p>{{services.description}}</p>
+	    			{% if app.user %}
+		    			<form action="{{ path('reponse_service') }}" method='POST'>
+		    				<input type='hidden' name='idService' value="{{services.id}}">
+		    				<input type='text' name='dateRDV' placeholder='aaaa/mm/jj h:m'>
+		    				<input type='text' name='message' placeholder='message'>
+		    				<input type='submit' name='envoie' value='répondre'>
+		    			</form>
+		    		{% else %}
+		    			<p class=""><a href="{{ path('fos_user_security_login') }}">connecter vous répondre à cette annonce</a></p>
+		    		{% endif %}
+	    		</div>
 		    </div>
 	    </div>
 	    <!-- La Carte -->

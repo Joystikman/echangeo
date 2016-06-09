@@ -72,6 +72,26 @@ class DefaultController extends Controller
     }
 
     /**
+     * Page de recherche d'un service donne
+     * @Route("/recherche/service/{id}",
+              name="recherche_service_id")
+     */
+    public function rechercheServiceAction($id)
+    {
+    /*On récupère les categories*/
+        $docCategories = $this->getDoctrine()->getRepository('EchangeoBundle:Categorie');
+        $categories = $docCategories->findAll();
+    /*On recupère les derniers services*/
+        $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        $service = $docS->find($id);
+    /*rendu*/
+        return $this->render('EchangeoBundle:Default:rechercheService.html.twig',array(
+                "categories"=>$categories,
+                "services"=>$service)
+                );
+    }
+
+    /**
      * Répondre recherche de service
      * @Route("/recherche/reponse",
               name="reponse_service")

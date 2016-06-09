@@ -3,28 +3,29 @@
 namespace EchangeoBundle\Controller;
 
 /*appel des entitées*/
-use EchangeoBundle\Entity\Categorie;
-use EchangeoBundle\Entity\Service;
-use EchangeoBundle\Entity\Reponse;
-use EchangeoBundle\Entity\Inscrit;
-use EchangeoBundle\Entity\Message;
-use EchangeoBundle\Entity\Evaluation;
+  use EchangeoBundle\Entity\Categorie;
+  use EchangeoBundle\Entity\Service;
+  use EchangeoBundle\Entity\Reponse;
+  use EchangeoBundle\Entity\Inscrit;
+  use EchangeoBundle\Entity\Message;
+  use EchangeoBundle\Entity\Evaluation;
 
 /*appel des formulaires*/
-use EchangeoBundle\Form\ServiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+  use EchangeoBundle\Form\ServiceType;
+  use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+  use Symfony\Component\Form\Extension\Core\Type\TextType;
+  use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+  use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+  use Symfony\Component\Form\Extension\Core\Type\DateType;
+  use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+  use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+  use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /*appel des gestionnaires*/
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Request;
+  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+  use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
 {
@@ -39,7 +40,7 @@ class DashboardController extends Controller
     {
         $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
         $id = $this->getUser()->getId();
-        $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), 1, null);
+        $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
         return $this->render('EchangeoBundle:Dashboard:dashboard.html.twig',array(
                 "services"=>$services)
                 );
@@ -94,7 +95,8 @@ class DashboardController extends Controller
                 ->add('type', ChoiceType::class, array('choices' => array(
                       'propose' => 'propose',
                       'demande' => 'demande')))
-                ->add('lieu', TextareaType::class)
+                ->add('adresse', TextType::class)
+                ->add('lieu', HiddenType::class)
                 ->add('distance', IntegerType::class)
                 ->add('save', SubmitType::class, array('label' => 'Creer une annonce'))
                 ->getForm();
@@ -154,7 +156,8 @@ class DashboardController extends Controller
                 ->add('type', ChoiceType::class, array('choices' => array(
                       'propose' => 'propose',
                       'demande' => 'demande')))
-                ->add('lieu', TextareaType::class)
+                ->add('adresse', TextType::class)
+                ->add('lieu', HiddenType::class)
                 ->add('distance', IntegerType::class)
                 ->add('save', SubmitType::class, array('label' => "enregistrer les modifications"))
                 ->add('delete', SubmitType::class, array('label' => "supprimer"))
@@ -294,7 +297,7 @@ class DashboardController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($evaluation);
         $em->flush();
-        //return $this->redirectToRoute('reponsesUser');
+        return $this->redirectToRoute('reponsesUser');
       }
     }
 }

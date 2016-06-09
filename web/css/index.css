@@ -9,6 +9,20 @@
     z-index: 0; /* Set z-index to 0 as it will be on a layer below the contact form */
 }
 
+.login{
+    position: relative; 
+	z-index: 1;
+	text-align: right;
+	padding : 5px 10px;
+	color: #E47C1F;
+	font-weight: bold;
+}
+
+.login:a{
+	background-color: #4C5DE0;
+	color: #FFFFFF;
+}
+
 .titre{
     position: relative; 
 	z-index: 1;
@@ -26,14 +40,26 @@
 	text-align: center;
 }
 
-.link a{
+.button{
 	background-color: #4C5DE0;
 	color: white;
 	padding: 15px 10px;
 	border-bottom: solid 5px #4353CA;
 }
 
-.link a:active{
+.button:active{
+	border-bottom: solid 5px #4C60F2;	
+}
+
+.button_details{
+	text-align: center;
+	background-color: #4C5DE0;
+	color: white;
+	padding: 5px 3px;
+	border-bottom: solid 5px #4353CA;
+}
+
+.button_details:active{
 	border-bottom: solid 5px #4C60F2;	
 }
 

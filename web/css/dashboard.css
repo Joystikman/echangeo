@@ -3,6 +3,19 @@
 .container {
 
 }
+.login{
+    position: relative; 
+	z-index: 1;
+	text-align: right;
+	padding : 5px 10px;
+	color: #E47C1F;
+	font-weight: bold;
+}
+
+.login:a{
+	background-color: #4C5DE0;
+	color: #FFFFFF;
+}
 
 header {
 	z-index: 5;
@@ -123,14 +136,16 @@ header {
 	margin: 10px 15px;
 }
 
-.cadre input{
+.cadre input,textarea,select{
 	margin: 10px 0px;
     margin-bottom: 10px;
-    padding: 7px;
+    padding: 5px 10px;
     background: transparent;
     color: #000000;
     font: 16px;
-    height: 45px;
+    width: 50%;
+    border : none;
+    border-bottom: solid 2px #EA7317;
 }
 
 .cadre button{
@@ -180,6 +195,14 @@ header {
 .message{
 	background-color: #E6D9C8;	
 }
+
+.carteAjout{
+	margin: 25px 0px;
+	width: 100%;
+	height: 250px;
+	background-color: #DC9130;
+}
+
 footer{
 	z-index: 1;
 	min-height: 50px;
