@@ -37,7 +37,7 @@ class SuggestionCategorie
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit")
+     * @ORM\ManyToOne(targetEntity="Inscrit", inversedBy="suggestions")
      * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
      */
     private $inscrit;

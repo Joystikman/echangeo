@@ -29,14 +29,14 @@ class Conversation
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit")
+     * @ORM\ManyToOne(targetEntity="Inscrit", inversedBy="conversations1")
      * @ORM\JoinColumn(name="Inscrit_id1", referencedColumnName="id")
      */
     private $interlocuteur1;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit")
+     * @ORM\ManyToOne(targetEntity="Inscrit", inversedBy="conversations2")
      * @ORM\JoinColumn(name="Inscrit_id2", referencedColumnName="id")
      */
     private $interlocuteur2;

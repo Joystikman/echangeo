@@ -26,64 +26,66 @@
 				$("#liste").empty();
 				$('#select2').empty();
 				$('#select2').append($("<form id='formSousCategorie' method='get'>"));
-				for(var i=0; i<data.length; i++){
+				console.log(data);
+				for(var i=0; i<data.length-1; i++){
 					/*affichage de la selection des sousCategorie*/ 
-					$('#formSousCategorie').append($("<h4>").text(data[i].libelle));
-					$('#formSousCategorie').append($("<input type='checkbox' value="+data[i].id+"  onchange='displayServices()'>"));
+					$('#formSousCategorie').append($("<h4 id="+data[i].libelle+">").text(data[i].libelle));
+					$('#'+data[i].libelle).append($("<input type='checkbox' value="+data[i].id+"  onchange='displayServices()'>"));
 					/*affichage des annonces de la categorie*/
-					for(var j=0; j<data[i].services.length; j++){
-						$('#titre').text("Annonces disponibles :")
-						$('#liste').append($("<div>")
-							.append($("<h3>").text(data[i].services[j].titre))
-							.append($("<p>").text("Proposé par : "+data[i].services[j].inscrit.username))
-							.append($("<a id="+data[i].services[j].id+" href='#' class='button_details'>").text('voir en détails'))
-						);
-						markerServices(false,data[i].services[j],data[i].icone);
-						$('#'+data[i].services[j].id).on("click", function(){
-				        	var selectedId = $(this).attr("id");
-				        	console.log("Service n°: "+selectedId);  
-				        	/*création de l'url*/ 
-									var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-									url = url.replace("idPlaceholder", selectedId);
-									var urlForm = "{{ path('reponse_service') }}";
-									console.log("url :");
-									console.log(url);
-									/*AJAX*/
-									$("#titre").empty();	
-									$("#liste").empty();	
-									$("#liste").append($("<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>"));	
-									$.ajax({
-										url: url,
-										type: "GET",
-										dataType: "json",
-										success: function(data){
-											console.log('click -> voir details');
-											console.log(data);
-											$("#liste").empty();
-											/*$('#titre').text("<- retour");*/
-											$('#liste').append($("<div id='serviceDetail'>"));
-											$('#serviceDetail').append($("<h3>").text(data.titre));
-											$('#serviceDetail').append($("<p>").text("Proposé par : "+data.inscrit.username));
-											$('#serviceDetail').append($("<p>").text(""+data.description));
-											{% if app.user %}
-											$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
-												$('#serviceDetail').append($("<input type='hidden' name='idService' value="+data.id+">"));
-												$('#serviceDetail').append($("<input type='text' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
-												$('#serviceDetail').append($("<input type='text' name='message' placeholder='message'>"));
-												$('#serviceDetail').append($("<input type='submit' name='envoie' value='répondre'>"));
-											{% else %}
-												$('#serviceDetail').append($("<p>").append($("<a href='{{ path('fos_user_security_login') }}''>connecter vous répondre à cette annonce</a>")));
-											{% endif %}
-										},
-										error: function (req, status, err){
-											console.log("erreur");
-											console.log(err);
-										}
-									});
-									return false;        
-				    	});
-					}
 				}
+				for(var i=0; i<data[data.length-1].length; i++){
+					var service = data[data.length-1][i];
+					$('#titre').text("Annonces disponibles :")
+					$('#liste').append($("<div>")
+						.append($("<h3>").text(service.titre))
+						.append($("<p>").text("Proposé par : "+service.username))
+						.append($("<a id="+service.id+" href='#' class='button_details'>").text('voir en détails'))
+					);
+					markerServices(false,service,service.icone);
+					$('#'+service.id).on("click", function(){
+				       	var selectedId = $(this).attr("id");
+				       	console.log("Service n°: "+selectedId);  
+				       	/*création de l'url*/ 
+								var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+								url = url.replace("idPlaceholder", selectedId);
+								var urlForm = "{{ path('reponse_service') }}";
+								console.log("url :");
+								console.log(url);
+								/*AJAX*/
+								$("#titre").empty();	
+								$("#liste").empty();	
+								$("#liste").append($("<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>"));	
+								$.ajax({
+									url: url,
+									type: "GET",
+									dataType: "json",
+									success: function(data){
+										console.log('click -> voir details');
+										console.log(data);
+										$("#liste").empty();
+										/*$('#titre').text("<- retour");*/
+										$('#liste').append($("<div id='serviceDetail'>"));
+										$('#serviceDetail').append($("<h3>").text(data.titre));
+										$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
+										$('#serviceDetail').append($("<p>").text(""+data.description));
+										{% if app.user %}
+										$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
+											$('#serviceDetail').append($("<input type='hidden' name='idService' value="+data.id+">"));
+											$('#serviceDetail').append($("<input type='text' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
+											$('#serviceDetail').append($("<input type='text' name='message' placeholder='message'>"));
+											$('#serviceDetail').append($("<input type='submit' name='envoie' value='répondre'>"));
+										{% else %}
+											$('#serviceDetail').append($("<p>").append($("<a href='{{ path('fos_user_security_login') }}''>connecter vous répondre à cette annonce</a>")));
+										{% endif %}
+									},
+									error: function (req, status, err){
+										console.log("erreur");
+										console.log(err);
+									}
+								});
+								return false;        
+				   	});
+					}
 			},
 			error: function (req, status, err){
 				console.log("erreur");
@@ -121,12 +123,12 @@
 				$("#liste").empty();
 				for(var i=0; i<data.length; i++){
 					$('#liste').append($("<div>")
-						.append($("<h3>").text(data[i][0].titre))
-						.append($("<p>").text("Proposé par : "+data[i][0].inscrit.username))
-						.append($("<a id="+data[i][0].id+" href='#' class='button_details'>").text('voir en détails'))
+						.append($("<h3>").text(data[i].titre))
+						.append($("<p>").text("Proposé par : "+data[i].username))
+						.append($("<a id="+data[i].id+" href='#' class='button_details'>").text('voir en détails'))
 					);
-					markerServices(false,data[i][0],data[i][0].sous_categorie.icone);
-					$('#'+data[i][0].id).on("click", function(){
+					markerServices(false,data[i],data[i].icone);
+					$('#'+data[i].id).on("click", function(){
 				        	var selectedId = $(this).attr("id");
 				        	console.log("Service n°: "+selectedId);  
 				        	/*création de l'url*/ 
@@ -153,7 +155,7 @@
 									});*/
 									$('#liste').append($("<div id='serviceDetail'>"));
 									$('#serviceDetail').append($("<h3>").text(data.titre));
-									$('#serviceDetail').append($("<p>").text("Proposé par : "+data.inscrit.username));
+									$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
 									$('#serviceDetail').append($("<p>").text(""+data.description));
 									{% if app.user %}
 									$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
@@ -203,10 +205,10 @@
 									console.log('liste a -> voir details');
 									console.log(data);
 									$("#liste").empty();
-									/*$('#titre').text("<- retour");*/
+									$('#titre').text("Réponde à l'annonce");
 									$('#liste').append($("<div id='serviceDetail'>"));
 									$('#serviceDetail').append($("<h3>").text(data.titre));
-									$('#serviceDetail').append($("<p>").text("Proposé par : "+data.inscrit.username));
+									$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
 									$('#serviceDetail').append($("<p>").text(""+data.description));
 									{% if app.user %}
 										$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));

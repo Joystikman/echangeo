@@ -79,7 +79,7 @@ class Service
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit")
+     * @ORM\ManyToOne(targetEntity="Inscrit", inversedBy="services")
      * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
      *
      */
@@ -87,7 +87,7 @@ class Service
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="SousCategorie")
+     * @ORM\ManyToOne(targetEntity="SousCategorie", inversedBy="services")
      * @ORM\JoinColumn(name="SousCategorie_id", referencedColumnName="id")
      *
      */

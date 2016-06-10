@@ -37,14 +37,14 @@ class Evaluation
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit")
+     * @ORM\ManyToOne(targetEntity="Inscrit", inversedBy="evaluationsDonnees")
      * @ORM\JoinColumn(name="Inscrit_id_notant", referencedColumnName="id")
      */
     private $inscritNotant;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit")
+     * @ORM\ManyToOne(targetEntity="Inscrit", inversedBy="evaluationsRecus")
      * @ORM\JoinColumn(name="Inscrit_id_note", referencedColumnName="id")
      */
     private $inscritNote;

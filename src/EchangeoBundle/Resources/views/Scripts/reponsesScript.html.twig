@@ -12,7 +12,7 @@
 		console.log('display');
 		console.log(this.id);
 		/*création de l'url*/ 
-		var url = "{{ path('getreponseID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+		var url = "{{ path('getreponseUserID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 		url = url.replace("idPlaceholder", this.id);
 		var urlForm = "{{ path('sendMessage') }}";
 		urlForm = urlForm.replace("idPlaceholder", this.id);
@@ -38,22 +38,30 @@
 				$("#annonce").append($("<div id='googlemaps' class='carteAjout'>"));
 				$("#service").append($("<div id='reponse' class='reponse'>"));
 				$("#reponse").append($("<h3>").text("Réponse :"));
-				$("#reponse").append($("<h4>").text('de '+data.conversation.interlocuteur2.username));
+				$("#reponse").append($("<h4>").text('de '+data.username));
 				$("#reponse").append($("<p>").text('date proposé pour le service :'+data.date_rendez_vous));
 				validation(data);
 				$("#service").append($("<div id='conversation' class='conversation'>"));
-				for(var i=0; i<data.conversation.messages.length; i++){
-					var id = data.conversation.messages[i].id;
-					$("#conversation").append($("<div id='message"+id+"' class='message'>"));
-					$("#message"+id).append($("<h4>").text(data.conversation.messages[i].inscrit.username));
-					$("#message"+id).append($("<p>").text(data.conversation.messages[i].contenu));
+				for(var i=0; i<data.messages.length; i++){
+					if ( "{{ app.user.username }}"==data.messages[i].username) {
+						var id = data.messages[i].id;
+						$("#conversation").append($("<div id='message"+id+"' class='message sideUser'>"));
+						$("#message"+id).append($("<h4>").text(data.messages[i].username));
+						$("#message"+id).append($("<p>").text(data.messages[i].contenu));
+					}
+					else{
+						var id = data.messages[i].id;
+						$("#conversation").append($("<div id='message"+id+"' class='message'>"));
+						$("#message"+id).append($("<h4>").text(data.messages[i].username));
+						$("#message"+id).append($("<p>").text(data.messages[i].contenu));
+					}
 				}
 				if (data.etat=="cloture") {
 					$("#conversation").append($("<p>").text("Le service est cloture"))
 				}
 				else{
 					$("#conversation").append($("<form id='send' action="+urlForm+" method='POST'>"));
-					$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversation.id+">"));
+					$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversationId+">"));
 					$("#send").append($("<input type='hidden' name='page' value='reponse'>"));
 					$("#send").append($("<input type='text' name='message' placeholder='message'>"));
 					$("#send").append($("<input type='submit' name='envoie' value='répondre'>"));

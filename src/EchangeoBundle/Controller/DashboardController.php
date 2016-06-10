@@ -228,7 +228,7 @@ class DashboardController extends Controller
       $em->flush();
 
     /*On renvoie vers la page de recherche*/
-    if ($request->request->get('page')==="reponse") {
+    if ($request->request->get('page')=="reponse") {
       return $this->redirectToRoute('reponsesUser');
     }
     else{

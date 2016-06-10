@@ -187,13 +187,33 @@ header {
 }
 
 .conversation{
-	margin: 5px;
+	margin: 20px 10px;
 	padding: 5px;
 	border : 1px solid #D9C067;
 }
 
 .message{
+	/*padding: 5px;*/
+	width: 75%;
 	background-color: #E6D9C8;	
+	border-radius: 10px;
+}
+
+.message h4{
+	margin: 5px;
+}
+
+.message p{
+	margin: 5px;
+}
+
+.sideUser{
+	background-color: #C8D3E6;	
+	margin-left: 25%;
+}
+
+.sideUser h4{
+	text-align: right;
 }
 
 .carteAjout{
