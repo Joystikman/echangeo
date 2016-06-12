@@ -51,7 +51,7 @@ class Evaluation
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Service")
+     * @ORM\ManyToOne(targetEntity="Service", inversedBy="evaluations")
      * @ORM\JoinColumn(name="Service_id", referencedColumnName="id")
      */
     private $service;

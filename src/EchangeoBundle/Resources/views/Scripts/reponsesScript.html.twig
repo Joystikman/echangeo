@@ -81,23 +81,28 @@
 			$("#validation").append($("<p>").text("votre proposition a été validé. Un fois le service rendu, pensez à noter"));
 		}
 		if (data.etat=="notation"){
-			var urlNote = "{{ path('notation') }}";
-			$("#reponse").append($("<form id='validation' action="+urlNote+" method='POST'>"));
-			$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
-			$("#validation").append($("<input type='hidden' name='page' value='reponses'>"));
-			$("#validation").append($("<label for='note'>Note : </label>"));
-			$("#validation").append($("<input id='r1' type='radio' name='note' value=1>"));
-			$("#r1").append($("<label for='r1'>1</label>"));
-			$("#validation").append($("<input id='r2' type='radio' name='note' value=2>"));
-			$("#r2").append($("<label for='r2'>2</label>"));
-			$("#validation").append($("<input id='r3' type='radio' name='note' value=3>"));
-			$("#r3").append($("<label for='r3'>3</label>"));
-			$("#validation").append($("<input id='r4' type='radio' name='note' value=4>"));
-			$("#r4").append($("<label for='r4'>4</label>"));
-			$("#validation").append($("<input id='r5' type='radio' name='note' value=5>"));
-			$("#r5").append($("<label for='r5'>5</label>"));
-			$("#validation").append($("<input type='text' name='commentaire' placeholder='commentaire'>"));
-			$("#validation").append($("<input type='submit' name='noter' value='noter'>"));
+			if (data.service.evaluateurs.indexOf("{{app.user.username}}")) {
+				$("#reponse").append($("<p>").text("ça marche !!!!!!!!! Vous avez deja noté"));
+			}
+			else{
+				var urlNote = "{{ path('notation') }}";
+				$("#reponse").append($("<form id='validation' action="+urlNote+" method='POST'>"));
+				$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
+				$("#validation").append($("<input type='hidden' name='page' value='reponses'>"));
+				$("#validation").append($("<label for='note'>Note : </label>"));
+				$("#validation").append($("<input id='r1' type='radio' name='note' value=1>"));
+				$("#r1").append($("<label for='r1'>1</label>"));
+				$("#validation").append($("<input id='r2' type='radio' name='note' value=2>"));
+				$("#r2").append($("<label for='r2'>2</label>"));
+				$("#validation").append($("<input id='r3' type='radio' name='note' value=3>"));
+				$("#r3").append($("<label for='r3'>3</label>"));
+				$("#validation").append($("<input id='r4' type='radio' name='note' value=4>"));
+				$("#r4").append($("<label for='r4'>4</label>"));
+				$("#validation").append($("<input id='r5' type='radio' name='note' value=5>"));
+				$("#r5").append($("<label for='r5'>5</label>"));
+				$("#validation").append($("<input type='text' name='commentaire' placeholder='commentaire'>"));
+				$("#validation").append($("<input type='submit' name='noter' value='noter'>"));
+			}
 		}
 		if (data.etat=="refuser"){
 			$("#reponse").append($("<div>"));

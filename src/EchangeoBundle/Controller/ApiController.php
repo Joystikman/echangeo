@@ -295,7 +295,7 @@ class ApiController extends Controller
      */
     public function getReponseUserID($id)
     {
-        /*Requete*/
+        /*Requete - recuperation de la reponse brut*/
         $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
         $reponse = $docR->find($id);
         $messages = $reponse->getConversation()->getMessages();
@@ -334,7 +334,20 @@ class ApiController extends Controller
                          'adresse'=> $serviceBrut->getAdresse(),
                          'lieu'=> $serviceBrut->getLieu(),
                          'username'=> $serviceBrut->getInscrit()->getUsername(),
+                         'evaluateurs'=> "",
+                         'evaluations'=> array(),
             );
+        /*creation des evaluations*/
+        foreach ($serviceBrut->getEvaluations() as $eval) {
+            $e = array('id' => $eval->getId(),
+                       'note' => $eval->getNote(),
+                       'commentaire' => $eval->getCommentaire(),
+                       'notant' => $eval->getInscritNotant()->getId(),
+                       'note' => $eval->getInscritNote()->getId(),
+                );
+            $service['evaluations'][]=$e;
+            $service['evaluateurs'].=",".$eval->getInscritNotant()->getUsername();
+        }
         $res['service']=$service;
 
         /*passage en JSON avec Serializer*/
