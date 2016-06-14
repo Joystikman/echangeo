@@ -4,6 +4,7 @@
 
 {% block css %}	
 	<link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+	<link href="{{ asset('script/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -14,26 +15,26 @@
 	    {% else %}
 	      <p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    
 	    {% endif %}
-		<header>
-  		<h2 class="logo"><span>E</span></h2>
-  	</header>
-		<nav class="navbar">
-		<p>
-			<a id="dashboardMenu" href="{{ path('dashboard') }}" class="menu">🏠</a>
-			<a id="servicesMenu" href="{{ path('servicesUser') }}" class="menu">Mes Services</a>
-			<a id="reponsesMenu" href="{{ path('reponsesUser') }}" class="menu">Mes Réponses</a>
-		</p>
-		</nav>
-		<div class="main">
-			<div class="liste">
+		<div class="main row">
+			<header>
+	  			<h2 class="logo"><a href="{{ path('index') }}"><span>E</span></a></h2>
+	  		</header>
+			<nav class="navbar col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<p>
+					<a id="dashboardMenu" href="{{ path('dashboard') }}" class="menu">🏠</a>
+					<a id="servicesMenu" href="{{ path('servicesUser') }}" class="menu">Mes Services</a>
+					<a id="reponsesMenu" href="{{ path('reponsesUser') }}" class="menu">Mes Réponses</a>
+				</p>
+			</nav>
+			<div class="liste col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				{% block liste %}
 					<!-- <div><p> block de liste</p></div> -->
 				{% endblock liste %}
 			</div>
-			<div id="cadre" class="cadre">
+			<div id="cadre" class="cadre col-xs-12 col-sm-12 col-md-8 col-lg-8">
 				{% block affichage %}
 					<div><h2> Bonjour {{ app.user.username }}</h2></div>
-					<div><h4> Vos dernières annonces</h4></div>
+					<div><h4> Vos dernières annonces : </h4></div>
 					{% for service in services %}
 						<div class="tuile">
 		       				<h3>{{service.titre}}</h3>
@@ -53,7 +54,7 @@
 <script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#dashboardMenu").css({'border-bottom': 'solid 12px #73B4D9'});
+		$("#dashboardMenu").css({'border-bottom': 'solid 8px #73B4D9'});
 	});
 </script>
 {% endblock script %}

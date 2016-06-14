@@ -4,49 +4,51 @@
 
 {% block css %}
 	<link href="{{ asset('css/recherche.css') }}" rel="stylesheet">
+	<link href="{{ asset('script/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
   <div class="container">
   	{% if app.user %}
-      <p class="login"><a href="{{ path('dashboard') }}">dashboard</a>
+      <p class="login"><a href="{{ path('dashboard') }}">dashboard</a> | 
         <a href="{{ path('fos_user_security_logout') }}">deconnexion</a>
     {% else %}
       <p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    
     {% endif %}
   	<header>
-  		<h1 class="logo"><span>E</span></h1>
+  		<h1 class="logo"><a href="{{ path('index') }}"><span>E</span></a></h1>
   	</header>
-  	<nav></nav>
-  	<div id="main" class="main">
-  	 	<!-- Block de recherche -->
-  		<div class="recherche">
-	  		<!-- <input placeholder="Recherche"></input> -->
-	    	<h2>Catégories : </h2>
-	  		<div id="select1">
-		  		<select onchange="displaySousCategorie.call(this,event)">
-		  			{% for categorie in categories %}	
-		  				<option value="{{categorie.id}}">{{categorie.libelle}}</option>
-		  			{% endfor %}
-		  		</select>
-	  		</div>
-	  		<div id="select2"></div>  	
-  		</div>
+  	<div id="main" class="main row"> 
+  		<nav class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  			<!-- barre de recherche -->
+		  	<div class="recherche">
+				<div id="select1">
+			 		<select onchange="displaySousCategorie.call(this,event)" class="dropdown">
+			  		<option value=""> </option>
+			  		{% for categorie in categories %}	
+			  			<option value="{{categorie.id}}">{{categorie.libelle}}</option>
+			  		{% endfor %}
+			  		</select>
+				</div>
+				<div id="select2"></div>  	
+		  	</div>
+	  	</nav> 	 	
   	 	<!-- Block Services -->
-	    <div id="services" class="services">
+	    <div id="services" class="services col-xs-12 col-sm-12 col-md-5 col-lg-5">
 		    <h2 id="titre">Les derniers services ajoutés : </h2>
 	    	<div id="liste" class="liste">
 		    	{% for service in services %}
 		       	<div class="tuile">
 		       		<h3>{{service.titre}}</h3>       	
 		       		<p>Proposé par : {{service.inscrit.username}}</p>
-		       		<a id="{{service.id}}" href="#" class="button_details">voir en détails</a>
+		       		<p>Du : {{service.debut|date("d/m/Y")}} - {{service.fin|date("d/m/Y")}}</p>
+		       		<a id="{{service.id}}" href="#" class="btn btn-primary">voir en détails</a>
 		       	</div>
 		      {% endfor %}
 		    </div>
 	    </div>
 	    <!-- La Carte -->
-	    <div id="carte" class="carte">
+	    <div id="carte" class="carte col-xs-12 col-sm-12 col-md-7 col-lg-7">
 	    	<div id="googlemaps"></div>
 	    </div>
     </div>	
@@ -57,6 +59,7 @@
 
 {% block script %}
 	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+	<script src="{{ asset('script/jquery-ui/jquery-ui.js') }}"></script> 
 	<!-- include fonction de recherche	 -->
 	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}
 {% endblock script %}

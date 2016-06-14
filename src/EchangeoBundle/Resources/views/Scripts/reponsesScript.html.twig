@@ -4,8 +4,9 @@
  * =======================================================*/ -->
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
 <script type="text/javascript">
+	var chargement = "<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>";
 	$(document).ready(function(){
-		$("#reponsesMenu").css({'border-bottom': 'solid 12px #73B4D9'});
+		$("#reponsesMenu").css({'border-bottom': 'solid 8px #4FC1E9'});
 	});
 /*on click service*/
 	$(".tuile").on("click", function(){
@@ -19,7 +20,7 @@
 		console.log(url);
 		/*fonction ajax*/
 		$("#cadre").empty();
-		$("#cadre").append($("<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>"));
+		$("#cadre").append($(chargement));
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -63,8 +64,8 @@
 					$("#conversation").append($("<form id='send' action="+urlForm+" method='POST'>"));
 					$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversationId+">"));
 					$("#send").append($("<input type='hidden' name='page' value='reponse'>"));
-					$("#send").append($("<input type='text' name='message' placeholder='message'>"));
-					$("#send").append($("<input type='submit' name='envoie' value='répondre'>"));
+					$("#send").append($("<input type='text' class='form-control' name='message' placeholder='message'>"));
+					$("#send").append($("<input type='submit' class='btn btn-primary' name='envoie' value='répondre'>"));
 				}
 				displayMap();
 			}
@@ -81,7 +82,7 @@
 			$("#validation").append($("<p>").text("votre proposition a été validé. Un fois le service rendu, pensez à noter"));
 		}
 		if (data.etat=="notation"){
-			if (data.service.evaluateurs.indexOf("{{app.user.username}}")) {
+			if (data.service.evaluateurs.indexOf("{{app.user.username}}")> -1) {
 				$("#reponse").append($("<p>").text("ça marche !!!!!!!!! Vous avez deja noté"));
 			}
 			else{
@@ -104,9 +105,13 @@
 				$("#validation").append($("<input type='submit' name='noter' value='noter'>"));
 			}
 		}
-		if (data.etat=="refuser"){
+		if (data.etat=="refuse"){
 			$("#reponse").append($("<div>"));
 			$("#reponse").append($("<p>").text("Votre proposition a été refusée. "));
+		}
+		if (data.etat=="cloture"){
+			$("#reponse").append($("<div>"));
+			$("#reponse").append($("<p>").text("Le service est fini, il a été cloturé. Vous pouvez toujours y répondre à nouveau pour établir un nouveau rendez-vous."));
 		}
 	}
 

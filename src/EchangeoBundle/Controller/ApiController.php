@@ -252,11 +252,6 @@ class ApiController extends Controller
         $reponse = $docR->find($id);
         $messages = $reponse->getConversation()->getMessages();
 
-        /*Activation de la notation*/
-        if ($reponse->getEtat() === "valide" && ($reponse->getDateRendezVous()->diff(new DateTime())->format("%d days, %h hours and %i minuts")) ) {
-            $reponse->setEtat("notation");
-        }
-
         /*creation de la réponse*/
         $res = array('id' => $reponse->getId(),
                      'date_rendez_vous'=> $reponse->getDateRendezVous(),
@@ -264,6 +259,7 @@ class ApiController extends Controller
                      'username'=> $reponse->getConversation()->getInterlocuteur2()->getUsername(),
                      'conversationId'=> $reponse->getConversation()->getId(),
                      'messages'=> array(),
+                     'evaluateurs'=> "",
             );
         foreach ($messages as $message) {
             $m = array('id' => $message->getId(),
@@ -271,6 +267,11 @@ class ApiController extends Controller
                        'contenu' => $message->getContenu(),
                 );
             $res['messages'][]=$m;
+        }
+
+        /*creation des evaluations*/
+        foreach ($reponse->getService()->getEvaluations() as $eval) {
+            $res['evaluateurs'].=",".$eval->getInscritNotant()->getUsername();
         }
 
         /*passage en JSON avec Serializer*/
@@ -300,11 +301,6 @@ class ApiController extends Controller
         $reponse = $docR->find($id);
         $messages = $reponse->getConversation()->getMessages();
         $serviceBrut = $reponse->getService();
-
-        /*Activation de la notation*/
-        if ($reponse->getEtat() === "valide" && ($reponse->getDateRendezVous()->diff(new DateTime())->format("%d days, %h hours and %i minuts")) ) {
-            $reponse->setEtat("notation");
-        }
 
         /*creation de la réponse*/
         $res = array('id' => $reponse->getId(),

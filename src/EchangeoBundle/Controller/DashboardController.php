@@ -284,6 +284,13 @@ class DashboardController extends Controller
       $evaluation->setCommentaire($request->request->get('commentaire'));
       $evaluation->setInscritNotant($this->getUser());
       $evaluation->setService($reponse->getService());
+      /*à modifier*/
+      if (count($reponse->getService()->getEvaluations())>= 2) {
+        $reponse->setEtat("cloture");
+      }
+      else{
+        $reponse->setEtat("notation");
+      }
 
       if ($request->request->get('page')=="services") {
         $evaluation->setInscritNote($reponse->getInscrit());
