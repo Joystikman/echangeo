@@ -79,7 +79,7 @@ class Service
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit")
+     * @ORM\ManyToOne(targetEntity="Inscrit", inversedBy="services")
      * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
      *
      */
@@ -87,7 +87,7 @@ class Service
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="SousCategorie")
+     * @ORM\ManyToOne(targetEntity="SousCategorie", inversedBy="services")
      * @ORM\JoinColumn(name="SousCategorie_id", referencedColumnName="id")
      *
      */
@@ -101,19 +101,10 @@ class Service
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="Evaluation")
-     * @ORM\JoinColumn(name="Evaluation_id_notant", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="service", cascade={"remove", "persist"})
      *
      */
-    private $evaluationNotant;
-
-    /**
-     *
-     * @ORM\OneToOne(targetEntity="Evaluation")
-     * @ORM\JoinColumn(name="Evaluation_id_note", referencedColumnName="id")
-     *
-     */
-    private $evaluationNote;
+    private $evaluations;
 
 
     /**
@@ -375,52 +366,6 @@ class Service
     }
 
     /**
-     * Set evaluationNotant
-     *
-     * @param \EchangeoBundle\Entity\Evaluation $evaluationNotant
-     * @return Service
-     */
-    public function setEvaluationNotant(\EchangeoBundle\Entity\Evaluation $evaluationNotant = null)
-    {
-        $this->evaluationNotant = $evaluationNotant;
-
-        return $this;
-    }
-
-    /**
-     * Get evaluationNotant
-     *
-     * @return \EchangeoBundle\Entity\Evaluation 
-     */
-    public function getEvaluationNotant()
-    {
-        return $this->evaluationNotant;
-    }
-
-    /**
-     * Set evaluationNote
-     *
-     * @param \EchangeoBundle\Entity\Evaluation $evaluationNote
-     * @return Service
-     */
-    public function setEvaluationNote(\EchangeoBundle\Entity\Evaluation $evaluationNote = null)
-    {
-        $this->evaluationNote = $evaluationNote;
-
-        return $this;
-    }
-
-    /**
-     * Get evaluationNote
-     *
-     * @return \EchangeoBundle\Entity\Evaluation 
-     */
-    public function getEvaluationNote()
-    {
-        return $this->evaluationNote;
-    }
-
-    /**
      * Set adresse
      *
      * @param string $adresse
@@ -442,5 +387,39 @@ class Service
     public function getAdresse()
     {
         return $this->adresse;
+    }
+
+    /**
+     * Add evaluation
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluation
+     *
+     * @return Service
+     */
+    public function addEvaluation(\EchangeoBundle\Entity\Evaluation $evaluation)
+    {
+        $this->evaluations[] = $evaluation;
+
+        return $this;
+    }
+
+    /**
+     * Remove evaluation
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluation
+     */
+    public function removeEvaluation(\EchangeoBundle\Entity\Evaluation $evaluation)
+    {
+        $this->evaluations->removeElement($evaluation);
+    }
+
+    /**
+     * Get evaluations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvaluations()
+    {
+        return $this->evaluations;
     }
 }

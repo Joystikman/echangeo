@@ -1,9 +1,13 @@
 /*CSS du dashboard*/
 
 .container {
-
+	width: 100%;
+	background-color: #E6E9ED;
 }
+
 .login{
+	background-color: #FFFFFF;
+	border-bottom-radius:5px;
     position: relative; 
 	z-index: 1;
 	text-align: right;
@@ -21,7 +25,7 @@ header {
 	z-index: 5;
 	padding : 10px 0px;
 	text-align: center;
-	background-color: #2F3140;
+	background-color: #434A54;
 	/*border-bottom: 2px solid #B87731;*/
 }
 
@@ -32,17 +36,19 @@ header {
 .logo span{
 	padding: 20px 32px;
 	color: white;
-	background-color: #ea7317;
-	font-size: 32px;
+	background-color: #E9573F;
+	font-size: 55px;
 	font-weight: bold;
 	border-radius: 100%;	
 }
 
 .navbar{
 	padding: 15px 0px;
-	background-color: #2F3140;
+	background-color: #434A54;
 	/*border-top: 2px solid #B87731;	
-	border-bottom: 2px solid #B87731;*/	
+	border-bottom: 2px solid #B87731;*/
+	border-radius: inherit;	
+	border-radius-bottom: 5px;	
 }
 
 .menu{
@@ -51,34 +57,26 @@ header {
 	padding: 20px 25px;
 	color: #FFFFFF;
 	font-size: 20px;
-	background-color:#2F3140;
+	background-color:#434A54;
 	border: none;		
-	border-bottom: solid 12px #2F3140;
-	/*border-radius: 10px;*/
+	border-bottom: solid 8px #434A54;
 	/*box-shadow: 0px 2px 3px #E0E0E0;*/
 }
 
 .menu:hover{
-	border-bottom: solid 12px #73B4D9;
+	border-bottom: solid 8px #4FC1E9;
 }
 
 .menu:active{
 	background-color:#20222F;
 }
 
-.button{
-	margin: 10px 0px;
-	padding: 10px 15px;
-	color: #FFFFFF;
-	background-color: #2364aa;
-}
-
 .main{
-	display: -ms-flex;
+	/*display: -ms-flex;
   	display: -webkit-flex;
   	display: flex;
   	flex-direction: row;
-  	flex-wrap: wrap;
+  	flex-wrap: wrap;*/
   	height: 100%;
   	min-height: 750px;
 }
@@ -86,22 +84,33 @@ header {
 .liste{
 	padding: 0px 15px;
 	flex: 1;
-	display: flex;
-	flex-direction: column;
+	/*display: flex;
+	flex-direction: column;*/
 	overflow-y: auto;
-	height: 100vh;
-	background-color: #FFFFFF;
-	box-shadow: 0px 0px 5px 1px #878787;
+	/*height: 100vh;*/
+	background-color: #E6E9ED;
+}
+
+.cadre{
+	flex: 3;
+    background-color: #AAB2BD;
+    padding: 10px;
+}
+
+.ajout{
+	text-align: center;
+	margin: 10px 0px;
 }
 
 .tuile{	
 	margin: 10px;
 	padding: 10px;
-	background-color: #F3ECE3;
+	background-color: #F5F7FA;
+	border-radius: 5px;
 }
 
-.tuile:hover{
-	background-color: #E6D9C8;
+.tuile a{
+	text-align: center;
 }
 
 .attente{
@@ -119,16 +128,10 @@ header {
 .cloture{
 	border-top: 8px solid #7D907C;
 }
-
-.cadre{
-	flex: 3;
-    background-color: #F1F1F3;
-    padding: 10px;
-}
-
 .service{
-	margin: 20px 10%;
-	background-color: #FFFFFF;
+	padding: 0% 10%;
+	background-color: #F5F7FA;
+	
 }
 
 .cadre label{
@@ -136,31 +139,14 @@ header {
 	margin: 10px 15px;
 }
 
-.cadre input,textarea,select{
-	margin: 10px 0px;
-    margin-bottom: 10px;
-    padding: 5px 10px;
-    background: transparent;
-    color: #000000;
-    font: 16px;
-    width: 50%;
-    border : none;
-    border-bottom: solid 2px #EA7317;
-}
-
-.cadre button{
-	margin: 10px 0px;
-	padding: 8px 18px;
-	color: white;
-	font-size: 16px;
-	background-color:#007CB0 ;
-	border: none;		
-	border-bottom: solid 3px #005B8C;
-}
 
 .annonce{
 	padding: 5px;
 	border : 1px solid #A7A5A5;
+}
+
+.btn{
+	margin: 5px 0px;
 }
 
 .loading{
@@ -187,13 +173,35 @@ header {
 }
 
 .conversation{
-	margin: 5px;
+	margin: 20px 10px;
 	padding: 5px;
 	border : 1px solid #D9C067;
 }
 
 .message{
-	background-color: #E6D9C8;	
+	/*padding: 5px;*/
+	width: 70%;
+	margin: 5px 0px;
+	background-color: #E6E9ED;
+	padding: 3px;	
+	border-radius: 5px;
+}
+
+.message h4{
+	margin: 5px;
+}
+
+.message p{
+	margin: 5px;
+}
+
+.sideUser{
+	background-color: #48CFAD;	
+	margin-left: 30%;
+}
+
+.sideUser h4{
+	text-align: right;
 }
 
 .carteAjout{
@@ -211,6 +219,6 @@ footer{
 	height:30px;
 	width:100%;	
 	text-align: center;
-	background: #2F3140;
+	background: #434A54;
 	color: white;
 }

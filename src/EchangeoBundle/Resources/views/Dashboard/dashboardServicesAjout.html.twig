@@ -7,17 +7,20 @@
 		<div id='annonce' class='annonce'>
 		<h2>Créer une annonce</h2>
 		{{ form_start(form) }}
-			{{ form_row(form.titre) }}
-			{{ form_row(form.sousCategorie) }}
-			{{ form_row(form.description) }}
-			{{ form_row(form.debut) }}
-			{{ form_row(form.fin) }}
-			{{ form_row(form.type) }}
-			{{ form_row(form.adresse) }}
-			{{ form_row(form.lieu) }}
+			{{ form_row(form.titre, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.sousCategorie, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.description, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.debut, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.fin, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.type, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.adresse, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.lieu, { 'attr': {'class': 'form-control'} }) }}
 			<div id="googlemaps" class="carteAjout"></div>
-			{{ form_row(form.distance) }}
-			{{ form_row(form.save) }}
+			{{ form_row(form.distance, { 'attr': {'class': 'form-control stepper-input'} }) }}
+			{{ form_row(form.save, { 'attr': {'class': 'btn btn-primary'} }) }}
+			{% if form.delete is defined %}
+				{{ form_row(form.delete, { 'attr': {'class': 'btn btn-danger'} }) }}
+			{% endif %}
 		{{ form_end(form) }}
 		</div>
 	</div>

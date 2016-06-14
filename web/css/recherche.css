@@ -1,6 +1,7 @@
 /*CSS page Recherche*/
 
 .container{
+	width: 100%;
 }
 
 .login{
@@ -23,12 +24,6 @@ header {
 	text-align: center;
 }
 
-nav{
-	margin-top: 30px;
-	height: 10px;
-	background-color: #D3D3D3;
-}
-
 .logo {
 	text-align: center;
 }
@@ -36,83 +31,95 @@ nav{
 .logo span{
 	padding: 20px 32px;
 	color: white;
-	background-color: #E47C1F;
+	background-color: #E9573F;
 	font-size: 55px;
 	font-weight: bold;
 	border-radius: 100%;	
 }
 
-.main{	
-	display: -ms-flex;
-  	display: -webkit-flex;
-  	display: flex;
-  	flex-direction: row;
-  	flex-wrap: wrap;
+.main{
   	height: 100%;
+  	margin-top:20px;
   	min-height: 750px;
+  	background-color: #E6E9ED;
+}
+
+nav{
+	margin-top: 4px;
+	padding: 20px 0px;
+	background-color: #E9573F;
+	border-top: solid 4px #FC6E51;
+	border-top-radius:5px;
 }
 
 .Recherche {
 	padding: 0px 15px;
-	flex: 1;
-	display: flex;
-	flex-direction: column;
+	/*display: flex;
+	flex-direction: row;*/
+}
+
+.dropdown{
+	/*margin-left: 15px;*/
+	padding: 5px 0px;
+	font-size: 18px;
+	border-radius: 5px;
+}
+
+.sousCategorie ul{
+	margin: 0;
+	margin-top: 15px;
+	padding: 0;
+	list-style: none;
+	
+}
+
+.sousCategorie ul li{
+	display: inline;
+	padding: 10px;
+	background-color: #FFFFFF;
+	border: 1px solid #E9573F;
+}
+
+.labelSC{
+	color: #000000;
+	font-size: 16px;
+	margin-right: 5px;
 }
 
 .services{
-	background-color: #E1E1E1;
+	background-color: #E6E9ED;
 	color: #000000;
-	padding: 0 5px;
 	flex: 1 2;
-}
-
-.services h2{
-	border-bottom: 2px solid #E47C1F;	
+	height: 100%;
 }
 
 .tuile{	
 	margin: 10px;
 	padding: 10px;
-	background-color: #F3ECE3;
-}
-
-.tuile:hover{
-	background-color: #E6D9C8;
+	background-color: #F5F7FA;
+	border-radius: 5px;
 }
 
 .liste{
 	overflow-y: auto;
 	height: 100vh;
-	background-color: #FFFFFF;
 }
 
-.liste div{
-	padding: 10px 15px;
-	border-top: 2px solid #808080;
-	border-bottom: 2px solid #808080;
+.serviceDetail{
+	background-color: #F5F7FA;
+	margin : 5px;
+	padding : 15px;
+	border-radius: 5px;
 }
 
-.liste div:hover{
-	background-color: #F3F3F3;
+.serviceDetail input{
+	margin: 5px 0px;
 }
 
-.liste div p{
-	padding-left: 15px;
-}
 
 .carte{
     flex: 2;
     height: 100%;
-}
-
-.button_details{
-	margin: 10px 0px;
-	padding: 8px 18px;
-	color: white;
-	font-size: 16px;
-	background-color:#007CB0 ;
-	border: none;		
-	border-bottom: solid 3px #005B8C;
 }
 
 footer{
@@ -123,7 +130,7 @@ footer{
 	height:30px;
 	width:100%;	
 	text-align: center;
-	background: #2F3140;
+	background: #E9573F;
 	color: white;
 }
 

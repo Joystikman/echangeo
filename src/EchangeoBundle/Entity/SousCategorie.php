@@ -50,7 +50,7 @@ class SousCategorie
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Categorie")
+     * @ORM\ManyToOne(targetEntity="Categorie", inversedBy="sousCategories")
      * @ORM\JoinColumn(name="Categorie_id", referencedColumnName="id")
      */
     private $categorie;

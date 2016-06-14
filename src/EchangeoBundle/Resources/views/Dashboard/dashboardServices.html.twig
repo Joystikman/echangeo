@@ -4,7 +4,9 @@
 
 {% block liste %}
 	<!-- <h2>Mes services</h2> -->
-	<a href="{{ path('addServices') }}" class="button">Crée une nouvelle annonce</a>
+	<div class='ajout'>
+		<a href="{{ path('addServices') }}" class="btn btn-primary">Crée une nouvelle annonce</a>
+	</div>
 	{% for service in services %}
 		{% if service.fin|date('Ymd') < "now"|date('Y-m-d') %}
 			<div id="{{service.id}}" class="tuile cloture">
@@ -13,6 +15,7 @@
 		   	<p>{{"now"|date('Y-m-d')}}</p>
 		   	<p>{{service.fin|date('Y-m-d')}}</p>
 		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+		   	<a href="#" class="btn btn-primary">voir en détail</a>
 		  </div>
 		{% else %}
 			<div id="{{service.id}}" class="tuile valide">
@@ -21,6 +24,7 @@
 		   	<p>{{"now"|date('Y-m-d')}}</p>
 		   	<p>{{service.fin|date('Y-m-d')}}</p>
 		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+		   	<a href="#" class="btn btn-primary">voir en détail</a>
 		  </div>
 		{% endif %}
 	{% endfor %}

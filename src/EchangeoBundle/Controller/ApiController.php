@@ -32,8 +32,11 @@ class ApiController extends Controller
         $docService = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
         $services = $docService->findAll();
         /*Serialisation*/
+        $start = microtime(true);
         $serializer = $this->get('serializer');
 		$jsonContent = $serializer->serialize($services, 'json');
+        $time_elapsed_secs = microtime(true) - $start;
+        print_r($time_elapsed_secs);
         return new Response(
             $jsonContent,
             200,
@@ -56,10 +59,37 @@ class ApiController extends Controller
     	/*Requete*/
         $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
         $sousCategories = $docSC->findBy(array('categorie' => $id), array(), null, null);
+
+        $res = array();
+        $services_res = array();
+        foreach ($sousCategories as $sc) {
+            $sous_categorie = array('id' => $sc->getId(),
+                                    'libelle'=> $sc->getLibelle(),
+                                    'description'=> $sc->getDescription(),
+            );
+            $res[]=$sous_categorie;
+            $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+            $services = $docS->findBy(array('sousCategorie' => $sc->getId()), array('fin'=>'desc'), null, null);
+            foreach ($services as $s) {
+                $service = array('id' => $s->getId(),
+                                 'titre'=> $s->getTitre(),
+                                 'description'=> $s->getDescription(),
+                                 'debut'=> $s->getDebut(),
+                                 'fin'=> $s->getFin(),
+                                 'type'=> $s->getType(),
+                                 'distance'=> $s->getDistance(),
+                                 'adresse'=> $s->getAdresse(),
+                                 'lieu'=> $s->getLieu(),
+                                 'username'=> $s->getInscrit()->getUsername(),
+                                 'icone'=> $sc->getIcone(),
+                );
+                $services_res[]=$service;
+            }
+        }
+        $res[]=$services_res;
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
-		$jsonContent = $serializer->serialize($sousCategories, 'json');
-
+		$jsonContent = $serializer->serialize($res, 'json');
         return new Response(
             $jsonContent,
             200,
@@ -83,14 +113,69 @@ class ApiController extends Controller
         /*Parse des arguments*/
         $ids = explode(",", $id);
         /*Requetes*/
-        $services = array();
+        $services_res = array();
         foreach ($ids as $categorie ) {        	
-        	array_push($services, $docS->findBy(array('sousCategorie' => $categorie), array(), null, null));
+        	$services = $docS->findBy(array('sousCategorie' => $categorie), array(), null, null);
+            foreach ($services as $s ) { 
+                $service = array('id' => $s->getId(),
+                                 'titre'=> $s->getTitre(),
+                                 'description'=> $s->getDescription(),
+                                 'debut'=> $s->getDebut(),
+                                 'fin'=> $s->getFin(),
+                                 'type'=> $s->getType(),
+                                 'distance'=> $s->getDistance(),
+                                 'adresse'=> $s->getAdresse(),
+                                 'lieu'=> $s->getLieu(),
+                                 'username'=> $s->getInscrit()->getUsername(),
+                                 'icone'=> $s->getSousCategorie()->getIcone(),
+                );
+                $services_res[]=$service;
+            }
         }
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
-		$jsonContent = $serializer->serialize($services, 'json');
+		$jsonContent = $serializer->serialize($services_res, 'json');
 
+        return new Response(
+            $jsonContent,
+            200,
+            array('Content-Type' => 'application/json')
+        );
+    }
+
+    /**
+     * Fonction d'obtention d'un service par son id
+     * @Route("/api/service/{id}.{_format}",
+              defaults = {"_format"="json"},
+              requirements = { "_format" = "html|json" },
+              name="getserviceID",
+     *  )
+     * @Method({"GET"})
+     */
+    public function getserviceID($id)
+    {
+        /*Requete*/
+        $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+        $service = $docS->find($id);
+
+        /*$res = array();*/
+        $res = array('id' => $service->getId(),
+                         'titre'=> $service->getTitre(),
+                         'description'=> $service->getDescription(),
+                         'debut'=> $service->getDebut(),
+                         'fin'=> $service->getFin(),
+                         'type'=> $service->getType(),
+                         'distance'=> $service->getDistance(),
+                         'adresse'=> $service->getAdresse(),
+                         'lieu'=> $service->getLieu(),
+                         'username'=> $service->getInscrit()->getUsername(),
+                         'icone'=> $service->getSousCategorie()->getIcone(),
+           );
+        /*$res[]=$service;*/
+    
+        /*passage en JSON avec Serializer*/
+        $serializer = $this->get('serializer');
+        $jsonContent = $serializer->serialize($res, 'json');
         return new Response(
             $jsonContent,
             200,
@@ -101,22 +186,49 @@ class ApiController extends Controller
     /*DASHBOARD*/
     /**
      * Fonction d'obtention d'un service par son id
-     * @Route("/api/service/{id}.{_format}",
+     * @Route("/api/dashboard/service/{id}.{_format}",
               defaults = {"_format"="json"},
               requirements = { "_format" = "html|json" },
-              name="getserviceID",
+              name="getmonServiceID",
      *  )
      * @Method({"GET"})
      */
-    public function getServiceID($id)
+    public function getmonServiceID($id)
     {
         /*Requete*/
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-        $services = $docS->find($id);
+        $service = $docS->find($id);
+
+        /*$docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');*/
+        /*$reponses = $docR->findBy(array('service' => $id), array('id'=>'desc'), null, null);*/
+        $reponses = $service->getReponses();
+
+        /*$res = array();*/
+        $res = array('id' => $service->getId(),
+                         'titre'=> $service->getTitre(),
+                         'description'=> $service->getDescription(),
+                         'debut'=> $service->getDebut(),
+                         'fin'=> $service->getFin(),
+                         'type'=> $service->getType(),
+                         'distance'=> $service->getDistance(),
+                         'adresse'=> $service->getAdresse(),
+                         'lieu'=> $service->getLieu(),
+                         'username'=> $service->getInscrit()->getUsername(),
+                         'icone'=> $service->getSousCategorie()->getIcone(),
+                         'reponses'=> array(),
+            );
+        foreach ($reponses as $reponse) {
+            $r = array('id' => $reponse->getId(),
+                       'username' => $reponse->getConversation()->getInterlocuteur2()->getUsername(),
+                       'etat' => $reponse->getEtat(),
+                       'date_rendez_vous' => $reponse->getDateRendezVous(),
+                );
+            $res['reponses'][]=$r;
+        }
+    
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
-        $jsonContent = $serializer->serialize($services, 'json');
-
+        $jsonContent = $serializer->serialize($res, 'json');
         return new Response(
             $jsonContent,
             200,
@@ -126,7 +238,7 @@ class ApiController extends Controller
 
     /**
      * Fonction d'obtention d'une réponse par son id
-     * @Route("/api/reponse/{id}.{_format}",
+     * @Route("/api/reponse/dashboard/{id}.{_format}",
               defaults = {"_format"="json"},
               requirements = { "_format" = "html|json" },
               name="getreponseID",
@@ -138,13 +250,105 @@ class ApiController extends Controller
         /*Requete*/
         $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
         $reponse = $docR->find($id);
-        /*Activation de la notation*/
-        if ($reponse->getEtat() === "valide" && ($reponse->getDateRendezVous()->diff(new DateTime())->format("%d days, %h hours and %i minuts")) ) {
-            $reponse->setEtat("notation");
+        $messages = $reponse->getConversation()->getMessages();
+
+        /*creation de la réponse*/
+        $res = array('id' => $reponse->getId(),
+                     'date_rendez_vous'=> $reponse->getDateRendezVous(),
+                     'etat'=> $reponse->getEtat(),
+                     'username'=> $reponse->getConversation()->getInterlocuteur2()->getUsername(),
+                     'conversationId'=> $reponse->getConversation()->getId(),
+                     'messages'=> array(),
+                     'evaluateurs'=> "",
+            );
+        foreach ($messages as $message) {
+            $m = array('id' => $message->getId(),
+                       'username' => $message->getInscrit()->getUsername(),
+                       'contenu' => $message->getContenu(),
+                );
+            $res['messages'][]=$m;
         }
+
+        /*creation des evaluations*/
+        foreach ($reponse->getService()->getEvaluations() as $eval) {
+            $res['evaluateurs'].=",".$eval->getInscritNotant()->getUsername();
+        }
+
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
-        $jsonContent = $serializer->serialize($reponse, 'json');
+        $jsonContent = $serializer->serialize($res, 'json');
+
+        return new Response(
+            $jsonContent,
+            200,
+            array('Content-Type' => 'application/json')
+        );
+    }
+
+    /**
+     * Fonction d'obtention d'une réponse d'un utilisateur par son id
+     * @Route("/api/reponseUser/dashboard/{id}.{_format}",
+              defaults = {"_format"="json"},
+              requirements = { "_format" = "html|json" },
+              name="getreponseUserID",
+     *  )
+     * @Method({"GET"})
+     */
+    public function getReponseUserID($id)
+    {
+        /*Requete - recuperation de la reponse brut*/
+        $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
+        $reponse = $docR->find($id);
+        $messages = $reponse->getConversation()->getMessages();
+        $serviceBrut = $reponse->getService();
+
+        /*creation de la réponse*/
+        $res = array('id' => $reponse->getId(),
+                     'date_rendez_vous'=> $reponse->getDateRendezVous(),
+                     'etat'=> $reponse->getEtat(),
+                     'username'=> $reponse->getConversation()->getInterlocuteur2()->getUsername(),
+                     'conversationId'=> $reponse->getConversation()->getId(),
+                     'messages'=> array(),
+                     'service'=> null,
+            );
+        /*creation des messages*/
+        foreach ($messages as $message) {
+            $m = array('id' => $message->getId(),
+                       'username' => $message->getInscrit()->getUsername(),
+                       'contenu' => $message->getContenu(),
+                );
+            $res['messages'][]=$m;
+        }
+        /*creation des services*/
+        $service = array('id' => $serviceBrut->getId(),
+                         'titre'=> $serviceBrut->getTitre(),
+                         'description'=> $serviceBrut->getDescription(),
+                         'debut'=> $serviceBrut->getDebut(),
+                         'fin'=> $serviceBrut->getFin(),
+                         'type'=> $serviceBrut->getType(),
+                         'distance'=> $serviceBrut->getDistance(),
+                         'adresse'=> $serviceBrut->getAdresse(),
+                         'lieu'=> $serviceBrut->getLieu(),
+                         'username'=> $serviceBrut->getInscrit()->getUsername(),
+                         'evaluateurs'=> "",
+                         'evaluations'=> array(),
+            );
+        /*creation des evaluations*/
+        foreach ($serviceBrut->getEvaluations() as $eval) {
+            $e = array('id' => $eval->getId(),
+                       'note' => $eval->getNote(),
+                       'commentaire' => $eval->getCommentaire(),
+                       'notant' => $eval->getInscritNotant()->getId(),
+                       'note' => $eval->getInscritNote()->getId(),
+                );
+            $service['evaluations'][]=$e;
+            $service['evaluateurs'].=",".$eval->getInscritNotant()->getUsername();
+        }
+        $res['service']=$service;
+
+        /*passage en JSON avec Serializer*/
+        $serializer = $this->get('serializer');
+        $jsonContent = $serializer->serialize($res, 'json');
 
         return new Response(
             $jsonContent,

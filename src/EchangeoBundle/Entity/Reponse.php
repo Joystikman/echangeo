@@ -37,21 +37,21 @@ class Reponse
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Inscrit")
+     * @ORM\ManyToOne(targetEntity="Inscrit", inversedBy="reponses")
      * @ORM\JoinColumn(name="Inscrit_id", referencedColumnName="id")
      */
     private $inscrit;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Service")
+     * @ORM\ManyToOne(targetEntity="Service", inversedBy="reponses")
      * @ORM\JoinColumn(name="Service_id", referencedColumnName="id")
      */
     private $service;
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="Conversation", cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Conversation", inversedBy="reponse", cascade={"remove"})
      * @ORM\JoinColumn(name="Conversation_id", referencedColumnName="id")
      */
     private $conversation ;
