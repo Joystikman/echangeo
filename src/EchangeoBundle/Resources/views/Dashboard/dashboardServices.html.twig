@@ -2,6 +2,11 @@
 
 {% block title %}Services Utilisateur{% endblock %}
 
+{% block scriptTete %}	
+	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
+	<script src="{{ asset('script/moment.js')}}"></script>
+{% endblock scriptTete %}
+
 {% block liste %}
 	<!-- <h2>Mes services</h2> -->
 	<div class='ajout'>
@@ -12,8 +17,10 @@
 			<div id="{{service.id}}" class="tuile cloture">
 		    <h3>{{service.titre}}</h3>
 		   	<p>{{service.description}}</p>
-		   	<p>{{"now"|date('Y-m-d')}}</p>
-		   	<p>{{service.fin|date('Y-m-d')}}</p>
+		   	<p id="date{{service.id}}"></p>
+		       	<script type="text/javascript">
+					$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
+				</script>
 		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
 		   	<a href="#" class="btn btn-primary">voir en détail</a>
 		  </div>
@@ -21,8 +28,10 @@
 			<div id="{{service.id}}" class="tuile valide">
 		    <h3>{{service.titre}}</h3>
 		   	<p>{{service.description}}</p>
-		   	<p>{{"now"|date('Y-m-d')}}</p>
-		   	<p>{{service.fin|date('Y-m-d')}}</p>
+		   	<p id="date{{service.id}}"></p>
+		       	<script type="text/javascript">
+					$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
+				</script>
 		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
 		   	<a href="#" class="btn btn-primary">voir en détail</a>
 		  </div>
@@ -35,6 +44,5 @@
 {% endblock affichage %}
 
 {% block script %}
-<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
 {% include 'EchangeoBundle:Scripts:servicesScript.html.twig' %}
 {% endblock script %}	

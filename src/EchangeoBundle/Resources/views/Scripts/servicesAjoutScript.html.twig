@@ -39,7 +39,7 @@ var chargement = "<img class='loading' src={{ asset('assets/Loading_icon.gif')}}
 				$("#annonce").append($("<a href="+urlEdit+" class='btn btn-primary'>").text("modifier"));
 				$("#annonce").append($("<h2>").text(data.titre));
 				$("#annonce").append($("<p>").text(data.description));
-				$("#annonce").append($("<p>").text(data.debut+" - "+data.fin));
+				$("#annonce").append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")));
 				$("#annonce").append($("<p>").text(data.adresse));
 				$("#annonce").append($("<input id='lieu' hidden value="+data.lieu+">"));
 				$("#annonce").append($("<input id='distance' hidden value="+data.distance+">"));

@@ -5,12 +5,13 @@
 {% block css %}	
 	<link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
 	<link href="{{ asset('script/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/pikaday.css') }}" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
 	<div class="container">
 		{% if app.user %}
-	      <p class="login"><a href="{{ path('dashboard') }}">dashboard</a>
+	      <p class="login"><a href="{{ path('dashboard') }}">dashboard</a> | 
 	        <a href="{{ path('fos_user_security_logout') }}">deconnexion</a>
 	    {% else %}
 	      <p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    

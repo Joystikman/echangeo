@@ -33,14 +33,14 @@
 				$("#service").append($("<div id='annonce' class='annonce'>"));
 				$("#annonce").append($("<h2>").text(data.service.titre));
 				$("#annonce").append($("<p>").text(data.service.description));
-				$("#annonce").append($("<p>").text(data.service.debut+" - "+data.service.fin));
+				$("#annonce").append($("<p>").text("Du : "+moment(data.service.debut).lang('fr').format("LLL")+" au "+moment(data.service.fin).lang('fr').format("LLL")));
 				$("#annonce").append($("<input id='lieu' hidden value="+data.service.lieu+">"));
 				$("#annonce").append($("<input id='distance' hidden value="+data.service.distance+">"));
 				$("#annonce").append($("<div id='googlemaps' class='carteAjout'>"));
 				$("#service").append($("<div id='reponse' class='reponse'>"));
 				$("#reponse").append($("<h3>").text("Réponse :"));
 				$("#reponse").append($("<h4>").text('de '+data.username));
-				$("#reponse").append($("<p>").text('date proposé pour le service :'+data.date_rendez_vous));
+				$("#reponse").append($("<p>").text('date proposé pour le service :'+moment(data.date_rendez_vous).lang('fr').format("LLL")));
 				validation(data);
 				$("#service").append($("<div id='conversation' class='conversation'>"));
 				for(var i=0; i<data.messages.length; i++){

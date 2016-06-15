@@ -42,7 +42,7 @@
 					$('#liste').append($("<div class='tuile'>")
 						.append($("<h3>").text(service.titre))
 						.append($("<p>").text("Proposé par : "+service.username))
-						.append($("<p>").text("Du : "+service.debut+"-"+service.fin))
+						.append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL")))
 						.append($("<a id="+service.id+" href='#' class='btn btn-primary'>").text('voir en détails'))
 					);
 					/*affichage des annonce à la carte*/
@@ -72,13 +72,14 @@
 										$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
 										$('#serviceDetail').append($("<h3>").text(data.titre));
 										$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
-										$('#ServiceDetail').append($("<p>").text("Du : "+data.debut+"-"+data.fin));
+										$('#serviceDetail').append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL") ));
 										$('#serviceDetail').append($("<p>").text(""+data.description));
 										{% if app.user %}
 											$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
 											$('#serviceDetail').append($("<input type='hidden' name='idService' value="+data.id+">"));
 											$('#serviceDetail').append($("<input id='date' class='form-control' type='text' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
-											$("#date").datepicker();
+											/*$("#date").datepicker();*/
+											var picker = new Pikaday({ field: $('#date')[0] });
 											$('#serviceDetail').append($("<textarea type='text' class='form-control' name='message' placeholder='message'>"));
 											$('#serviceDetail').append($("<input type='submit' class='btn btn-success' name='envoie' value='répondre'>"));
 										{% else %}
@@ -132,7 +133,7 @@
 					$('#liste').append($("<div class='tuile'>")
 						.append($("<h3>").text(data[i].titre))
 						.append($("<p>").text("Proposé par : "+data[i].username))
-						.append($("<p>").text("Du : "+data[i].debut+"-"+data[i].fin))
+						.append($("<p>").text("Du : "+moment(data[i].debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")))
 						.append($("<a id="+data[i].id+" href='#' class='btn btn-primary'>").text('voir en détails'))
 					);
 					markerServices(false,data[i],data[i].icone);
@@ -164,13 +165,14 @@
 									$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
 									$('#serviceDetail').append($("<h3>").text(data.titre));
 									$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
-									$('#serviceDetail').append($("<p>").text("Du : "+data.debut+"-"+data.fin))
+									$('#serviceDetail').append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")));
 									$('#serviceDetail').append($("<p>").text(""+data.description));
 									{% if app.user %}
 										$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
 										$('#formulaire').append($("<input type='hidden' name='idService' value="+data.id+">"));
 										$('#formulaire').append($("<input id='date' type='text' class='form-control' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
-										$("#date").datepicker();
+										/*$("#date").datepicker();*/
+										var picker = new Pikaday({ field: $('#date')[0] });
 										$('#formulaire').append($("<textarea type='text' class='form-control' name='message' placeholder='message'>"));
 										$('#formulaire').append($("<input type='submit' class='btn btn-success' name='envoie' value='répondre'>"));
 									{% else %}
@@ -219,13 +221,14 @@
 									$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
 									$('#serviceDetail').append($("<h3>").text(data.titre));
 									$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
-									$('#serviceDetail').append($("<p>").text("Du : "+data.debut+"-"+data.fin))
+									$('#serviceDetail').append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")));
 									$('#serviceDetail').append($("<p>").text(""+data.description));
 									{% if app.user %}
 										$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
 										$('#formulaire').append($("<input type='hidden' name='idService' value="+data.id+">"));
 										$('#formulaire').append($("<input id='date' type='text' class='form-control' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
-										$("#date").datepicker();
+										/*$("#date").datepicker();*/
+										var picker = new Pikaday({ field: $('#date')[0] });
 										$('#formulaire').append($("<textarea type='text' class='form-control' name='message' placeholder='message'>"));
 										$('#formulaire').append($("<input type='submit' class='btn btn-success' name='envoie' value='répondre'>"));
 									{% else %}
