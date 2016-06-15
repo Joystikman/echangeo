@@ -34,7 +34,7 @@
 				$("#annonce").append($("<a href="+urlEdit+" class='btn btn-primary'>").text("modifier"));
 				$("#annonce").append($("<h2>").text(data.titre));
 				$("#annonce").append($("<p>").text(data.description));
-				$("#annonce").append($("<p>").text(data.debut+" - "+data.fin));
+				$("#annonce").append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")));
 				$("#annonce").append($("<p>").text(data.adresse));
 				$("#annonce").append($("<input id='lieu' hidden value="+data.lieu+">"));
 				$("#annonce").append($("<input id='distance' hidden value="+data.distance+">"));
@@ -66,7 +66,7 @@
 			var id = data.reponses[i].id;
 			$("#reponse").append($("<div id='reponse"+id+"' title='"+id+"' class='reponseId'>"));
 			$("#reponse"+id).append($("<h4>").text('de '+data.reponses[i].username));
-			$("#reponse"+id).append($("<p>").text('date proposé pour le service :'+data.reponses[i].date_rendez_vous));			
+			$("#reponse"+id).append($("<p>").text('date proposé pour le service :'+moment(data.reponses[i].date_rendez_vous).lang('fr').format("LLL")));			
 			$("#reponse"+id).append($("<p class='btn btn-primary'>").text("voir en détails."));
 			$("#reponse"+id).on("click", function(){
 				console.log('click voir en detail');
@@ -92,7 +92,7 @@
 						$("#reponseId").append($("<p id='retour' class='btn btn-primary'>").text("<- retour"));
 						$("#retour").on("click", function(){listeReponses(service)});
 						$("#reponseId").append($("<h4>").text('de '+data.username));
-						$("#reponseId").append($("<p>").text('date proposé pour le service :'+data.date_rendez_vous));
+						$("#reponseId").append($("<p>").text('date proposé pour le service :'+moment(data.date_rendez_vous).lang('fr').format("LLL")));
 						$("#reponseId").append($("<p>").text('etat :'+data.etat));
 						validation(data);
 						$("#reponseId").append($("<div id='conversation' class='conversation'>"));

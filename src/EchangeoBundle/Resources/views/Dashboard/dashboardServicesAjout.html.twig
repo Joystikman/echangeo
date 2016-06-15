@@ -2,6 +2,11 @@
 
 {% block title %}Services Utilisateur - Nouvelle annonce{% endblock %}
 
+{% block scriptTete %}	
+	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
+	<script src="{{ asset('script/moment.js')}}"></script>
+{% endblock scriptTete %}
+
 {% block affichage %}
 	<div id='service' class='service'>
 		<div id='annonce' class='annonce'>
@@ -27,6 +32,10 @@
 {% endblock affichage %}
 
 {% block script %}
-<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+<script src="{{ asset('script/pikaday.js')}}"></script>
 {% include 'EchangeoBundle:Scripts:servicesAjoutScript.html.twig' %}
+<script type="text/javascript">
+		var picker = new Pikaday({ field: $('#form_debut')[0] });
+		var picker2 = new Pikaday({ field: $('#form_fin')[0] });
+	</script>
 {% endblock script %}	

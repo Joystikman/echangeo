@@ -5,6 +5,7 @@
 {% block css %}
 	<link href="{{ asset('css/recherche.css') }}" rel="stylesheet">
 	<link href="{{ asset('script/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/pikaday.css') }}" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
@@ -44,7 +45,7 @@
 	    			{% if app.user %}
 		    			<form action="{{ path('reponse_service') }}" method='POST'>
 		    				<input type='hidden' name='idService' value="{{services.id}}">
-		    				<input type='text' name='dateRDV' class="form-control" placeholder='aaaa/mm/jj h:m'>
+		    				<input type='text' id='date' name='dateRDV' class="form-control" placeholder='aaaa/mm/jj h:m'>
 		    				<textarea name='message' class="form-control" placeholder='message'></textarea>
 		    				<input type='submit' name='envoie' class="btn btn-success" value='répondre'>
 		    			</form>
@@ -66,7 +67,10 @@
 
 {% block script %}
 	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
-	<script src="{{ asset('script/jquery-ui/jquery-ui.js') }}"></script> 
+	<script src="{{ asset('script/pikaday.js')}}"></script>
 	<!-- include fonction de recherche	 -->
 	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}
+	<script type="text/javascript">
+		var picker = new Pikaday({ field: $('#date')[0] });
+	</script>
 {% endblock script %}

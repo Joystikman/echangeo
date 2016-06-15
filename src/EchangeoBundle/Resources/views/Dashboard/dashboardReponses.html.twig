@@ -2,12 +2,21 @@
 
 {% block title %}Réponse Utilisateur{% endblock %}
 
+{% block scriptTete %}	
+	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
+	<script src="{{ asset('script/moment.js')}}"></script>
+{% endblock scriptTete %}
+
 {% block liste %}
 	<h2>Mes réponses</h2>
 	{% for reponse in reponses %}
 		<div id="{{reponse.id}}" class="tuile">
 	   		<h3>{{reponse.service.titre}}</h3>
 	   		<p>Date : <b>{{reponse.dateRendezVous|date("d/m/Y")}}</b></p> 
+	   		<p id="date{{reponse.id}}"></p>
+		       	<script type="text/javascript">
+					$("#date{{reponse.id}}").text("Le : "+moment('{{reponse.dateRendezVous|date("d F Y H:i")}}').lang('fr').format("LLL"));
+				</script>
 	   		<p>Etat : {{reponse.etat}}</p>
 	   		<a href="#" class="btn btn-primary">voir en détail</a>
 	   	</div>
@@ -19,6 +28,5 @@
 {% endblock affichage %}
 
 {% block script %}
-<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
 {% include 'EchangeoBundle:Scripts:reponsesScript.html.twig' %}
 {% endblock script %}	
