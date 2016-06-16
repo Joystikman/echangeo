@@ -21,11 +21,12 @@
 	  			<h2 class="logo"><a href="{{ path('index') }}"><span>E</span></a></h2>
 	  		</header>
 			<nav class="navbar col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<p>
-					<a id="dashboardMenu" href="{{ path('dashboard') }}" class="menu">🏠</a>
-					<a id="servicesMenu" href="{{ path('servicesUser') }}" class="menu">Mes Services</a>
-					<a id="reponsesMenu" href="{{ path('reponsesUser') }}" class="menu">Mes Réponses</a>
-				</p>
+				<ul>
+					<li><a id="dashboardMenu" href="{{ path('dashboard') }}" class="menu">🏠</a></li>
+					<li><a id="servicesMenu" href="{{ path('servicesUser') }}" class="menu">Mes Services</a></li>
+					<li><a id="reponsesMenu" href="{{ path('reponsesUser') }}" class="menu">Mes Réponses</a></li>
+					<li><a id="optionsMenu" href="{{ path('options') }}" class="menu">Options</a></li>
+				</ul>
 			</nav>
 			<div class="liste col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				{% block liste %}

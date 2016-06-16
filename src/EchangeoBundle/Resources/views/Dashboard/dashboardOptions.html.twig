@@ -1,0 +1,32 @@
+{% extends 'EchangeoBundle:Dashboard:dashboard.html.twig' %}
+
+{% block title %}Services Utilisateur - Options{% endblock %}
+
+
+{% block liste %}
+	<!-- <h2>Mes services</h2> -->
+	<div id="" class="tuile">
+	   	<a href="{{ path('editProfil',{ 'id': app.user.id }) }}" class=""><h3>Mon profil</h3></a>
+	</div>
+	<div id="" class="tuile">
+	   	<a href="#" class=""><h3>Mot de passe oublié</h3></a>
+	</div>
+	<div id="" class="tuile">
+	   	<a href="#" class=""><h3>Soumettre une catégorie</h3></a>
+	</div>
+	
+{% endblock liste %}
+
+{% block affichage %}
+		
+{% endblock affichage %}
+
+{% block script %}
+<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
+<script type="text/javascript">
+	var chargement = "<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>";
+	$(document).ready(function(){
+		$("#optionsMenu").css({'border-bottom': 'solid 8px #4FC1E9'});
+	});
+</script>
+{% endblock script %}	

@@ -20,8 +20,8 @@
 			{{ form_row(form.type, { 'attr': {'class': 'form-control'} }) }}
 			{{ form_row(form.adresse, { 'attr': {'class': 'form-control'} }) }}
 			{{ form_row(form.lieu, { 'attr': {'class': 'form-control'} }) }}
-			<div id="googlemaps" class="carteAjout"></div>
 			{{ form_row(form.distance, { 'attr': {'class': 'form-control stepper-input'} }) }}
+			<div id="googlemaps" class="carteAjout"></div>
 			{{ form_row(form.save, { 'attr': {'class': 'btn btn-primary'} }) }}
 			{% if form.delete is defined %}
 				{{ form_row(form.delete, { 'attr': {'class': 'btn btn-danger'} }) }}
