@@ -231,3 +231,31 @@ footer{
 	background: #434A54;
 	color: white;
 }
+
+@media (max-width: 700px) {
+	/*.main{
+		display: flex;
+  		flex-direction: column;
+  		flex-wrap: wrap;
+  		width: 100%;
+	}
+
+	.navbar {
+		padding: 0px 15px;
+		flex: 1;
+		order: 1;
+	}
+
+	.liste{
+		color: #000000;
+		padding: 0 5px;
+		flex: 1 2;
+		order: 3;
+	}
+
+	.cadre{
+	    flex: 2;
+	    order: 2;
+	    width: 100%;
+	}*/
+}

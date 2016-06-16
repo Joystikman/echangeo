@@ -9,6 +9,7 @@ namespace EchangeoBundle\Controller;
   use EchangeoBundle\Entity\Inscrit;
   use EchangeoBundle\Entity\Message;
   use EchangeoBundle\Entity\Evaluation;
+  use EchangeoBundle\Entity\SuggestionCategorie;
 
 /*appel des formulaires*/
   use EchangeoBundle\Form\ServiceType;
@@ -351,8 +352,47 @@ class DashboardController extends Controller{
 
       /*rendu de la page*/
       return $this->render('EchangeoBundle:Dashboard:dashboardProfile.html.twig',array(
-              "form"=>$formulaire->createView(),
-              "inscrit"=>$inscrit
+              "form"=>$formulaire->createView()
+              ));
+    }
+
+    /**
+     * Soummettre un catégorie
+     * @Route("/dashboard/options/categorie",
+              name="optionsCategorie")
+     */
+    public function optionsCategorieAction(Request $request){
+
+      $suggestionCategorie = new SuggestionCategorie();
+
+      /*creer le formulaire*/
+      $formulaire = $this->createFormBuilder($suggestionCategorie)
+                ->add('categorie', EntityType::class,array('mapped' => true,
+                                                         'required' => true,
+                                                         'multiple' => false,
+                                                         'expanded' => false,
+                                                         'class' => 'EchangeoBundle:Categorie',
+                                                         'choice_label' => 'libelle'))
+                ->add('libelle', TextType::class)
+                ->add('description', TextareaType::class)
+                ->add('save', SubmitType::class, array('label' => "enregistrer les modifications"))
+                ->getForm();
+
+      /*gestion des réponses*/
+      $formulaire->handleRequest($request);
+
+      if ($formulaire->isSubmitted() && $formulaire->isValid() && $formulaire->get('save')->isClicked()) {
+        $suggestionCategorie->setInscrit($this->get('security.token_storage')->getToken()->getUser());
+        $suggestionCategorie->setCategorie($formulaire->get('categorie')->getData()->getLibelle());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($suggestionCategorie);
+        $em->flush();
+        return $this->redirectToRoute('options');
+      }
+
+      /*rendu de la page*/
+      return $this->render('EchangeoBundle:Dashboard:dashboardSuggestion.html.twig',array(
+              "form"=>$formulaire->createView()
               ));
     }
 }

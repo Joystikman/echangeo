@@ -11,6 +11,7 @@
 {% block scriptTete %}	
 	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
 	<script src="{{ asset('script/moment.js')}}"></script>
+	<script src="{{ asset('script/pikaday.js')}}"></script>
 {% endblock scriptTete %}
 
 {% block content %}	
@@ -19,7 +20,8 @@
       <p class="login"><a href="{{ path('dashboard') }}">dashboard</a> | 
         <a href="{{ path('fos_user_security_logout') }}">deconnexion</a>
     {% else %}
-      <p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    
+      <p class="login"><a href="{{ path('fos_user_security_login') }}">se connecter</a> |   
+      <a href="{{ path('fos_user_registration_register') }}">s'inscrire</a></p>    
     {% endif %}
   	<header>
   		<h1 class="logo"><a href="{{ path('index') }}"><span>E</span></a></h1>

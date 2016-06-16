@@ -20,7 +20,7 @@
 
 header {
 	z-index: 1;
-	padding : 20px 0px;
+	padding : 5px 0px;
 	text-align: center;
 }
 
@@ -48,7 +48,7 @@ nav{
 	margin-top: 4px;
 	padding: 20px 0px;
 	background-color: #E9573F;
-	border-top: solid 4px #FC6E51;
+	border-bottom: solid 4px #FC6E51;
 	border-top-radius:5px;
 }
 
@@ -134,7 +134,7 @@ footer{
 	color: white;
 }
 
-@media (max-width: 641px) {
+@media (max-width: 700px) {
 	.main{
 		display: flex;
   		flex-direction: column;
@@ -144,7 +144,6 @@ footer{
 	}
 
 	.Recherche {
-		padding: 0px 15px;
 		flex: 1;
 		order: 1;
 		display: flex;
@@ -154,7 +153,6 @@ footer{
 	.services{
 		background-color: #E1E1E1;
 		color: #000000;
-		padding: 0 5px;
 		flex: 1 2;
 		order: 3;
 	}

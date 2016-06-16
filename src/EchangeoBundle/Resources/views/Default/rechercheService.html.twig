@@ -14,7 +14,8 @@
       <p class="login"><a href="{{ path('dashboard') }}">dashboard</a> | 
         <a href="{{ path('fos_user_security_logout') }}">deconnexion</a>
     {% else %}
-      <p class="login"><a href="{{ path('fos_user_security_login') }}">login</a></p>    
+      <p class="login"><a href="{{ path('fos_user_security_login') }}">se connecter</a> |   
+      <a href="{{ path('fos_user_registration_register') }}">s'inscrire</a></p>    
     {% endif %}
   	<header>
   		<h1 class="logo"><span>E</span></h1>
@@ -50,7 +51,7 @@
 		    				<input type='submit' name='envoie' class="btn btn-success" value='répondre'>
 		    			</form>
 		    		{% else %}
-		    			<p class=""><a href="{{ path('fos_user_security_login') }}">connecter vous répondre à cette annonce</a></p>
+		    			<p class=""><a href="{{ path('fos_user_security_login') }}" class="btn btn-success">connecter vous répondre à cette annonce</a></p>
 		    		{% endif %}
 	    		</div>
 		    </div>
