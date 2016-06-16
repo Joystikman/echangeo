@@ -1,0 +1,26 @@
+{% extends 'EchangeoBundle:Dashboard:dashboardOptions.html.twig' %}
+
+{% block title %}Services Utilisateur - Soumettre une categorie{% endblock %}
+
+{% block scriptTete %}	
+	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
+	<script src="{{ asset('script/moment.js')}}"></script>
+{% endblock scriptTete %}
+
+{% block affichage %}
+	<div id='service' class='service'>
+		<div id='annonce' class='annonce'>
+		<h2>Suggestion de categorie</h2>
+		<p>Si vous trouvez que les catégories disponible ne sont pas assez précise, vous pouvez nous en soumettre de nouvelle</p>
+		{{ form_start(form) }}
+			{{ form_row(form.categorie, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.libelle, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.description, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.save, { 'attr': {'class': 'btn btn-primary'} }) }}
+		{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock affichage %}
+
+{% block script %}
+{% endblock script %}	

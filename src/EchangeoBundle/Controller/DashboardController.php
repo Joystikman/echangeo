@@ -9,6 +9,7 @@ namespace EchangeoBundle\Controller;
   use EchangeoBundle\Entity\Inscrit;
   use EchangeoBundle\Entity\Message;
   use EchangeoBundle\Entity\Evaluation;
+  use EchangeoBundle\Entity\SuggestionCategorie;
 
 /*appel des formulaires*/
   use EchangeoBundle\Form\ServiceType;
@@ -27,8 +28,7 @@ namespace EchangeoBundle\Controller;
   use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
   use Symfony\Component\HttpFoundation\Request;
 
-class DashboardController extends Controller
-{
+class DashboardController extends Controller{
 
 /*ACCUEIL*/ 
 	/**
@@ -84,14 +84,14 @@ class DashboardController extends Controller
                                                          'class' => 'EchangeoBundle:SousCategorie',
                                                          'choice_label' => 'libelle' ))
                 ->add('description', TextareaType::class)
-                ->add('debut', DateType::class, array(
-                            'widget'  => 'single_text',
-                            'format' => 'dd/MM/yyyy',
-                        ))
-                ->add('fin', DateType::class, array(
-                            'widget'  => 'single_text',
-                            'format' => 'dd/MM/yyyy',
-                        ))
+                ->add('debut', 'datetime', array(
+                          'input' => 'datetime',
+                          'widget' => 'single_text'
+                          ))
+                ->add('fin', 'datetime', array(
+                          'input' => 'datetime',
+                          'widget' => 'single_text'
+                          ))
                 ->add('type', ChoiceType::class, array('choices' => array(
                       'propose' => 'propose',
                       'demande' => 'demande')))
@@ -145,14 +145,14 @@ class DashboardController extends Controller
                                                          'class' => 'EchangeoBundle:SousCategorie',
                                                          'choice_label' => 'libelle' ))
                 ->add('description', TextareaType::class)
-                ->add('debut', DateType::class, array(
-                            'widget'  => 'single_text',
-                            'format' => 'dd/MM/yyyy',
-                        ))
-                ->add('fin', DateType::class, array(
-                            'widget'  => 'single_text',
-                            'format' => 'dd/MM/yyyy',
-                        ))
+                ->add('debut', 'datetime', array(
+                          'input' => 'datetime',
+                          'widget' => 'single_text'
+                          ))
+                ->add('fin', 'datetime', array(
+                          'input' => 'datetime',
+                          'widget' => 'single_text'
+                          ))
                 ->add('type', ChoiceType::class, array('choices' => array(
                       'propose' => 'propose',
                       'demande' => 'demande')))
@@ -189,7 +189,7 @@ class DashboardController extends Controller
     }
 
 /*REPONSES*/
-/**
+  /**
      * Page des services
      * @Route("/dashboard/reponses",
               name="reponsesUser")
@@ -306,5 +306,93 @@ class DashboardController extends Controller
         $em->flush();
         return $this->redirectToRoute('reponsesUser');
       }
+    }
+
+/*OPTIONS*/
+
+  /**
+     * Page des options
+     * @Route("/dashboard/options",
+              name="options")
+     */
+    public function optionsAction(){
+        return $this->render('EchangeoBundle:Dashboard:dashboardOptions.html.twig',array());
+    }
+
+  /**
+     * Modification des information personnelles
+     * @Route("/dashboard/options/profil/{id}",
+              name="editProfil")
+     */
+    public function editProfilAction(Request $request, $id){
+
+      $docI = $this->getDoctrine()->getRepository('EchangeoBundle:Inscrit');
+      $inscrit = $docI->find($id);
+
+      /*creer le formulaire*/
+      $formulaire = $this->createFormBuilder($inscrit)
+                ->add('nom', TextType::class)
+                ->add('prenom', TextType::class)
+                ->add('dateNaissance', 'datetime', array(
+                          'input' => 'datetime',
+                          'widget' => 'single_text'
+                          ))
+                ->add('adresse', TextType::class)
+                ->add('save', SubmitType::class, array('label' => "enregistrer les modifications"))
+                ->getForm();
+
+      /*gestion des réponses*/
+      $formulaire->handleRequest($request);
+
+      if ($formulaire->isSubmitted() && $formulaire->isValid() && $formulaire->get('save')->isClicked()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        return $this->redirectToRoute('options');
+      }
+
+      /*rendu de la page*/
+      return $this->render('EchangeoBundle:Dashboard:dashboardProfile.html.twig',array(
+              "form"=>$formulaire->createView()
+              ));
+    }
+
+    /**
+     * Soummettre un catégorie
+     * @Route("/dashboard/options/categorie",
+              name="optionsCategorie")
+     */
+    public function optionsCategorieAction(Request $request){
+
+      $suggestionCategorie = new SuggestionCategorie();
+
+      /*creer le formulaire*/
+      $formulaire = $this->createFormBuilder($suggestionCategorie)
+                ->add('categorie', EntityType::class,array('mapped' => true,
+                                                         'required' => true,
+                                                         'multiple' => false,
+                                                         'expanded' => false,
+                                                         'class' => 'EchangeoBundle:Categorie',
+                                                         'choice_label' => 'libelle'))
+                ->add('libelle', TextType::class)
+                ->add('description', TextareaType::class)
+                ->add('save', SubmitType::class, array('label' => "enregistrer les modifications"))
+                ->getForm();
+
+      /*gestion des réponses*/
+      $formulaire->handleRequest($request);
+
+      if ($formulaire->isSubmitted() && $formulaire->isValid() && $formulaire->get('save')->isClicked()) {
+        $suggestionCategorie->setInscrit($this->get('security.token_storage')->getToken()->getUser());
+        $suggestionCategorie->setCategorie($formulaire->get('categorie')->getData()->getLibelle());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($suggestionCategorie);
+        $em->flush();
+        return $this->redirectToRoute('options');
+      }
+
+      /*rendu de la page*/
+      return $this->render('EchangeoBundle:Dashboard:dashboardSuggestion.html.twig',array(
+              "form"=>$formulaire->createView()
+              ));
     }
 }

@@ -1,7 +1,10 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
-    {{ form_widget(form) }}
+	<h1>S'inscrire</h1>
+    {{ form_row(form.email, { 'attr': {'class': 'form-control'} }) }}
+    {{ form_row(form.username, { 'attr': {'class': 'form-control'} }) }}
+    {{ form_row(form.plainPassword, { 'attr': {'class': 'form-control'} }) }}
     <div>
         <input type="submit" value="s'inscrire" />
     </div>

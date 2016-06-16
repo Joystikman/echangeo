@@ -15,25 +15,25 @@
 	{% for service in services %}
 		{% if service.fin|date('Ymd') < "now"|date('Y-m-d') %}
 			<div id="{{service.id}}" class="tuile cloture">
-		    <h3>{{service.titre}}</h3>
-		   	<p>{{service.description}}</p>
-		   	<p id="date{{service.id}}"></p>
-		       	<script type="text/javascript">
-					$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
-				</script>
-		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
-		   	<a href="#" class="btn btn-primary">voir en détail</a>
+			    <h3>{{service.titre}}</h3>
+			   	<p>{{service.description}}</p>
+			   	<p id="date{{service.id}}"></p>
+			       	<script type="text/javascript">
+						$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
+					</script>
+			   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+			   	<a href="#" class="btn btn-primary">voir en détail</a>
 		  </div>
 		{% else %}
 			<div id="{{service.id}}" class="tuile valide">
-		    <h3>{{service.titre}}</h3>
-		   	<p>{{service.description}}</p>
-		   	<p id="date{{service.id}}"></p>
-		       	<script type="text/javascript">
-					$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
-				</script>
-		   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
-		   	<a href="#" class="btn btn-primary">voir en détail</a>
+			    <h3>{{service.titre}}</h3>
+			   	<p>{{service.description}}</p>
+			   	<p id="date{{service.id}}"></p>
+			       	<script type="text/javascript">
+						$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
+					</script>
+			   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
+			   	<a href="#" class="btn btn-primary">voir en détail</a>
 		  </div>
 		{% endif %}
 	{% endfor %}
