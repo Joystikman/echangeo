@@ -1,0 +1,30 @@
+{% extends 'EchangeoBundle:Dashboard:dashboardOptions.html.twig' %}
+
+{% block title %}Services Utilisateur - Mon profile{% endblock %}
+
+{% block scriptTete %}	
+	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
+	<script src="{{ asset('script/moment.js')}}"></script>
+{% endblock scriptTete %}
+
+{% block affichage %}
+	<div id='service' class='service'>
+		<div id='annonce' class='annonce'>
+		<h2>Mon profile</h2>
+		{{ form_start(form) }}
+			{{ form_row(form.nom, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.prenom, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.dateNaissance, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.adresse, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.save, { 'attr': {'class': 'btn btn-primary'} }) }}
+		{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock affichage %}
+
+{% block script %}
+<script src="{{ asset('script/pikaday.js')}}"></script>
+<script type="text/javascript">
+		var picker = new Pikaday({ field: $('#form_dateNaissance')[0] });
+	</script>
+{% endblock script %}	

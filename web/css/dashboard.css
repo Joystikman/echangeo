@@ -51,6 +51,14 @@ header {
 	border-radius-bottom: 5px;	
 }
 
+.navbar ul{
+	list-style: none;
+}
+
+.navbar ul li{
+	display: inline;
+}
+
 .menu{
 	z-index: 4;
 	text-decoration: none;
@@ -83,7 +91,7 @@ header {
 
 .liste{
 	padding: 0px 15px;
-	flex: 1;
+	/*flex: 1;*/
 	/*display: flex;
 	flex-direction: column;*/
 	overflow-y: auto;
@@ -92,9 +100,10 @@ header {
 }
 
 .cadre{
-	flex: 3;
+	/*flex: 3;*/
     background-color: #AAB2BD;
     padding: 10px;
+    min-height: 600px;
 }
 
 .ajout{
@@ -131,7 +140,6 @@ header {
 .service{
 	padding: 0% 10%;
 	background-color: #F5F7FA;
-	
 }
 
 .cadre label{
@@ -213,6 +221,7 @@ header {
 
 footer{
 	z-index: 1;
+	margin-top:20px;
 	min-height: 50px;
 	left:0px;
 	bottom:0px;
@@ -221,4 +230,32 @@ footer{
 	text-align: center;
 	background: #434A54;
 	color: white;
+}
+
+@media (max-width: 700px) {
+	/*.main{
+		display: flex;
+  		flex-direction: column;
+  		flex-wrap: wrap;
+  		width: 100%;
+	}
+
+	.navbar {
+		padding: 0px 15px;
+		flex: 1;
+		order: 1;
+	}
+
+	.liste{
+		color: #000000;
+		padding: 0 5px;
+		flex: 1 2;
+		order: 3;
+	}
+
+	.cadre{
+	    flex: 2;
+	    order: 2;
+	    width: 100%;
+	}*/
 }

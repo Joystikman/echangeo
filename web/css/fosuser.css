@@ -7,13 +7,27 @@ body {
 	align-items: center;	
 }
 
+.login{
+    position: relative; 
+	z-index: 1;
+	text-align: right;
+	padding : 5px 10px;
+	color: #E47C1F;
+	font-weight: bold;
+}
+
+.login:a{
+	background-color: #4C5DE0;
+	color: #FFFFFF;
+}
+
 .connexion{
-	margin: 20px;
+	margin: 12% 0%;
 	/*margin-top: 20%;*/
 	padding: 20px 15px;
-	max-width: 400px;
+	/*max-width: 400px;*/
 	height: auto;
-	background-color: #BF5B1F;
+	background-color: #E9573F;
 	border-radius: 5px;
 }
 
@@ -21,48 +35,17 @@ body {
 	color: white;
 }
 
-.connexion-form{
-	display: flex; 
-	justify-content: center;
-	flex-direction: column;
-	opacity: 0.8;
-}
-
-.input{
-	margin: 10px 0px;
-    margin-bottom: 10px;
-    width: 90%;
-    padding: 7px;
-    border: none;
-    border-bottom: 1px solid #ddd;
-    background: transparent;
-    color: #000000;
-    font: 16px;
-    height: 45px;
-}
-
-.submit{
-	width: 100%;
-	margin: 10px 0px;
-	padding: 8px 18px;
-	color: white;
-	font-size: 16px;
-	background-color:#007CB0 ;
-	border: none;		
-	border-bottom: solid 3px #005B8C;
-	/*box-shadow: 0px 2px 3px #E0E0E0;*/
-}
 
 footer{
+	position: fixed;
 	z-index: 1;
 	min-height: 50px;
-	position:fixed;
 	left:0px;
 	bottom:0px;
 	height:30px;
 	width:100%;	
 	text-align: center;
-	background: #1B2ABA;
+	background: #E9573F;
 	color: white;
 }
 

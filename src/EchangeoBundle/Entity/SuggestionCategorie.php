@@ -24,6 +24,13 @@ class SuggestionCategorie
     /**
      * @var string
      *
+     * @ORM\Column(name="categorie", type="string", length=255, unique=false, nullable=true)
+     */
+    private $categorie;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="libelle", type="string", length=255, unique=true)
      */
     private $libelle;
@@ -121,5 +128,29 @@ class SuggestionCategorie
     public function getInscrit()
     {
         return $this->inscrit;
+    }
+
+    /**
+     * Set categorie
+     *
+     * @param string $categorie
+     *
+     * @return SuggestionCategorie
+     */
+    public function setCategorie($categorie)
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get categorie
+     *
+     * @return string
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
     }
 }
