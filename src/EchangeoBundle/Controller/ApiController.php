@@ -254,7 +254,7 @@ class ApiController extends Controller
         $reponse = $docR->find($id);
         $messages = $reponse->getConversation()->getMessages();
         
-        if($reponse->getDateRendezVous()< new \Datetime()){
+        if($reponse->getDateRendezVous()< new \Datetime() && $reponse->getEtat()=="valide"){
             $etat = "notation";
         }
         else{

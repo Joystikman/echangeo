@@ -157,19 +157,22 @@
 				$("#reponseId").append($("<form id='validation' action="+urlNote+" method='POST'>"));
 				$("#validation").append($("<input type='hidden' name='idReponse' value="+reponse.id+">"));
 				$("#validation").append($("<input type='hidden' name='page' value='services'>"));
-				$("#validation").append($("<label for='note'>Note : </label>"));
-				$("#validation").append($("<input id='r1' type='radio' name='note' value=1>"));
-				$("#r1").append($("<label for='r1'>1</label>"));
-				$("#validation").append($("<input id='r2' type='radio' name='note' value=2>"));
-				$("#r2").append($("<label for='r2'>2</label>"));
-				$("#validation").append($("<input id='r3' type='radio' name='note' value=3>"));
-				$("#r3").append($("<label for='r3'>3</label>"));
-				$("#validation").append($("<input id='r4' type='radio' name='note' value=4>"));
-				$("#r4").append($("<label for='r4'>4</label>"));
-				$("#validation").append($("<input id='r5' type='radio' name='note' value=5>"));
-				$("#r5").append($("<label for='r5'>5</label>"));
-				$("#validation").append($("<input type='text' name='commentaire' placeholder='commentaire'>"));
-				$("#validation").append($("<input type='submit' name='noter' value='noter'>"));
+				$("#validation").append($("<h4>").text("Note : "));
+				$("#validation").append($("<span id='stars' class='star-cb-group'>"));
+				$("#stars").append($("<input id='rating-5' type='radio' name='rating' value=5>"));
+				$("#stars").append($("<label for='rating-5'>5</label>"));
+				$("#stars").append($("<input id='rating-4' type='radio' name='rating' value=4>"));
+				$("#stars").append($("<label for='rating-4'>2</label>"));
+				$("#stars").append($("<input id='rating-3' type='radio' name='rating' value=3>"));
+				$("#stars").append($("<label for='rating-3'>3</label>"));
+				$("#stars").append($("<input id='rating-2' type='radio' name='rating' value=2>"));
+				$("#stars").append($("<label for='rating-2'>4</label>"));
+				$("#stars").append($("<input id='rating-1' type='radio' name='rating' value=1>"));
+				$("#stars").append($("<label for='rating-1'>5</label>"));
+				$("#stars").append($("<input id='rating-0' type='radio' name='rating' class='star-cb-clear' value=0>"));
+				$("#stars").append($("<label for='rating-0'>0</label>"));
+				$("#validation").append($("<input type='text' class='form-control' name='commentaire' placeholder='commentaire'>"));
+				$("#validation").append($("<input type='submit' class='btn btn-success' name='noter' value='noter'>"));
 			}
 		}
 		if (reponse.etat=="refuser"){

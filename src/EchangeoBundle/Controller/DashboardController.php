@@ -329,7 +329,7 @@ class DashboardController extends Controller{
       $reponse = $docR->find($request->request->get('idReponse'));
 
       $evaluation = new Evaluation();
-      $evaluation->setNote($request->request->get('note'));
+      $evaluation->setNote($request->request->get('rating'));
       $evaluation->setCommentaire($request->request->get('commentaire'));
       $evaluation->setInscritNotant($this->getUser());
       $evaluation->setReponse($reponse);
