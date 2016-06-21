@@ -66,6 +66,13 @@ class Service
     /**
      * @var string
      *
+     * @ORM\Column(name="region", type="string", length=255, nullable=true)
+     */
+    private $region;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="lieu", type="string", length=255)
      */
     private $lieu;
@@ -99,12 +106,6 @@ class Service
      */
     private $reponses;
 
-    /**
-     *
-     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="service", cascade={"remove", "persist"})
-     *
-     */
-    private $evaluations;
 
 
     /**
@@ -389,37 +390,28 @@ class Service
         return $this->adresse;
     }
 
+
     /**
-     * Add evaluation
+     * Set region
      *
-     * @param \EchangeoBundle\Entity\Evaluation $evaluation
+     * @param string $region
      *
      * @return Service
      */
-    public function addEvaluation(\EchangeoBundle\Entity\Evaluation $evaluation)
+    public function setRegion($region)
     {
-        $this->evaluations[] = $evaluation;
+        $this->region = $region;
 
         return $this;
     }
 
     /**
-     * Remove evaluation
+     * Get region
      *
-     * @param \EchangeoBundle\Entity\Evaluation $evaluation
+     * @return string
      */
-    public function removeEvaluation(\EchangeoBundle\Entity\Evaluation $evaluation)
+    public function getRegion()
     {
-        $this->evaluations->removeElement($evaluation);
-    }
-
-    /**
-     * Get evaluations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEvaluations()
-    {
-        return $this->evaluations;
+        return $this->region;
     }
 }

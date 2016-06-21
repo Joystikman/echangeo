@@ -51,10 +51,10 @@ class Evaluation
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Service", inversedBy="evaluations")
-     * @ORM\JoinColumn(name="Service_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Reponse", inversedBy="evaluations")
+     * @ORM\JoinColumn(name="Reponse_id", referencedColumnName="id")
      */
-    private $service;
+    private $reponse;
 
     /**
      * Get id
@@ -159,26 +159,28 @@ class Evaluation
         return $this->inscritNote;
     }
 
+
     /**
-     * Set service
+     * Set reponse
      *
-     * @param \EchangeoBundle\Entity\Service $service
+     * @param \EchangeoBundle\Entity\Reponse $reponse
+     *
      * @return Evaluation
      */
-    public function setService(\EchangeoBundle\Entity\Service $service = null)
+    public function setReponse(\EchangeoBundle\Entity\Reponse $reponse = null)
     {
-        $this->service = $service;
+        $this->reponse = $reponse;
 
         return $this;
     }
 
     /**
-     * Get service
+     * Get reponse
      *
-     * @return \EchangeoBundle\Entity\Service 
+     * @return \EchangeoBundle\Entity\Reponse
      */
-    public function getService()
+    public function getReponse()
     {
-        return $this->service;
+        return $this->reponse;
     }
 }

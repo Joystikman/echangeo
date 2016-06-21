@@ -81,9 +81,9 @@ class DefaultController extends Controller
     /*On récupère les categories*/
         $docCategories = $this->getDoctrine()->getRepository('EchangeoBundle:Categorie');
         $categories = $docCategories->findAll();
-    /*On recupère les derniers services*/
+    /*On recupère le service souhaité*/
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-        $service = $docS->find($id);
+        $service[] = $docS->find($id);
     /*rendu*/
         return $this->render('EchangeoBundle:Default:rechercheService.html.twig',array(
                 "categories"=>$categories,
@@ -99,8 +99,7 @@ class DefaultController extends Controller
      */
     public function reponseAction(Request $request)
     {
-      //print_r($request->request->get('message'));
-    /*On enregistre le réponse*/
+    /*On créé les entités vierges*/
       $reponse = new Reponse();
       $conversation = new Conversation();
       $message = new Message();

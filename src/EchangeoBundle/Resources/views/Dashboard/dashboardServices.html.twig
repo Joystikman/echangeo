@@ -13,7 +13,7 @@
 		<a href="{{ path('addServices') }}" class="btn btn-primary">Crée une nouvelle annonce</a>
 	</div>
 	{% for service in services %}
-		{% if service.fin|date('Ymd') < "now"|date('Y-m-d') %}
+		{% if service.fin|date('Y-m-d') < "now"|date('Y-m-d') %}
 			<div id="{{service.id}}" class="tuile cloture">
 			    <h3>{{service.titre}}</h3>
 			   	<p>{{service.description}}</p>

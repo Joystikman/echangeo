@@ -6,6 +6,12 @@
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
 <script type="text/javascript">
 	var chargement = "<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>";
+	{% if app.user %}
+		var userId = "{{app.user.id}}";
+	{% else %}
+		var userId="anon";
+	{% endif %}
+	console.log(userId);
 	/*scripts de recherche*/
 	function displaySousCategorie(event) {
 		/*récupération de la catégorie choisie*/
@@ -18,81 +24,40 @@
 		$("#liste").empty();	
 		$("#liste").append($(chargement));	
 		clearMarkers();
-		/*fonction ajax - recuperation des services dans les categorie choisies*/
+		/*fonction ajax - recuperation des sousCatégories dans la categorie choisie*/
 		$.ajax({
 			url: url,
 			type: "GET",
 			dataType: "json",
-			success: function(data){
-				console.log(data);
+			success: function(sousCategorie){
+				console.log(sousCategorie);
 				$("#liste").empty();
 				$('#select2').empty();
 				$('#select2').append($("<form id='formSousCategorie' class='sousCategorie' method='get'>"));
 				$('#formSousCategorie').append($("<ul id='listeCategories'>"));
 				/*affichage de la selection des sousCategorie*/ 
-				for(var i=0; i<data.length-1; i++){
-					$('#listeCategories').append($("<li id=categorie"+data[i].id+">"));
-					$('#categorie'+data[i].id).append($("<label class='labelSC'>").text(data[i].libelle));
-					$('#categorie'+data[i].id).append($("<input type='checkbox' value="+data[i].id+"  onchange='displayServices()'>"));
+				for(var i=0; i<sousCategorie.length-1; i++){
+					$('#listeCategories').append($("<li id=categorie"+sousCategorie[i].id+">"));
+					$('#categorie'+sousCategorie[i].id).append($("<label class='labelSC'>").text(sousCategorie[i].libelle));
+					$('#categorie'+sousCategorie[i].id).append($("<input type='checkbox' checked value="+sousCategorie[i].id+"  onchange='displayServices()'>"));
 				}
-				/*affichage des annonces de la categorie*/
-				for(var i=0; i<data[data.length-1].length; i++){
-					var service = data[data.length-1][i];
+				/*Parcours des annonces de la categorie(mère)*/
+				for(var i=0; i<sousCategorie[sousCategorie.length-1].length; i++){
+					var service = sousCategorie[sousCategorie.length-1][i];
+
+					/*affichage des annonces*/
 					$('#titre').text("Annonces disponibles :");
-					$('#liste').append($("<div class='tuile'>")
-						.append($("<h3>").text(service.titre))
-						.append($("<p>").text("Proposé par : "+service.username))
-						.append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL")))
-						.append($("<a id="+service.id+" href='#' class='btn btn-primary'>").text('voir en détails'))
-					);
-					/*affichage des annonce à la carte*/
+					$('#liste').append($("<div id='service"+service.id+"' class='tuile'>"));
+					$('#service'+service.id).append($("<h3>").text(service.titre));
+					$('#service'+service.id).append($("<p>").text("Proposé par : "+service.username));
+					$('#service'+service.id).append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL")));
+					$('#service'+service.id).append($("<a id="+service.id+" href='#' class='btn btn-primary'>").text('voir en détails'));
+
+					/*affichage des annonces à la carte*/
 					markerServices(false,service,service.icone);
-					$('#'+service.id).on("click", function(){
-				       	var selectedId = $(this).attr("id");
-				       	console.log("Service n°: "+selectedId);  
-				       	/*création de l'url*/ 
-								var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-								url = url.replace("idPlaceholder", selectedId);
-								var urlForm = "{{ path('reponse_service') }}";
-								console.log("url :");
-								console.log(url);
-								/*AJAX*/
-								$("#titre").empty();	
-								$("#liste").empty();	
-								$("#liste").append($(chargement));	
-								$.ajax({
-									url: url,
-									type: "GET",
-									dataType: "json",
-									success: function(data){
-										console.log('click -> voir details');
-										console.log(data);
-										$("#liste").empty();
-										/*$('#titre').text("<- retour");*/
-										$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
-										$('#serviceDetail').append($("<h3>").text(data.titre));
-										$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
-										$('#serviceDetail').append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL") ));
-										$('#serviceDetail').append($("<p>").text(""+data.description));
-										{% if app.user %}
-											$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
-											$('#serviceDetail').append($("<input type='hidden' name='idService' value="+data.id+">"));
-											$('#serviceDetail').append($("<input id='date' class='form-control' type='text' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
-											/*$("#date").datepicker();*/
-											var picker = new Pikaday({ field: $('#date')[0] });
-											$('#serviceDetail').append($("<textarea type='text' class='form-control' name='message' placeholder='message'>"));
-											$('#serviceDetail').append($("<input type='submit' class='btn btn-success' name='envoie' value='répondre'>"));
-										{% else %}
-											$('#serviceDetail').append($("<p>").append($("<a class='btn btn-success' href='{{ path('fos_user_security_login') }}''>connecter vous répondre à cette annonce</a>")));
-										{% endif %}
-									},
-									error: function (req, status, err){
-										console.log("erreur");
-										console.log(err);
-									}
-								});
-								return false;        
-				   	});
+
+					/*ajout de la fonction d'affichage des détails d'un service*/
+					displayDetails(service.id,false);
 					}
 			},
 			error: function (req, status, err){
@@ -105,6 +70,7 @@
 
 	function displayServices(){
 		console.log("activation displayServices");
+		/*On récupère les catégories sélectionné par l'utilisateur*/
 		var selectedId = [];
 		$('#formSousCategorie input:checked').each(function() {
     		selectedId.push($(this).attr('value'));
@@ -116,131 +82,106 @@
 		url = url.replace("idPlaceholder", selectedId);
 		console.log("url :");
 		console.log(url);
-		/*AJAX*/
-		/*$("#titre").empty();*/	
 		$("#liste").empty();
 		$("#liste").append($(chargement));	
 		clearMarkers();
+		/*AJAX*/		
 		$.ajax({
 			url: url,
 			type: "GET",
 			dataType: "json",
-			success: function(data){
+			success: function(services){
 				console.log('test rqt Ajax');
-				console.log(data);
+				console.log(services);
 				$("#liste").empty();
-				for(var i=0; i<data.length; i++){
-					$('#liste').append($("<div class='tuile'>")
-						.append($("<h3>").text(data[i].titre))
-						.append($("<p>").text("Proposé par : "+data[i].username))
-						.append($("<p>").text("Du : "+moment(data[i].debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")))
-						.append($("<a id="+data[i].id+" href='#' class='btn btn-primary'>").text('voir en détails'))
-					);
-					markerServices(false,data[i],data[i].icone);
-					$('#'+data[i].id).on("click", function(){
-				        	var selectedId = $(this).attr("id");
-				        	console.log("Service n°: "+selectedId);  
-				        	/*création de l'url*/ 
-							var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-							url = url.replace("idPlaceholder", selectedId);
-							var urlForm = "{{ path('reponse_service') }}";
-							console.log("url :");
-							console.log(url);
-							/*AJAX*/
-							$("#titre").empty();	
-							$("#liste").empty();	
-							$("#liste").append($(chargement));
-							$.ajax({
-								url: url,
-								type: "GET",
-								dataType: "json",
-								success: function(data){
-									console.log('test rqt Ajax');
-									console.log(data);
-									$("#liste").empty();
-									/*$('#titre').text("<- retour");*/
-									/*$('#titre').on("click", function(){
-										displayServices();
-									});*/
-									$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
-									$('#serviceDetail').append($("<h3>").text(data.titre));
-									$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
-									$('#serviceDetail').append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")));
-									$('#serviceDetail').append($("<p>").text(""+data.description));
-									{% if app.user %}
-										$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
-										$('#formulaire').append($("<input type='hidden' name='idService' value="+data.id+">"));
-										$('#formulaire').append($("<input id='date' type='text' class='form-control' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
-										/*$("#date").datepicker();*/
-										var picker = new Pikaday({ field: $('#date')[0] });
-										$('#formulaire').append($("<textarea type='text' class='form-control' name='message' placeholder='message'>"));
-										$('#formulaire').append($("<input type='submit' class='btn btn-success' name='envoie' value='répondre'>"));
-									{% else %}
-										$('#serviceDetail').append($("<p>").append($("<a href='{{ path('fos_user_security_login') }}''>connecter vous répondre à cette annonce</a>")));
-									{% endif %}
-								},
-								error: function (req, status, err){
-									console.log("erreur click service");
-									console.log(err);
-								}
-							});        
-				    	});
+				for(var i=0; i<services.length; i++){
+					$('#liste').append($("<div id='service"+services[i].id+"' class='tuile'>"));
+					$('#service'+services[i].id).append($("<h3>").text(services[i].titre));
+					$('#service'+services[i].id).append($("<p>").text("Proposé par : "+services[i].username));
+					$('#service'+services[i].id).append($("<p>").text("Du : "+moment(services[i].debut).lang('fr').format("LLL")+" au "+moment(services.fin).lang('fr').format("LLL")));
+					$('#service'+services[i].id).append($("<a id="+services[i].id+" href='#' class='btn btn-primary'>").text('voir en détails'));					
+					markerServices(false,services[i],services[i].icone);
+					displayDetails(services[i].id,false);
 				}
 			},
 			error: function (req, status, err){
-				console.log("erreur display service ¯|_(ツ)_/¯");
+				console.log("erreur display service");
 				console.log(err);
 			}
 		});
 	}
 
-	//Details des services
+
+	function displayDetails(id, onload){
+		console.log("displayDetails");
+		var elem = $('#'+id);
+		if (onload) {
+			elem = $('#liste a');
+		}
+		console.log(elem);
+		elem.on("click", function(){
+			/*affichage du chargement*/
+			$("#titre").empty();	
+			$("#liste").empty();	
+			$("#liste").append($(chargement));
+			var selectedId = $(this).attr("id");
+			console.log("Details Service n°: "+selectedId);  
+			/*création de l'url de la fonction ajax*/ 
+			var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
+			url = url.replace("idPlaceholder", selectedId);
+			var urlForm = "{{ path('reponse_service') }}";
+			console.log("url :");
+			console.log(url);
+			/*AJAX*/	
+			$.ajax({
+				url: url,
+				type: "GET",
+				dataType: "json",
+				success: function(service){
+					console.log('click -> voir details');
+					console.log(service);
+					$("#liste").empty();
+					/*$('#titre').text("<- retour");*/
+					/*Affichage du service*/
+					$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
+					$('#serviceDetail').append($("<h3>").text(service.titre));
+					$('#serviceDetail').append($("<p>").text("Proposé par : "+service.username));
+					$('#serviceDetail').append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL") ));
+					$('#serviceDetail').append($("<p>").text(""+service.description));
+
+					/*Si l'utilisateur est connecté, il peut répondre, sinon il doit se connecter*/
+					{% if app.user %}
+						if (userId!=service.userId) {
+							/*affichage du formulaire de réponse*/
+							$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
+							$('#formulaire').append($("<input type='hidden' name='idService' value="+service.id+">"));
+							$('#formulaire').append($("<input id='date' class='form-control' type='text' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
+							/*ajout du datePicker*/
+							var picker = new Pikaday({ field: $('#date')[0] });
+							$('#formulaire').append($("<textarea type='text' class='form-control' name='message' placeholder='message'>"));
+							$('#formulaire').append($("<input type='submit' class='btn btn-success' name='envoie' value='répondre'>"));
+						}
+						else{
+							var urlDash = "{{ path('dashboard') }}";
+							$('#serviceDetail').append($("<h5 class='btn btn-default'>").text("Vous ne pouvez pas répondre à votre propre annonce"));
+							$('#serviceDetail').append($("<a href="+urlDash+" class='btn btn-primary' >").text("Modifier mon annonce"));
+						}
+					{% else %}
+						$('#serviceDetail').append($("<p>").append($("<a class='btn btn-success' href='{{ path('fos_user_security_login') }}''>connecter vous répondre à cette annonce</a>")));
+					{% endif %}
+				},
+				error: function (req, status, err){
+					console.log("erreur");
+					console.log(err);
+				}
+			});
+			return false;
+		});
+	}
+
+	//Ajout des Details des services pour les service affiché par défaut
 	$(document).ready(function(){
-    	$('#liste a').on("click", function(){
-    						/*Affichage du chargement*/
-    						$("#titre").empty();	
-							$("#liste").empty();	
-							$("#liste").append($(chargement));
-				        	var selectedId = $(this).attr("id");
-				        	console.log("Service n°: "+selectedId);  
-				        	/*création de l'url*/ 
-							var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-							url = url.replace("idPlaceholder", selectedId);
-							var urlForm = "{{ path('reponse_service') }}";
-							console.log("url :");
-							console.log(url);
-							/*AJAX*/								
-							$.ajax({
-								url: url,
-								type: "GET",
-								dataType: "json",
-								success: function(data){
-									console.log('liste a -> voir details');
-									console.log(data);
-									$("#liste").empty();
-									$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
-									$('#serviceDetail').append($("<h3>").text(data.titre));
-									$('#serviceDetail').append($("<p>").text("Proposé par : "+data.username));
-									$('#serviceDetail').append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")));
-									$('#serviceDetail').append($("<p>").text(""+data.description));
-									{% if app.user %}
-										$('#serviceDetail').append($("<form id='formulaire' action="+urlForm+" method='POST'>"));
-										$('#formulaire').append($("<input type='hidden' name='idService' value="+data.id+">"));
-										$('#formulaire').append($("<input id='date' type='text' class='form-control' name='dateRDV' placeholder='aaaa/mm/jj h:m'>"));
-										/*$("#date").datepicker();*/
-										var picker = new Pikaday({ field: $('#date')[0] });
-										$('#formulaire').append($("<textarea type='text' class='form-control' name='message' placeholder='message'>"));
-										$('#formulaire').append($("<input type='submit' class='btn btn-success' name='envoie' value='répondre'>"));
-									{% else %}
-										$('#serviceDetail').append($("<p>").append($("<a class='btn btn-success' href='{{ path('fos_user_security_login') }}''>connecter vous répondre à cette annonce</a>")));
-									{% endif %}
-								},
-								error: function (req, status, err){
-									console.log("erreur");
-									console.log(err);
-								}
-							});        
-				    	});
+    	displayDetails(null,true);
 	});
 
 /*CARTE*/

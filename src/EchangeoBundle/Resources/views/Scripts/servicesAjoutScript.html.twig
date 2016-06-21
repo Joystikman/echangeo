@@ -153,7 +153,7 @@ var chargement = "<img class='loading' src={{ asset('assets/Loading_icon.gif')}}
 		}
 		if (data.etat=="notation"){
 			if (data.evaluateurs.indexOf("{{app.user.username}}")> -1) {
-				$("#reponseId").append($("<p>").text("ça marche !!!!!!!!! Vous avez deja noté"));
+				$("#reponseId").append($("<p>").text("Vous avez deja noté"));
 			}
 			else{
 				var urlNote = "{{ path('notation') }}";
@@ -178,6 +178,10 @@ var chargement = "<img class='loading' src={{ asset('assets/Loading_icon.gif')}}
 		if (data.etat=="refuser"){
 			$("#reponseId").append($("<div>"));
 			$("#reponseId").append($("<p>").text("Vous avez refuser la proposition de "+data.inscrit.username));
+		}
+		if (data.etat=="cloture"){
+			$("#reponse").append($("<div>"));
+			$("#reponse").append($("<p>").text("Le service est fini, il a été cloturé. Vous pouvez toujours y répondre à nouveau pour établir un nouveau rendez-vous."));
 		}
 	}
 

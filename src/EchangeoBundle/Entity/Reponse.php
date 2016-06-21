@@ -56,6 +56,13 @@ class Reponse
      */
     private $conversation ;
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Evaluation", mappedBy="reponse", cascade={"remove", "persist"})
+     *
+     */
+    private $evaluations;
+
 
     /**
      * Get id
@@ -181,5 +188,46 @@ class Reponse
     public function getConversation()
     {
         return $this->conversation;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->evaluations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add evaluation
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluation
+     *
+     * @return Reponse
+     */
+    public function addEvaluation(\EchangeoBundle\Entity\Evaluation $evaluation)
+    {
+        $this->evaluations[] = $evaluation;
+
+        return $this;
+    }
+
+    /**
+     * Remove evaluation
+     *
+     * @param \EchangeoBundle\Entity\Evaluation $evaluation
+     */
+    public function removeEvaluation(\EchangeoBundle\Entity\Evaluation $evaluation)
+    {
+        $this->evaluations->removeElement($evaluation);
+    }
+
+    /**
+     * Get evaluations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEvaluations()
+    {
+        return $this->evaluations;
     }
 }
