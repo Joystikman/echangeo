@@ -72,7 +72,21 @@ class DashboardController extends Controller{
       $service = new Service();
 
       $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
-      $sousCategories = $docSC->findAll();
+      $SC = $docSC->findAll();
+
+      $sousCategories = [];
+      $titre = "";
+      $index = -1;
+      foreach ($SC as $sousCategorie) {
+        if ($titre!=$sousCategorie->getCategorie()->getLibelle()) {
+          $titre = $sousCategorie->getCategorie()->getLibelle();
+          $index += 1;
+          $sousCategories[$titre]=array($sousCategorie->getCategorie()->getLibelle()=>$sousCategorie->getLibelle());
+        }
+        else{
+          $sousCategories[$titre][]=$sousCategorie->getLibelle();
+        }
+      }
 
       /*creer le formulaire*/
       $formulaire = $this->createFormBuilder($service)
@@ -81,8 +95,14 @@ class DashboardController extends Controller{
                                                          'required' => true,
                                                          'multiple' => false,
                                                          'expanded' => false,
-                                                         'class' => 'EchangeoBundle:SousCategorie',
-                                                         'choice_label' => 'libelle' ))
+                                                         'class' => 'EchangeoBundle:sousCategorie',
+                                                         'choice_label' => 'libelle'))
+                //liste des sous categorie avec les titres
+                /*->add('sousCategorie', ChoiceType::class,array('mapped' => false,
+                                                         'required' => true,
+                                                         'multiple' => false,
+                                                         'expanded' => false,
+                                                         'choices' => $sousCategories))*/
                 ->add('description', TextareaType::class)
                 ->add('debut', 'datetime', array(
                           'input' => 'datetime',
@@ -94,7 +114,9 @@ class DashboardController extends Controller{
                           ))
                 ->add('type', ChoiceType::class, array('choices' => array(
                       'propose' => 'propose',
-                      'demande' => 'demande')))
+                      'demande' => 'demande'),
+                      'expanded' => true,
+                      'multiple' => false))
                 ->add('adresse', TextType::class)
                 ->add('lieu', HiddenType::class)
                 ->add('distance', IntegerType::class)
@@ -106,7 +128,12 @@ class DashboardController extends Controller{
 
       if ($formulaire->isSubmitted() && $formulaire->isValid()) {
         $service->setInscrit($this->getUser());
-        print_r("ça marche");
+        //ajout sousCategorie
+        /*$docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
+        $sc = $docSC->findBy(array("libelle" => $formulaire->get('sousCategorie')->getData()), null, null, null);
+        print_r($formulaire->get('sousCategorie')->getData());
+        print_r($sc);
+        $service->setSousCategorie($sc[0]);*/
         $em = $this->getDoctrine()->getManager();
         $em->persist($service);
         $em->flush();
@@ -117,6 +144,7 @@ class DashboardController extends Controller{
       $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
       $id = $this->getUser()->getId();
       $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
+
       return $this->render('EchangeoBundle:Dashboard:dashboardServicesAjout.html.twig',array(
               "form"=>$formulaire->createView(),
               "services"=>$services)
@@ -130,20 +158,41 @@ class DashboardController extends Controller{
      */
     public function editServicesAction(Request $request, $id)
     {
-      /*$service = new Service();*/
 
       $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
       $service = $docS->find($id);
 
+      $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
+      $SC = $docSC->findAll();
+
+      $sousCategories = [];
+      $titre = "";
+      $index = -1;
+      foreach ($SC as $sousCategorie) {
+        if ($titre!=$sousCategorie->getCategorie()->getLibelle()) {
+          $titre = $sousCategorie->getCategorie()->getLibelle();
+          $index += 1;
+          $sousCategories[$titre]=array($sousCategorie->getCategorie()->getLibelle()=>$sousCategorie->getLibelle());
+        }
+        else{
+          $sousCategories[$titre][]=$sousCategorie->getLibelle();
+        }
+      }
+
       /*creer le formulaire*/
       $formulaire = $this->createFormBuilder($service)
                 ->add('titre', TextType::class)
+                /*->add('sousCategorie', ChoiceType::class,array('mapped' => true,
+                                                         'required' => true,
+                                                         'multiple' => false,
+                                                         'expanded' => false,
+                                                         'choices' => $sousCategories ))*/
                 ->add('sousCategorie', EntityType::class,array('mapped' => true,
                                                          'required' => true,
                                                          'multiple' => false,
                                                          'expanded' => false,
-                                                         'class' => 'EchangeoBundle:SousCategorie',
-                                                         'choice_label' => 'libelle' ))
+                                                         'class' => 'EchangeoBundle:sousCategorie',
+                                                         'choice_label' => 'libelle'))
                 ->add('description', TextareaType::class)
                 ->add('debut', 'datetime', array(
                           'input' => 'datetime',
@@ -283,9 +332,9 @@ class DashboardController extends Controller{
       $evaluation->setNote($request->request->get('note'));
       $evaluation->setCommentaire($request->request->get('commentaire'));
       $evaluation->setInscritNotant($this->getUser());
-      $evaluation->setService($reponse->getService());
+      $evaluation->setReponse($reponse);
       /*à modifier*/
-      if (count($reponse->getService()->getEvaluations())>= 2) {
+      if (count($reponse->getEvaluations())>= 2) {
         $reponse->setEtat("cloture");
       }
       else{
@@ -296,6 +345,7 @@ class DashboardController extends Controller{
         $evaluation->setInscritNote($reponse->getInscrit());
         $em = $this->getDoctrine()->getManager();
         $em->persist($evaluation);
+        $em->persist($reponse);
         $em->flush();
         return $this->redirectToRoute('servicesUser');
       }
@@ -303,6 +353,7 @@ class DashboardController extends Controller{
         $evaluation->setInscritNote($reponse->getService()->getInscrit());
         $em = $this->getDoctrine()->getManager();
         $em->persist($evaluation);
+        $em->persist($reponse);
         $em->flush();
         return $this->redirectToRoute('reponsesUser');
       }

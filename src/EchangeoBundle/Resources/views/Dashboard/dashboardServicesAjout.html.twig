@@ -9,7 +9,6 @@
 
 {% block affichage %}
 	<div id='service' class='service'>
-		<div id='annonce' class='annonce'>
 		<h2>Créer une annonce</h2>
 		{{ form_start(form) }}
 			{{ form_row(form.titre, { 'attr': {'class': 'form-control'} }) }}
@@ -22,12 +21,13 @@
 			{{ form_row(form.lieu, { 'attr': {'class': 'form-control'} }) }}
 			{{ form_row(form.distance, { 'attr': {'class': 'form-control stepper-input'} }) }}
 			<div id="googlemaps" class="carteAjout"></div>
-			{{ form_row(form.save, { 'attr': {'class': 'btn btn-primary'} }) }}
-			{% if form.delete is defined %}
-				{{ form_row(form.delete, { 'attr': {'class': 'btn btn-danger'} }) }}
-			{% endif %}
+			<div class="validation">
+				{{ form_row(form.save, { 'attr': {'class': 'btn btn-primary'} }) }}
+				{% if form.delete is defined %}
+					{{ form_row(form.delete, { 'attr': {'class': 'btn btn-danger'} }) }}
+				{% endif %}
+			</div>
 		{{ form_end(form) }}
-		</div>
 	</div>
 {% endblock affichage %}
 

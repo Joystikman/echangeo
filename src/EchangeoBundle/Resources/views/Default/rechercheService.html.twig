@@ -8,6 +8,11 @@
 	<link href="{{ asset('css/pikaday.css') }}" rel="stylesheet">
 {% endblock css %}
 
+{% block scriptTete %}	
+	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
+	<script src="{{ asset('script/moment.js')}}"></script>
+{% endblock scriptTete %}
+
 {% block content %}
   <div class="container">
   	{% if app.user %}
@@ -26,7 +31,7 @@
 		  	<div class="recherche">
 				<div id="select1">
 			 		<select onchange="displaySousCategorie.call(this,event)" class="dropdown">
-			  		<option value=""> </option>
+			  		<option value="null">Catégories</option>
 			  		{% for categorie in categories %}	
 			  			<option value="{{categorie.id}}">{{categorie.libelle}}</option>
 			  		{% endfor %}
@@ -35,25 +40,27 @@
 				<div id="select2"></div>  	
 		  	</div>
 	  	</nav> 	 	
-  	 	<!-- Block Services -->
+  	 	<!-- Block service -->
 	    <div id="services" class="services col-xs-12 col-sm-12 col-md-5 col-lg-5">
 		    <h2 id="titre"> </h2>
 	    	<div id="liste" class="liste">
-	    		<div id="serviceDetail" class="serviceDetail">
-	    			<h3>{{services.titre}}</h3>
-	    			<p>Proposé par : {{services.inscrit.username}}</p>
-	    			<p>{{services.description}}</p>
-	    			{% if app.user %}
-		    			<form action="{{ path('reponse_service') }}" method='POST'>
-		    				<input type='hidden' name='idService' value="{{services.id}}">
-		    				<input type='text' id='date' name='dateRDV' class="form-control" placeholder='aaaa/mm/jj h:m'>
-		    				<textarea name='message' class="form-control" placeholder='message'></textarea>
-		    				<input type='submit' name='envoie' class="btn btn-success" value='répondre'>
-		    			</form>
-		    		{% else %}
-		    			<p class=""><a href="{{ path('fos_user_security_login') }}" class="btn btn-success">connecter vous répondre à cette annonce</a></p>
-		    		{% endif %}
-	    		</div>
+		    	{% for service in services %}
+		    		<div id="serviceDetail" class="serviceDetail">
+		    			<h3>{{service.titre}}</h3>
+		    			<p>Proposé par : {{service.inscrit.username}}</p>
+		    			<p>{{service.description}}</p>
+		    			{% if app.user %}
+			    			<form action="{{ path('reponse_service') }}" method='POST'>
+			    				<input type='hidden' name='idService' value="{{service.id}}">
+			    				<input type='text' id='date' name='dateRDV' class="form-control" placeholder='aaaa/mm/jj h:m'>
+			    				<textarea name='message' class="form-control" placeholder='message'></textarea>
+			    				<input type='submit' name='envoie' class="btn btn-success" value='répondre'>
+			    			</form>
+			    		{% else %}
+			    			<p class=""><a href="{{ path('fos_user_security_login') }}" class="btn btn-success">connecter vous répondre à cette annonce</a></p>
+			    		{% endif %}
+		    		</div>
+		    	{% endfor %}
 		    </div>
 	    </div>
 	    <!-- La Carte -->
@@ -66,8 +73,7 @@
 
 {% block footer %}{{ parent() }}{% endblock footer %}
 
-{% block script %}
-	<script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script> 
+{% block script %} 
 	<script src="{{ asset('script/pikaday.js')}}"></script>
 	<!-- include fonction de recherche	 -->
 	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}

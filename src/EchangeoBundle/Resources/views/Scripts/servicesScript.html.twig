@@ -25,28 +25,30 @@
 			url: url,
 			type: "GET",
 			dataType: "json",
-			success: function(data){
-				console.log('test get data');
-				console.log(data);
+			success: function(service){
+				console.log('test get service');
+				console.log(service);
 				$("#cadre").empty();
 				$("#cadre").append($("<div id='service' class='service'>"));
-				$("#service").append($("<div id='annonce' class='annonce'>"));
-				$("#annonce").append($("<a href="+urlEdit+" class='btn btn-primary'>").text("modifier"));
-				$("#annonce").append($("<h2>").text(data.titre));
-				$("#annonce").append($("<p>").text(data.description));
-				$("#annonce").append($("<p>").text("Du : "+moment(data.debut).lang('fr').format("LLL")+" au "+moment(data.fin).lang('fr').format("LLL")));
-				$("#annonce").append($("<p>").text(data.adresse));
-				$("#annonce").append($("<input id='lieu' hidden value="+data.lieu+">"));
-				$("#annonce").append($("<input id='distance' hidden value="+data.distance+">"));
-				$("#annonce").append($("<div id='googlemaps' class='carteAjout'>"));
+				$("#service").append($("<a href="+urlEdit+" class='btn btn-primary'>").text("modifier"));
+				$("#service").append($("<h2>").text(service.titre));
+				$("#service").append($("<p id='description' class='description'>"));
+				$("#description").append($("<h5>").text("Description : "));
+				$("#description").append($("<p>").text(service.description));
+				/*$("#service").append($("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>"));*/
+				$("#service").append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL")));
+				$("#service").append($("<p>").text(service.adresse));
+				$("#service").append($("<input id='lieu' hidden value="+service.lieu+">"));
+				$("#service").append($("<input id='distance' hidden value="+service.distance+">"));
+				$("#service").append($("<div id='googlemaps' class='carteAjout'>"));
 				displayMap();
-				$("#service").append($("<div id='reponse' class='reponse'>"));
-				if(data.reponses.length==0){
+				$("#cadre").append($("<div id='reponse' class='reponse'>"));
+				if(service.reponses.length==0){
 					$("#reponse").append($("<h3>").text("Réponse :"));
 					$("#reponse").append($("<p>").text("Personne n'a encore répondu à votre annonce. Sachez que vous pouvez la modifier à tout moment."));
 				}
 				else{
-					listeReponses(data);
+					listeReponses(service);
 				}		    
 			},
 			error: function (req, status, err){
@@ -83,40 +85,40 @@
 					url: url,
 					type: "GET",
 					dataType: "json",
-					success: function(data){
-						console.log('data obtenu');
-						console.log(data);
+					success: function(reponse){
+						console.log('reponse obtenu');
+						console.log(reponse);
 						$("#reponse").empty();
 						$("#reponse").append($("<div id='reponseId' class='reponse'>"));
 						$("#reponseId").append($("<h3>").text("Réponse :"));
-						$("#reponseId").append($("<p id='retour' class='btn btn-primary'>").text("<- retour"));
+						$("#reponseId").append($("<p id='retour' class='btn btn-primary'>").text("retour"));
 						$("#retour").on("click", function(){listeReponses(service)});
-						$("#reponseId").append($("<h4>").text('de '+data.username));
-						$("#reponseId").append($("<p>").text('date proposé pour le service :'+moment(data.date_rendez_vous).lang('fr').format("LLL")));
-						$("#reponseId").append($("<p>").text('etat :'+data.etat));
-						validation(data);
+						$("#reponseId").append($("<h4>").text('de '+reponse.username));
+						$("#reponseId").append($("<p>").text('date proposé pour le service :'+moment(reponse.date_rendez_vous).lang('fr').format("LLL")));
+						$("#reponseId").append($("<p>").text('etat :'+reponse.etat));
+						validation(reponse);
 						$("#reponseId").append($("<div id='conversation' class='conversation'>"));
-						for(var i=0; i<data.messages.length; i++){
-							if ( "{{ app.user.username }}"==data.messages[i].username) {
-								var id = data.messages[i].id;
+						for(var i=0; i<reponse.messages.length; i++){
+							if ( "{{ app.user.username }}"==reponse.messages[i].username) {
+								var id = reponse.messages[i].id;
 								$("#conversation").append($("<div id='message"+id+"' class='message sideUser'>"));
-								$("#message"+id).append($("<h4>").text(data.messages[i].username));
-								$("#message"+id).append($("<p>").text(data.messages[i].contenu));
+								$("#message"+id).append($("<h4>").text(reponse.messages[i].username));
+								$("#message"+id).append($("<p>").text(reponse.messages[i].contenu));
 							}
 							else{
-								var id = data.messages[i].id;
+								var id = reponse.messages[i].id;
 								$("#conversation").append($("<div id='message"+id+"' class='message'>"));
-								$("#message"+id).append($("<h4>").text(data.messages[i].username));
-								$("#message"+id).append($("<p>").text(data.messages[i].contenu));
+								$("#message"+id).append($("<h4>").text(reponse.messages[i].username));
+								$("#message"+id).append($("<p>").text(reponse.messages[i].contenu));
 							}
 						}
-						if (data.etat=="cloture") {
+						if (reponse.etat=="cloture") {
 							$("#conversation").append($("<p>").text("Le service est cloturé"))
 						}
 						else{
 							$("#conversation").append($("<form id='send' action="+urlForm+" method='POST'>"));
-							$("#send").append($("<input type='hidden' name='idConversation' value="+data.conversationId+">"));
-							$("#send").append($("<input type='hidden' name='page' value='reponse'>"));
+							$("#send").append($("<input type='hidden' name='idConversation' value="+reponse.conversationId+">"));
+							$("#send").append($("<input type='hidden' name='page' value='service'>"));
 							$("#send").append($("<input type='text' class='form-control' name='message' placeholder='message'>"));
 							$("#send").append($("<input type='submit' name='envoie' class='btn btn-primary' value='répondre'>"));
 						}
@@ -130,30 +132,30 @@
 		}
 	}
 
-	function validation(data){
-		if (data.etat=="attente") {
+	function validation(reponse){
+		if (reponse.etat=="attente") {
 			var urlVal = "{{ path('validation') }}";
 			$("#reponseId").append($("<form id='validation' action="+urlVal+" method='POST'>"));
-			$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
+			$("#validation").append($("<input type='hidden' name='idReponse' value="+reponse.id+">"));
 			$("#validation").append($("<input type='submit' name='valide' class='btn btn-primary' value='accepter'>"));
 			$("#validation").append($("<input type='submit' name='decline' class='btn btn-danger' value='decliner'>"));
 		}
-		if (data.etat=="valide"){
+		if (reponse.etat=="valide"){
 			var urlVal = "{{ path('validation') }}";
 			$("#reponseId").append($("<div>"));
-			$("#reponseId").append($("<p>").text("La proposition de "+data.username+" a été accepter, une fois le service rendu, pensez à venir noter."));
+			$("#reponseId").append($("<p>").text("La proposition de "+reponse.username+" a été accepter, une fois le service rendu, pensez à venir noter."));
 			$("#reponseId").append($("<form id='validation' action="+urlVal+" method='POST'>"));
-			$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
+			$("#validation").append($("<input type='hidden' name='idReponse' value="+reponse.id+">"));
 			$("#validation").append($("<input type='submit' name='decline' class='btn btn-danger' value='annuler'>"));
 		}
-		if (data.etat=="notation"){
-			if (data.evaluateurs.indexOf("{{app.user.username}}")> -1) {
-				$("#reponseId").append($("<p>").text("ça marche !!!!!!!!! Vous avez deja noté"));
+		if (reponse.etat=="notation"){
+			if (reponse.evaluateurs.indexOf("{{app.user.username}}")> -1) {
+				$("#reponseId").append($("<p>").text("Vous avez deja noté"));
 			}
 			else{
 				var urlNote = "{{ path('notation') }}";
 				$("#reponseId").append($("<form id='validation' action="+urlNote+" method='POST'>"));
-				$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
+				$("#validation").append($("<input type='hidden' name='idReponse' value="+reponse.id+">"));
 				$("#validation").append($("<input type='hidden' name='page' value='services'>"));
 				$("#validation").append($("<label for='note'>Note : </label>"));
 				$("#validation").append($("<input id='r1' type='radio' name='note' value=1>"));
@@ -170,9 +172,13 @@
 				$("#validation").append($("<input type='submit' name='noter' value='noter'>"));
 			}
 		}
-		if (data.etat=="refuser"){
+		if (reponse.etat=="refuser"){
 			$("#reponseId").append($("<div>"));
-			$("#reponseId").append($("<p>").text("Vous avez refuser la proposition de "+data.inscrit.username));
+			$("#reponseId").append($("<p>").text("Vous avez refuser la proposition de "+reponse.inscrit.username));
+		}
+		if (reponse.etat=="cloture"){
+			$("#reponse").append($("<div>"));
+			$("#reponse").append($("<p>").text("Le service est fini, il a été cloturé. Vous pouvez toujours y répondre à nouveau pour établir un nouveau rendez-vous."));
 		}
 	}
 
@@ -199,7 +205,7 @@
 		    animation: google.maps.Animation.DROP
 		});
 		var radius = $("#distance").val();
-		cityCircle = new google.maps.Circle({
+		/*cityCircle = new google.maps.Circle({
 		    strokeColor: '#FF0000',
 		    strokeOpacity: 0.8,
 		    strokeWeight: 2,
@@ -208,7 +214,7 @@
 		    map: map,
 		    center: latLng,
 			radius: radius * 1000
-		});
+		});*/
 		console.log("fin displayMap");
 	}
 

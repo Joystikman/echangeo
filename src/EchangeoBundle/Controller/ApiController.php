@@ -46,7 +46,7 @@ class ApiController extends Controller
 
 
     /**
-     * Fonction d'obtention des sous-categories
+     * Fonction d'obtention des sous-categories et des services d'une categorie
      * @Route("/api/sousCategorie/{id}.{_format}",
      		  defaults = {"_format"="json"},
      		  requirements = { "_format" = "html|json" },
@@ -56,10 +56,11 @@ class ApiController extends Controller
      */
     public function getSousCategories($id)
     {
-    	/*Requete*/
+    	/*Requete : on récupère les sous-catégorie d'un catégorie donnée*/
         $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
         $sousCategories = $docSC->findBy(array('categorie' => $id), array(), null, null);
 
+        /*Optimisation*/
         $res = array();
         $services_res = array();
         foreach ($sousCategories as $sc) {
@@ -168,6 +169,7 @@ class ApiController extends Controller
                          'distance'=> $service->getDistance(),
                          'adresse'=> $service->getAdresse(),
                          'lieu'=> $service->getLieu(),
+                         'userId'=> $service->getInscrit()->getId(),
                          'username'=> $service->getInscrit()->getUsername(),
                          'icone'=> $service->getSousCategorie()->getIcone(),
            );
@@ -251,11 +253,18 @@ class ApiController extends Controller
         $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
         $reponse = $docR->find($id);
         $messages = $reponse->getConversation()->getMessages();
+        
+        if($reponse->getDateRendezVous()< new \Datetime()){
+            $etat = "notation";
+        }
+        else{
+            $etat = $reponse->getEtat();
+        }
 
         /*creation de la réponse*/
         $res = array('id' => $reponse->getId(),
                      'date_rendez_vous'=> $reponse->getDateRendezVous(),
-                     'etat'=> $reponse->getEtat(),
+                     'etat'=> $etat,
                      'username'=> $reponse->getConversation()->getInterlocuteur2()->getUsername(),
                      'conversationId'=> $reponse->getConversation()->getId(),
                      'messages'=> array(),
@@ -270,7 +279,7 @@ class ApiController extends Controller
         }
 
         /*creation des evaluations*/
-        foreach ($reponse->getService()->getEvaluations() as $eval) {
+        foreach ($reponse->getEvaluations() as $eval) {
             $res['evaluateurs'].=",".$eval->getInscritNotant()->getUsername();
         }
 
@@ -302,14 +311,24 @@ class ApiController extends Controller
         $messages = $reponse->getConversation()->getMessages();
         $serviceBrut = $reponse->getService();
 
+        /*print_r(strtotime($reponse->getDateRendezVous())<strtotime(now()));*/
+        if($reponse->getDateRendezVous()<new \Datetime()){
+            $etat = "notation";
+        }
+        else{
+            $etat = $reponse->getEtat();
+        }
+
         /*creation de la réponse*/
         $res = array('id' => $reponse->getId(),
                      'date_rendez_vous'=> $reponse->getDateRendezVous(),
-                     'etat'=> $reponse->getEtat(),
+                     'etat'=> $etat,
                      'username'=> $reponse->getConversation()->getInterlocuteur2()->getUsername(),
                      'conversationId'=> $reponse->getConversation()->getId(),
                      'messages'=> array(),
                      'service'=> null,
+                     'evaluateurs'=> "",
+                     'evaluations'=> array(),
             );
         /*creation des messages*/
         foreach ($messages as $message) {
@@ -330,19 +349,18 @@ class ApiController extends Controller
                          'adresse'=> $serviceBrut->getAdresse(),
                          'lieu'=> $serviceBrut->getLieu(),
                          'username'=> $serviceBrut->getInscrit()->getUsername(),
-                         'evaluateurs'=> "",
-                         'evaluations'=> array(),
             );
+
         /*creation des evaluations*/
-        foreach ($serviceBrut->getEvaluations() as $eval) {
+        foreach ($reponse->getEvaluations() as $eval) {
             $e = array('id' => $eval->getId(),
                        'note' => $eval->getNote(),
                        'commentaire' => $eval->getCommentaire(),
                        'notant' => $eval->getInscritNotant()->getId(),
                        'note' => $eval->getInscritNote()->getId(),
                 );
-            $service['evaluations'][]=$e;
-            $service['evaluateurs'].=",".$eval->getInscritNotant()->getUsername();
+            $res['evaluations'][]=$e;
+            $res['evaluateurs'].=",".$eval->getInscritNotant()->getUsername();
         }
         $res['service']=$service;
 
