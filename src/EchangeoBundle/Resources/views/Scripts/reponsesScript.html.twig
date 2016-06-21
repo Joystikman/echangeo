@@ -90,6 +90,7 @@
 				$("#reponse").append($("<form id='validation' action="+urlNote+" method='POST'>"));
 				$("#validation").append($("<input type='hidden' name='idReponse' value="+data.id+">"));
 				$("#validation").append($("<input type='hidden' name='page' value='reponses'>"));
+				$("#validation").append($("<h4>").text("Note : "));
 				$("#validation").append($("<span id='stars' class='star-cb-group'>"));
 				$("#stars").append($("<input id='rating-5' type='radio' name='rating' value=5>"));
 				$("#stars").append($("<label for='rating-5'>5</label>"));
