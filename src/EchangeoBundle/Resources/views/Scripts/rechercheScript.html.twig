@@ -11,7 +11,22 @@
 	{% else %}
 		var userId="anon";
 	{% endif %}
-	console.log(userId);
+	var servicesCourants = {};
+	var index  = 0;
+	{% for service in services %}
+		var service = {
+			"id": "{{service.id}}",
+			"titre": "{{service.titre|e('js')}}",
+			"username": "{{service.inscrit.username}}",
+			"debut": "{{service.debut|date('d F Y H:i')}}",
+			"fin": "{{service.fin|date('d F Y H:i')}}",
+			"icone": "{{service.sousCategorie.icone}}",
+			"lieu": "{{service.lieu}}",
+		};
+		servicesCourants[index] = service;
+		index++;
+	{% endfor %}
+	servicesCourants['length'] = index+1;
 	/*scripts de recherche*/
 	function displaySousCategorie(event) {
 		/*récupération de la catégorie choisie*/
@@ -42,6 +57,9 @@
 					$('#categorie'+sousCategorie[i].id).append($("<input type='checkbox' checked value="+sousCategorie[i].id+"  onchange='displayServices()'>"));
 				}
 				/*Parcours des annonces de la categorie(mère)*/
+				servicesCourants = sousCategorie[sousCategorie.length-1];
+				console.log("servicesCourants: ");
+				console.log(servicesCourants);
 				for(var i=0; i<sousCategorie[sousCategorie.length-1].length; i++){
 					var service = sousCategorie[sousCategorie.length-1][i];
 
@@ -94,6 +112,7 @@
 				console.log('test rqt Ajax');
 				console.log(services);
 				$("#liste").empty();
+				servicesCourants=services;
 				for(var i=0; i<services.length; i++){
 					$('#liste').append($("<div id='service"+services[i].id+"' class='tuile'>"));
 					$('#service'+services[i].id).append($("<h3>").text(services[i].titre));
@@ -118,7 +137,7 @@
 		if (onload) {
 			elem = $('#liste a');
 		}
-		console.log(elem);
+		/*console.log(elem);*/
 		elem.on("click", function(){
 			/*affichage du chargement*/
 			$("#titre").empty();	
@@ -141,9 +160,12 @@
 					console.log('click -> voir details');
 					console.log(service);
 					$("#liste").empty();
-					/*$('#titre').text("<- retour");*/
+					/*Affichage du service sur la carte*/
+					clearMarkers();
+					markerServices(false,service,service.icone);
 					/*Affichage du service*/
 					$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
+					$('#serviceDetail').append($("<p id='retour' class='btn btn-primary'>").text("retour"));
 					$('#serviceDetail').append($("<h3>").text(service.titre));
 					$('#serviceDetail').append($("<p>").text("Proposé par : "+service.username));
 					$('#serviceDetail').append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL") ));
@@ -169,6 +191,8 @@
 					{% else %}
 						$('#serviceDetail').append($("<p>").append($("<a class='btn btn-success' href='{{ path('fos_user_security_login') }}''>connecter vous répondre à cette annonce</a>")));
 					{% endif %}
+					/*fonction de retour*/
+					backDisplay();
 				},
 				error: function (req, status, err){
 					console.log("erreur");
@@ -176,6 +200,26 @@
 				}
 			});
 			return false;
+		});
+	}
+
+
+	function backDisplay(){
+		var retour = $("#retour");
+		console.log(servicesCourants);
+		retour.on("click", function(){
+			$("#liste").empty();
+			clearMarkers();
+			for(var i=0; i<servicesCourants.length; i++){
+				$('#liste').append($("<div id='service"+servicesCourants[i].id+"' class='tuile'>"));
+				$('#service'+servicesCourants[i].id).append($("<h3>").text(servicesCourants[i].titre));
+				console.log(servicesCourants[i].id);
+				$('#service'+servicesCourants[i].id).append($("<p>").text("Proposé par : "+servicesCourants[i].username));
+				$('#service'+servicesCourants[i].id).append($("<p>").text("Du : "+moment(servicesCourants[i].debut).lang('fr').format("LLL")+" au "+moment(servicesCourants.fin).lang('fr').format("LLL")));
+				$('#service'+servicesCourants[i].id).append($("<a id="+servicesCourants[i].id+" href='#' class='btn btn-primary'>").text('voir en détails'));					
+				markerServices(false,servicesCourants[i],servicesCourants[i].icone);
+				displayDetails(servicesCourants[i].id,false);
+			}
 		});
 	}
 
@@ -259,6 +303,20 @@
 		for (var i = 0; i < markers.length; i++) {
     		markers[i].setMap(null);
   		}
+	}
+
+	function drawCircle(service){
+		var radius = service.distance;
+		cityCircle = new google.maps.Circle({
+		    strokeColor: '#E9573F',
+		    strokeOpacity: 0.8,
+		    strokeWeight: 1,
+		    fillColor: '#FC6E51',
+		    fillOpacity: 0.30,
+		    map: map,
+		    center: latLng,
+				radius: radius * 1000
+		});
 	}
 
 	google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);

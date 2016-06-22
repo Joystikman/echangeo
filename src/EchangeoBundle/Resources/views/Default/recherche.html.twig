@@ -51,7 +51,7 @@
 		       		<p>Proposé par : {{service.inscrit.username}}</p>
 		       		<p id="date{{service.id}}"></p>
 		       		<script type="text/javascript">
-						$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
+						$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').locale('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').locale('fr').format("LLL"));
 					</script>
 		       		<a id="{{service.id}}" href="#" class="btn btn-primary">voir en détails</a>
 		       	</div>
@@ -71,5 +71,7 @@
 {% block script %}	 
 	<!-- include fonction de recherche	 -->
 	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}
+<script type="text/javascript">
+</script>
 {% endblock script %}
 
