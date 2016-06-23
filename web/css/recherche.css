@@ -58,10 +58,17 @@ nav{
 	flex-direction: row;*/
 }
 
+
 .dropdown{
 	/*margin-left: 15px;*/
 	padding: 5px 0px;
 	font-size: 18px;
+	border-radius: 5px;
+}
+
+.keyword{
+	font-size: 18px;
+	padding: 5px 2px;
 	border-radius: 5px;
 }
 
@@ -138,7 +145,7 @@ footer{
 	.main{
 		display: flex;
   		flex-direction: column;
-  		flex-wrap: wrap;
+  		/*flex-wrap: wrap;*/
   		width: 100%;
   		min-height: 550px;
 	}
@@ -153,12 +160,12 @@ footer{
 	.services{
 		background-color: #E1E1E1;
 		color: #000000;
-		flex: 1 2;
+		flex: 1;
 		order: 3;
 	}
 
 	.carte{
-	    flex: 2;
+	    flex: 1;
 	    order: 2;
 	    width: 100%;
 	    height: 250px;

@@ -30,6 +30,7 @@
 	var idCategorie = "";
 	var departement = "";
 	var keyword = "";
+	var profondeur = true;
 
 	/*scripts de recherche*/
 	function displayRecherche() {
@@ -38,12 +39,14 @@
 		departement = $("#departement option:selected").val();
 		keyword = $("#keyword").val();
 		if (keyword == ""){ keyword = "null"; }
-		console.log(idCategorie+" "+departement+" "+keyword);
+		profondeur = $("#profondeur").prop('checked');
+		console.log(idCategorie+" "+departement+" "+keyword+" "+profondeur);
 		/*création de l'url*/ 
-		var url = "{{ path('getRecherche',{ 'categorie': "catPlaceholder" , 'departement': "dptPlaceholder" ,'keyword': "kwPlaceholder" ,  '_format': 'json'}) }}";
+		var url = "{{ path('getRecherche',{ 'categorie': "catPlaceholder" , 'departement': "dptPlaceholder" ,'keyword': "kwPlaceholder" ,'profondeur': "proPlaceholder" ,  '_format': 'json'}) }}";
 		url = url.replace("catPlaceholder", idCategorie);
 		url = url.replace("dptPlaceholder", departement);
 		url = url.replace("kwPlaceholder", keyword);
+		url = url.replace("proPlaceholder", profondeur);
 		/*on vide les div et on enleve les anciens marqueurs de la carte*/
 		$("#titre").empty();	
 		$("#liste").empty();	
@@ -107,11 +110,12 @@
 		console.log('liste des sousCatégorie choisie(s) :');
 		console.log(selectedId);
 		/*création de l'url*/ 
-		var url = "{{ path('getServicesSousCategories',{ 'sousCategorie': "scPlaceholder" , 'categorie': "catPlaceholder" , 'departement': "dptPlaceholder" ,'keyword': "kwPlaceholder" , '_format': 'json'}) }}";
+		var url = "{{ path('getServicesSousCategories',{ 'sousCategorie': "scPlaceholder" , 'categorie': "catPlaceholder" , 'departement': "dptPlaceholder" ,'keyword': "kwPlaceholder" ,'profondeur': "proPlaceholder", '_format': 'json'}) }}";
 		url = url.replace("scPlaceholder", selectedId);
 		url = url.replace("catPlaceholder", idCategorie);
 		url = url.replace("dptPlaceholder", departement);
 		url = url.replace("kwPlaceholder", keyword);
+		url = url.replace("proPlaceholder", profondeur);
 		console.log("url :");
 		console.log(url);
 

@@ -45,14 +45,14 @@ class ApiController extends Controller
 
     /**
      * Fonction d'obtention des sous-categories et des services d'une categorie
-     * @Route("/api/recherche/{categorie}_{departement}_{keyword}.{_format}",
+     * @Route("/api/recherche/{categorie}_{departement}_{keyword}_{profondeur}.{_format}",
      		  defaults = {"_format"="json", "departement"="null", "keyword"="null"},
      		  requirements = { "_format" = "html|json" },
               name="getRecherche",
      *  )
      * @Method({"GET"})
      */
-    public function getRecherche($categorie, $departement, $keyword)
+    public function getRecherche($categorie, $departement, $keyword, $profondeur)
     {
     	/*Requete : on récupère les sous-catégorie d'un catégorie donnée*/
         $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
@@ -111,10 +111,21 @@ class ApiController extends Controller
         }
 
         $services = array();
+        $listeKeyword = explode(" ", $keyword);
         if ($keyword != "null") {
-            foreach ($servicesQuery as $s) {
-                if (strpos($s->getTitre(), $keyword)) {
-                    $services[] = $s;
+            foreach ($listeKeyword as $word) {
+                $index = 0;
+                foreach ($servicesQuery as $s) {
+                    if ($profondeur=="true" && (strpos(strtolower($s->getTitre()), strtolower($word)) || strpos(strtolower($s->getDescription()), strtolower($word)) )) {                        
+                        $services[] = $s;
+                        unset($servicesQuery[$index]);
+                        $index++;
+                    }
+                    elseif ($profondeur=="false" && strpos(strtolower($s->getTitre()), strtolower($word)) ) {
+                        $services[] = $s;
+                        unset($servicesQuery[$index]);
+                        $index++;
+                    }
                 }
             }
         }
@@ -163,14 +174,14 @@ class ApiController extends Controller
 
     /**
      * Fonction d'obtention des services d'une sous-categories choisie
-     * @Route("/api/serviceSousCategorie/{sousCategorie}_{categorie}_{departement}_{keyword}.{_format}",
+     * @Route("/api/serviceSousCategorie/{sousCategorie}_{categorie}_{departement}_{keyword}_{profondeur}.{_format}",
      		  defaults = {"_format"="json"},
      		  requirements = { "_format" = "html|json" },
               name="getServicesSousCategories",
      *  )
      * @Method({"GET"})
      */
-    public function getServicesSousCategories($sousCategorie, $categorie, $departement, $keyword)
+    public function getServicesSousCategories($sousCategorie, $categorie, $departement, $keyword, $profondeur)
     {
     	/*Requete*/
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
@@ -201,10 +212,16 @@ class ApiController extends Controller
         }
 
         $services = array();
+        $listeKeyword = explode(" ", $keyword);
         if ($keyword != "null") {
             foreach ($servicesQuery as $s) {
-                if (strpos($s->getTitre(), $keyword)) {
-                    $services[] = $s;
+                foreach ($listeKeyword as $word) {
+                    if ($profondeur && strpos(strtolower($s->getTitre()), strtolower($word)) || strpos(strtolower($s->getDescription()), strtolower($word))) {
+                        $services[] = $s;
+                    }
+                    elseif ($profondeur && strpos(strtolower($s->getTitre()), strtolower($word))) {
+                        $services[] = $s;
+                    }
                 }
             }
         }
