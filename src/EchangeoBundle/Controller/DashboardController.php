@@ -74,6 +74,7 @@ class DashboardController extends Controller{
       $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
       $SC = $docSC->findAll();
 
+      /*Pour les titre dans la liste*/
       $sousCategories = [];
       $titre = "";
       $index = -1;
@@ -119,6 +120,7 @@ class DashboardController extends Controller{
                       'multiple' => false))
                 ->add('adresse', TextType::class)
                 ->add('lieu', HiddenType::class)
+                ->add('departement', HiddenType::class)
                 ->add('distance', IntegerType::class)
                 ->add('save', SubmitType::class, array('label' => 'Creer une annonce'))
                 ->getForm();
@@ -165,6 +167,7 @@ class DashboardController extends Controller{
       $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
       $SC = $docSC->findAll();
 
+      /*Pour les titre dans la liste*/
       $sousCategories = [];
       $titre = "";
       $index = -1;
@@ -207,6 +210,7 @@ class DashboardController extends Controller{
                       'demande' => 'demande')))
                 ->add('adresse', TextType::class)
                 ->add('lieu', HiddenType::class)
+                ->add('departement', HiddenType::class)
                 ->add('distance', IntegerType::class)
                 ->add('save', SubmitType::class, array('label' => "enregistrer les modifications"))
                 ->add('delete', SubmitType::class, array('label' => "supprimer"))

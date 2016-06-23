@@ -19,6 +19,7 @@
 			{{ form_row(form.type, { 'attr': {'class': 'form-control'} }) }}
 			{{ form_row(form.adresse, { 'attr': {'class': 'form-control'} }) }}
 			{{ form_row(form.lieu, { 'attr': {'class': 'form-control'} }) }}
+			{{ form_row(form.region, { 'attr': {'class': 'form-control'} }) }}
 			{{ form_row(form.distance, { 'attr': {'class': 'form-control stepper-input'} }) }}
 			<div id="googlemaps" class="carteAjout"></div>
 			<div class="validation">
@@ -33,7 +34,7 @@
 
 {% block script %}
 <script src="{{ asset('script/pikaday.js')}}"></script>
-{% include 'EchangeoBundle:Scripts:servicesScript.html.twig' %}
+{% include 'EchangeoBundle:Scripts:servicesAjoutScript.html.twig' %}
 <script type="text/javascript">
 		var picker = new Pikaday({ field: $('#form_debut')[0] });
 		var picker2 = new Pikaday({ field: $('#form_fin')[0] });

@@ -18,9 +18,6 @@ use JMS\Serializer\SerializerBuilder;
 
 class ApiController extends Controller
 {
-	/*NOTES :*/
-    /*lien vers la fonction {{ path('nomFonction',{ 'nomParam': entite.attribut }) }}*/
-
 	/**
      * Fonction d'obtention des Services
      * @Route("/api/services",
@@ -44,50 +41,116 @@ class ApiController extends Controller
         );
     }
 
+/*RECHERCHE*/
 
     /**
      * Fonction d'obtention des sous-categories et des services d'une categorie
-     * @Route("/api/sousCategorie/{id}.{_format}",
-     		  defaults = {"_format"="json"},
+     * @Route("/api/recherche/{categorie}_{departement}_{keyword}.{_format}",
+     		  defaults = {"_format"="json", "departement"="null", "keyword"="null"},
      		  requirements = { "_format" = "html|json" },
-              name="getSousCategories",
+              name="getRecherche",
      *  )
      * @Method({"GET"})
      */
-    public function getSousCategories($id)
+    public function getRecherche($categorie, $departement, $keyword)
     {
     	/*Requete : on récupère les sous-catégorie d'un catégorie donnée*/
         $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
-        $sousCategories = $docSC->findBy(array('categorie' => $id), array(), null, null);
+        $sousCategories = $docSC->findBy(array('categorie' => $categorie), array(), null, null);
 
-        /*Optimisation*/
-        $res = array();
-        $services_res = array();
+        if($categorie != "null" && $departement != "null"){
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                'SELECT s
+                FROM EchangeoBundle:Service s
+                WHERE EXISTS(
+                    SELECT sc
+                    FROM EchangeoBundle:sousCategorie sc
+                    WHERE sc.categorie = :categorie
+                    AND s.sousCategorie = sc.id
+                )
+                AND s.departement = :dpt
+                ORDER BY s.id DESC'
+            )->setParameter('categorie', $categorie)
+             ->setParameter('dpt', $departement);
+            $servicesQuery = $query->getResult();
+        }
+        elseif ($categorie != "null" && $departement == "null") {
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                'SELECT s
+                FROM EchangeoBundle:Service s
+                WHERE EXISTS(
+                    SELECT sc
+                    FROM EchangeoBundle:sousCategorie sc
+                    WHERE sc.categorie = :categorie
+                    AND s.sousCategorie = sc.id
+                )
+                ORDER BY s.id DESC'
+            )->setParameter('categorie', $categorie);
+            $servicesQuery = $query->getResult();
+        }
+        elseif ($categorie == "null" && $departement != "null") {
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                'SELECT s
+                FROM EchangeoBundle:Service s
+                WHERE s.departement = :dpt
+                ORDER BY s.id DESC'
+            )->setParameter('dpt', $departement);
+            $servicesQuery = $query->getResult();
+        }
+        elseif ($categorie == "null" && $departement == "null") {
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                'SELECT s
+                FROM EchangeoBundle:Service s
+                ORDER BY s.id DESC'
+            );
+            $servicesQuery = $query->getResult();
+        }
+
+        $services = array();
+        if ($keyword != "null") {
+            foreach ($servicesQuery as $s) {
+                if (strpos($s->getTitre(), $keyword)) {
+                    $services[] = $s;
+                }
+            }
+        }
+        else{
+            $services = $servicesQuery;
+        }
+
+        /*Optimisation pour la transcription en JSON*/
+        $sousCategories_res = array();
         foreach ($sousCategories as $sc) {
             $sous_categorie = array('id' => $sc->getId(),
                                     'libelle'=> $sc->getLibelle(),
                                     'description'=> $sc->getDescription(),
             );
-            $res[]=$sous_categorie;
-            $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-            $services = $docS->findBy(array('sousCategorie' => $sc->getId()), array('fin'=>'desc'), null, null);
-            foreach ($services as $s) {
-                $service = array('id' => $s->getId(),
-                                 'titre'=> $s->getTitre(),
-                                 'description'=> $s->getDescription(),
-                                 'debut'=> $s->getDebut(),
-                                 'fin'=> $s->getFin(),
-                                 'type'=> $s->getType(),
-                                 'distance'=> $s->getDistance(),
-                                 'adresse'=> $s->getAdresse(),
-                                 'lieu'=> $s->getLieu(),
-                                 'username'=> $s->getInscrit()->getUsername(),
-                                 'icone'=> $sc->getIcone(),
-                );
-                $services_res[]=$service;
-            }
+            $sousCategories_res[]=$sous_categorie;
         }
-        $res[]=$services_res;
+
+        $services_res = array();
+        foreach ($services as $s) {
+            $service = array('id' => $s->getId(),
+                            'titre'=> $s->getTitre(),
+                             'description'=> $s->getDescription(),
+                             'debut'=> $s->getDebut(),
+                             'fin'=> $s->getFin(),
+                             'type'=> $s->getType(),
+                             'distance'=> $s->getDistance(),
+                             'adresse'=> $s->getAdresse(),
+                             'lieu'=> $s->getLieu(),
+                             'username'=> $s->getInscrit()->getUsername(),
+                             'icone'=> $s->getSousCategorie()->getIcone(),
+            );
+            $services_res[]=$service;
+        }
+        $res = array('sousCategories' => $sousCategories_res,
+                     'services' => $services_res,
+        );
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
 		$jsonContent = $serializer->serialize($res, 'json');
@@ -100,23 +163,57 @@ class ApiController extends Controller
 
     /**
      * Fonction d'obtention des services d'une sous-categories choisie
-     * @Route("/api/serviceSousCategorie/{id}.{_format}",
+     * @Route("/api/serviceSousCategorie/{sousCategorie}_{categorie}_{departement}_{keyword}.{_format}",
      		  defaults = {"_format"="json"},
      		  requirements = { "_format" = "html|json" },
               name="getServicesSousCategories",
      *  )
      * @Method({"GET"})
      */
-    public function getServicesSousCategories($id)
+    public function getServicesSousCategories($sousCategorie, $categorie, $departement, $keyword)
     {
     	/*Requete*/
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-        /*Parse des arguments*/
-        $ids = explode(",", $id);
-        /*Requetes*/
-        $services_res = array();
-        foreach ($ids as $categorie ) {        	
-        	$services = $docS->findBy(array('sousCategorie' => $categorie), array(), null, null);
+
+        $ids = explode(",", $sousCategorie);
+
+        if ( $departement != "null") {
+            $repository = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+            $query = $repository->createQueryBuilder('s')
+            ->where("s.sousCategorie IN(:ids)")
+            ->andWhere('s.departement = :dpt')
+            ->setParameter('ids', array_values($ids))
+            ->setParameter('dpt', $departement)
+            ->orderBy('s.id', 'DESC')
+            ->getQuery();
+
+            $servicesQuery = $query->getResult();
+        }
+        else{
+            $repository = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+            $query = $repository->createQueryBuilder('s')
+            ->where("s.sousCategorie IN(:ids)")
+            ->setParameter('ids', array_values($ids))
+            ->orderBy('s.id', 'DESC')
+            ->getQuery();
+
+            $servicesQuery = $query->getResult();
+        }
+
+        $services = array();
+        if ($keyword != "null") {
+            foreach ($servicesQuery as $s) {
+                if (strpos($s->getTitre(), $keyword)) {
+                    $services[] = $s;
+                }
+            }
+        }
+        else{
+            $services = $servicesQuery;
+        }
+        
+        /*Optimisation des service*/
+        $services_res = array();        	
             foreach ($services as $s ) { 
                 $service = array('id' => $s->getId(),
                                  'titre'=> $s->getTitre(),
@@ -132,7 +229,6 @@ class ApiController extends Controller
                 );
                 $services_res[]=$service;
             }
-        }
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
 		$jsonContent = $serializer->serialize($services_res, 'json');
@@ -185,7 +281,7 @@ class ApiController extends Controller
         );
     }
 
-    /*DASHBOARD*/
+/*DASHBOARD*/
     /**
      * Fonction d'obtention d'un service par son id
      * @Route("/api/dashboard/service/{id}.{_format}",
