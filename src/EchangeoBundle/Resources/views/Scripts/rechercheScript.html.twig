@@ -11,14 +11,42 @@
 	{% else %}
 		var userId="anon";
 	{% endif %}
-	console.log(userId);
+	var servicesCourants = {};
+	var index  = 0;
+	{% for service in services %}
+		var service = {
+			"id": "{{service.id}}",
+			"titre": "{{service.titre|e('js')}}",
+			"username": "{{service.inscrit.username}}",
+			"debut": "{{service.debut|date('d F Y H:i')}}",
+			"fin": "{{service.fin|date('d F Y H:i')}}",
+			"icone": "{{service.sousCategorie.icone}}",
+			"lieu": "{{service.lieu}}",
+		};
+		servicesCourants[index] = service;
+		index++;
+	{% endfor %}
+	servicesCourants['length'] = index+1;
+	var idCategorie = "";
+	var departement = "";
+	var keyword = "";
+	var profondeur = true;
+
 	/*scripts de recherche*/
-	function displaySousCategorie(event) {
+	function displayRecherche() {
 		/*récupération de la catégorie choisie*/
-		var id = this.options[this.selectedIndex].value;
+		idCategorie = $("#sousCategorie option:selected").val();
+		departement = $("#departement option:selected").val();
+		keyword = $("#keyword").val();
+		if (keyword == ""){ keyword = "null"; }
+		profondeur = $("#profondeur").prop('checked');
+		console.log(idCategorie+" "+departement+" "+keyword+" "+profondeur);
 		/*création de l'url*/ 
-		var url = "{{ path('getSousCategories',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-		url = url.replace("idPlaceholder", id);
+		var url = "{{ path('getRecherche',{ 'categorie': "catPlaceholder" , 'departement': "dptPlaceholder" ,'keyword': "kwPlaceholder" ,'profondeur': "proPlaceholder" ,  '_format': 'json'}) }}";
+		url = url.replace("catPlaceholder", idCategorie);
+		url = url.replace("dptPlaceholder", departement);
+		url = url.replace("kwPlaceholder", keyword);
+		url = url.replace("proPlaceholder", profondeur);
 		/*on vide les div et on enleve les anciens marqueurs de la carte*/
 		$("#titre").empty();	
 		$("#liste").empty();	
@@ -29,28 +57,32 @@
 			url: url,
 			type: "GET",
 			dataType: "json",
-			success: function(sousCategorie){
-				console.log(sousCategorie);
+			success: function(recherche){
+				console.log(recherche);
 				$("#liste").empty();
 				$('#select2').empty();
 				$('#select2').append($("<form id='formSousCategorie' class='sousCategorie' method='get'>"));
 				$('#formSousCategorie').append($("<ul id='listeCategories'>"));
 				/*affichage de la selection des sousCategorie*/ 
-				for(var i=0; i<sousCategorie.length-1; i++){
-					$('#listeCategories').append($("<li id=categorie"+sousCategorie[i].id+">"));
-					$('#categorie'+sousCategorie[i].id).append($("<label class='labelSC'>").text(sousCategorie[i].libelle));
-					$('#categorie'+sousCategorie[i].id).append($("<input type='checkbox' checked value="+sousCategorie[i].id+"  onchange='displayServices()'>"));
+				for(var i=0; i<recherche.sousCategories.length; i++){
+					var sousCategorie = recherche.sousCategories[i];
+					$('#listeCategories').append($("<li id=categorie"+sousCategorie.id+">"));
+					$('#categorie'+sousCategorie.id).append($("<label class='labelSC'>").text(sousCategorie.libelle));
+					$('#categorie'+sousCategorie.id).append($("<input type='checkbox' checked value="+sousCategorie.id+" onchange='displayServices()'>"));
 				}
 				/*Parcours des annonces de la categorie(mère)*/
-				for(var i=0; i<sousCategorie[sousCategorie.length-1].length; i++){
-					var service = sousCategorie[sousCategorie.length-1][i];
+				servicesCourants = recherche.services;
+				console.log("servicesCourants: ");
+				console.log(servicesCourants);
+				for(var i=0; i<recherche.services.length; i++){
+					var service = recherche.services[i];
 
 					/*affichage des annonces*/
 					$('#titre').text("Annonces disponibles :");
 					$('#liste').append($("<div id='service"+service.id+"' class='tuile'>"));
 					$('#service'+service.id).append($("<h3>").text(service.titre));
 					$('#service'+service.id).append($("<p>").text("Proposé par : "+service.username));
-					$('#service'+service.id).append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL")));
+					$('#service'+service.id).append($("<p>").text("Du : "+moment(service.debut).locale('fr').format("LLL")+" au "+moment(service.fin).locale('fr').format("LLL")));
 					$('#service'+service.id).append($("<a id="+service.id+" href='#' class='btn btn-primary'>").text('voir en détails'));
 
 					/*affichage des annonces à la carte*/
@@ -78,10 +110,16 @@
 		console.log('liste des sousCatégorie choisie(s) :');
 		console.log(selectedId);
 		/*création de l'url*/ 
-		var url = "{{ path('getServicesSousCategories',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
-		url = url.replace("idPlaceholder", selectedId);
+		var url = "{{ path('getServicesSousCategories',{ 'sousCategorie': "scPlaceholder" , 'categorie': "catPlaceholder" , 'departement': "dptPlaceholder" ,'keyword': "kwPlaceholder" ,'profondeur': "proPlaceholder", '_format': 'json'}) }}";
+		url = url.replace("scPlaceholder", selectedId);
+		url = url.replace("catPlaceholder", idCategorie);
+		url = url.replace("dptPlaceholder", departement);
+		url = url.replace("kwPlaceholder", keyword);
+		url = url.replace("proPlaceholder", profondeur);
 		console.log("url :");
 		console.log(url);
+
+		$("#select2").empty();
 		$("#liste").empty();
 		$("#liste").append($(chargement));	
 		clearMarkers();
@@ -94,11 +132,12 @@
 				console.log('test rqt Ajax');
 				console.log(services);
 				$("#liste").empty();
+				servicesCourants=services;
 				for(var i=0; i<services.length; i++){
 					$('#liste').append($("<div id='service"+services[i].id+"' class='tuile'>"));
 					$('#service'+services[i].id).append($("<h3>").text(services[i].titre));
 					$('#service'+services[i].id).append($("<p>").text("Proposé par : "+services[i].username));
-					$('#service'+services[i].id).append($("<p>").text("Du : "+moment(services[i].debut).lang('fr').format("LLL")+" au "+moment(services.fin).lang('fr').format("LLL")));
+					$('#service'+services[i].id).append($("<p>").text("Du : "+moment(services[i].debut).locale('fr').format("LLL")+" au "+moment(services.fin).locale('fr').format("LLL")));
 					$('#service'+services[i].id).append($("<a id="+services[i].id+" href='#' class='btn btn-primary'>").text('voir en détails'));					
 					markerServices(false,services[i],services[i].icone);
 					displayDetails(services[i].id,false);
@@ -118,7 +157,7 @@
 		if (onload) {
 			elem = $('#liste a');
 		}
-		console.log(elem);
+		/*console.log(elem);*/
 		elem.on("click", function(){
 			/*affichage du chargement*/
 			$("#titre").empty();	
@@ -141,12 +180,15 @@
 					console.log('click -> voir details');
 					console.log(service);
 					$("#liste").empty();
-					/*$('#titre').text("<- retour");*/
+					/*Affichage du service sur la carte*/
+					clearMarkers();
+					markerServices(false,service,service.icone);
 					/*Affichage du service*/
 					$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
+					$('#serviceDetail').append($("<p id='retour' class='btn btn-primary'>").text("retour"));
 					$('#serviceDetail').append($("<h3>").text(service.titre));
 					$('#serviceDetail').append($("<p>").text("Proposé par : "+service.username));
-					$('#serviceDetail').append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL") ));
+					$('#serviceDetail').append($("<p>").text("Du : "+moment(service.debut).locale('fr').format("LLL")+" au "+moment(service.fin).locale('fr').format("LLL") ));
 					$('#serviceDetail').append($("<p>").text(""+service.description));
 
 					/*Si l'utilisateur est connecté, il peut répondre, sinon il doit se connecter*/
@@ -169,6 +211,8 @@
 					{% else %}
 						$('#serviceDetail').append($("<p>").append($("<a class='btn btn-success' href='{{ path('fos_user_security_login') }}''>connecter vous répondre à cette annonce</a>")));
 					{% endif %}
+					/*fonction de retour*/
+					backDisplay();
 				},
 				error: function (req, status, err){
 					console.log("erreur");
@@ -176,6 +220,26 @@
 				}
 			});
 			return false;
+		});
+	}
+
+
+	function backDisplay(){
+		var retour = $("#retour");
+		console.log(servicesCourants);
+		retour.on("click", function(){
+			$("#liste").empty();
+			clearMarkers();
+			for(var i=0; i<servicesCourants.length; i++){
+				$('#liste').append($("<div id='service"+servicesCourants[i].id+"' class='tuile'>"));
+				$('#service'+servicesCourants[i].id).append($("<h3>").text(servicesCourants[i].titre));
+				console.log(servicesCourants[i].id);
+				$('#service'+servicesCourants[i].id).append($("<p>").text("Proposé par : "+servicesCourants[i].username));
+				$('#service'+servicesCourants[i].id).append($("<p>").text("Du : "+moment(servicesCourants[i].debut).locale('fr').format("LLL")+" au "+moment(servicesCourants.fin).locale('fr').format("LLL")));
+				$('#service'+servicesCourants[i].id).append($("<a id="+servicesCourants[i].id+" href='#' class='btn btn-primary'>").text('voir en détails'));					
+				markerServices(false,servicesCourants[i],servicesCourants[i].icone);
+				displayDetails(servicesCourants[i].id,false);
+			}
 		});
 	}
 
@@ -259,6 +323,20 @@
 		for (var i = 0; i < markers.length; i++) {
     		markers[i].setMap(null);
   		}
+	}
+
+	function drawCircle(service){
+		var radius = service.distance;
+		cityCircle = new google.maps.Circle({
+		    strokeColor: '#E9573F',
+		    strokeOpacity: 0.8,
+		    strokeWeight: 1,
+		    fillColor: '#FC6E51',
+		    fillOpacity: 0.30,
+		    map: map,
+		    center: latLng,
+				radius: radius * 1000
+		});
 	}
 
 	google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);

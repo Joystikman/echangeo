@@ -31,12 +31,22 @@
   			<!-- barre de recherche -->
 		  	<div class="recherche">
 				<div id="select1">
-			 		<select onchange="displaySousCategorie.call(this,event)" class="dropdown">
-			  		<option value="null">Catégories</option>
-			  		{% for categorie in categories %}	
-			  			<option value="{{categorie.id}}">{{categorie.libelle}}</option>
-			  		{% endfor %}
-			  		</select>
+				 		<select id="sousCategorie" class="dropdown">
+					  		<option value="null">Toutes catégories</option>
+					  		{% for categorie in categories %}	
+					  			<option value="{{categorie.id}}">{{categorie.libelle}}</option>
+					  		{% endfor %}
+				  		</select>
+				  		<select id="departement" class="dropdown">
+					  		<option value="null">Toute la France</option>
+					  		<option value="Loiret">Loiret</option>
+					  		<option value="Paris">Paris</option>
+				  		</select>
+				  		<input id="keyword" type="text" name="keyword" class="keyword" placeholder="mots clés" />
+				  		<input id="profondeur" type="checkbox" name="profondeur"/>
+				  		<label for="profondeur">recherche en profondeur</label>
+				  		<button id="recherche" class="btn btn-primary" onclick="displayRecherche()">Rechercher</button>
+				  	
 				</div>
 				<div id="select2"></div>  	
 		  	</div>
@@ -51,7 +61,7 @@
 		       		<p>Proposé par : {{service.inscrit.username}}</p>
 		       		<p id="date{{service.id}}"></p>
 		       		<script type="text/javascript">
-						$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
+						$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').locale('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').locale('fr').format("LLL"));
 					</script>
 		       		<a id="{{service.id}}" href="#" class="btn btn-primary">voir en détails</a>
 		       	</div>
@@ -71,5 +81,7 @@
 {% block script %}	 
 	<!-- include fonction de recherche	 -->
 	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}
+<script type="text/javascript">
+</script>
 {% endblock script %}
 

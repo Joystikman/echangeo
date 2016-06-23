@@ -66,9 +66,9 @@ class Service
     /**
      * @var string
      *
-     * @ORM\Column(name="region", type="string", length=255, nullable=true)
+     * @ORM\Column(name="departement", type="string", length=255, nullable=true)
      */
-    private $region;
+    private $departement;
 
     /**
      * @var string
@@ -413,5 +413,29 @@ class Service
     public function getRegion()
     {
         return $this->region;
+    }
+
+    /**
+     * Set departement
+     *
+     * @param string $departement
+     *
+     * @return Service
+     */
+    public function setDepartement($departement)
+    {
+        $this->departement = $departement;
+
+        return $this;
+    }
+
+    /**
+     * Get departement
+     *
+     * @return string
+     */
+    public function getDepartement()
+    {
+        return $this->departement;
     }
 }
