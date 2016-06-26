@@ -34,7 +34,7 @@
 
 	/*scripts de recherche*/
 	function displayRecherche() {
-		/*récupération de la catégorie choisie*/
+		/*récupération des critères de recherche choisie*/
 		idCategorie = $("#sousCategorie option:selected").val();
 		departement = $("#departement option:selected").val();
 		keyword = $("#keyword").val();
@@ -52,13 +52,14 @@
 		$("#liste").empty();	
 		$("#liste").append($(chargement));	
 		clearMarkers();
-		/*fonction ajax - recuperation des sousCatégories dans la categorie choisie*/
+		/*fonction ajax - recuperation des services répondant à la recherche*/
 		$.ajax({
 			url: url,
 			type: "GET",
 			dataType: "json",
 			success: function(recherche){
 				console.log(recherche);
+				/*On enlève l'icone de chargement et les potentiel ancienne sous catégories*/
 				$("#liste").empty();
 				$('#select2').empty();
 				$('#select2').append($("<form id='formSousCategorie' class='sousCategorie' method='get'>"));
@@ -70,16 +71,16 @@
 					$('#categorie'+sousCategorie.id).append($("<label class='labelSC'>").text(sousCategorie.libelle));
 					$('#categorie'+sousCategorie.id).append($("<input type='checkbox' checked value="+sousCategorie.id+" onchange='displayServices()'>"));
 				}
-				/*Parcours des annonces de la categorie(mère)*/
+				/*On conserves les service dans la variable servicesCourants pour pouvoir les réaffichés avec la fonction backDisplay()*/
 				servicesCourants = recherche.services;
-				console.log("servicesCourants: ");
 				console.log(servicesCourants);
+				/*Parcours des annonces pour les afficher*/
 				for(var i=0; i<recherche.services.length; i++){
 					var service = recherche.services[i];
 
 					/*affichage des annonces*/
 					$('#titre').text("Annonces disponibles :");
-					$('#liste').append($("<div id='service"+service.id+"' class='tuile'>"));
+					$('#liste').append($("<div id='service"+service.id+"' name="+i+" class='tuile'>"));
 					$('#service'+service.id).append($("<h3>").text(service.titre));
 					$('#service'+service.id).append($("<p>").text("Proposé par : "+service.username));
 					$('#service'+service.id).append($("<p>").text("Du : "+moment(service.debut).locale('fr').format("LLL")+" au "+moment(service.fin).locale('fr').format("LLL")));
@@ -90,7 +91,9 @@
 
 					/*ajout de la fonction d'affichage des détails d'un service*/
 					displayDetails(service.id,false);
-					}
+				}
+				updateMap(recherche.services[0].lieu);
+				animationIcone();
 			},
 			error: function (req, status, err){
 				console.log("erreur");
@@ -134,7 +137,7 @@
 				$("#liste").empty();
 				servicesCourants=services;
 				for(var i=0; i<services.length; i++){
-					$('#liste').append($("<div id='service"+services[i].id+"' class='tuile'>"));
+					$('#liste').append($("<div id='service"+services[i].id+"' name="+i+" class='tuile'>"));
 					$('#service'+services[i].id).append($("<h3>").text(services[i].titre));
 					$('#service'+services[i].id).append($("<p>").text("Proposé par : "+services[i].username));
 					$('#service'+services[i].id).append($("<p>").text("Du : "+moment(services[i].debut).locale('fr').format("LLL")+" au "+moment(services.fin).locale('fr').format("LLL")));
@@ -142,6 +145,8 @@
 					markerServices(false,services[i],services[i].icone);
 					displayDetails(services[i].id,false);
 				}
+				updateMap(services[0].lieu);
+				animationIcone();
 			},
 			error: function (req, status, err){
 				console.log("erreur display service");
@@ -163,14 +168,13 @@
 			$("#titre").empty();	
 			$("#liste").empty();	
 			$("#liste").append($(chargement));
-			var selectedId = $(this).attr("id");
-			console.log("Details Service n°: "+selectedId);  
+			var selectedId = $(this).attr("id"); 
+
 			/*création de l'url de la fonction ajax*/ 
 			var url = "{{ path('getserviceID',{ 'id': "idPlaceholder" , '_format': 'json'}) }}";
 			url = url.replace("idPlaceholder", selectedId);
 			var urlForm = "{{ path('reponse_service') }}";
-			console.log("url :");
-			console.log(url);
+			
 			/*AJAX*/	
 			$.ajax({
 				url: url,
@@ -180,9 +184,8 @@
 					console.log('click -> voir details');
 					console.log(service);
 					$("#liste").empty();
-					/*Affichage du service sur la carte*/
 					clearMarkers();
-					markerServices(false,service,service.icone);
+
 					/*Affichage du service*/
 					$('#liste').append($("<div id='serviceDetail' class='serviceDetail'>"));
 					$('#serviceDetail').append($("<p id='retour' class='btn btn-primary'>").text("retour"));
@@ -213,6 +216,10 @@
 					{% endif %}
 					/*fonction de retour*/
 					backDisplay();
+					/*Mise à jour de la carte*/
+					updateMap(service.lieu);
+					/*Affichage du service sur la carte*/
+					markerServices(false,service,service.icone);
 				},
 				error: function (req, status, err){
 					console.log("erreur");
@@ -231,7 +238,7 @@
 			$("#liste").empty();
 			clearMarkers();
 			for(var i=0; i<servicesCourants.length; i++){
-				$('#liste').append($("<div id='service"+servicesCourants[i].id+"' class='tuile'>"));
+				$('#liste').append($("<div id='service"+servicesCourants[i].id+"' name="+i+" class='tuile'>"));
 				$('#service'+servicesCourants[i].id).append($("<h3>").text(servicesCourants[i].titre));
 				console.log(servicesCourants[i].id);
 				$('#service'+servicesCourants[i].id).append($("<p>").text("Proposé par : "+servicesCourants[i].username));
@@ -240,6 +247,9 @@
 				markerServices(false,servicesCourants[i],servicesCourants[i].icone);
 				displayDetails(servicesCourants[i].id,false);
 			}
+			/*Mise à jour de la carte*/
+					updateMap(servicesCourants[0].lieu);
+			animationIcone();
 		});
 	}
 
@@ -281,7 +291,14 @@
 	    
 	    //Affichage des marqueurs de services 
 	    markerServices(true,null,null);
-	  }
+	}
+
+	function updateMap(lieu){
+		var position = lieu.split(",");
+		var latLng = new google.maps.LatLng(position[0], position[1]);
+    	// using global variable:
+    	map.panTo(latLng);
+	}
 
 	function markerServices(defaut,service,icone){
 		if(defaut){
@@ -323,6 +340,7 @@
 		for (var i = 0; i < markers.length; i++) {
     		markers[i].setMap(null);
   		}
+  		markers = [];
 	}
 
 	function drawCircle(service){
@@ -338,6 +356,26 @@
 				radius: radius * 1000
 		});
 	}
+
+	function animationIcone() {
+		console.log(markers);
+		$(".tuile").hover(function(){
+    			console.log("hover on");
+    			var num = $(this).attr("name");
+    			console.log(num);
+    			markers[num].setAnimation(google.maps.Animation.BOUNCE);
+    		},
+    		function(){
+    			console.log("hover off");
+    			var num = $(this).attr("name");
+    			markers[num].setAnimation(null);
+    		}
+    	);
+	}
+
+	$(document).ready(function(){
+    	animationIcone();
+	});
 
 	google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
 </script>

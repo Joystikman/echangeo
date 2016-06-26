@@ -58,6 +58,8 @@ class ApiController extends Controller
         $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
         $sousCategories = $docSC->findBy(array('categorie' => $categorie), array(), null, null);
 
+        /*Requete pour récupérer les services corrépondant à la recherche*/
+        /*Si une catégorie et un département ont été renseignés*/
         if($categorie != "null" && $departement != "null"){
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
@@ -75,6 +77,7 @@ class ApiController extends Controller
              ->setParameter('dpt', $departement);
             $servicesQuery = $query->getResult();
         }
+        /*Si seulement une catégorie a été rensignée*/
         elseif ($categorie != "null" && $departement == "null") {
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
@@ -90,6 +93,7 @@ class ApiController extends Controller
             )->setParameter('categorie', $categorie);
             $servicesQuery = $query->getResult();
         }
+        /*Si seulement un département a été rensigné*/
         elseif ($categorie == "null" && $departement != "null") {
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
@@ -100,6 +104,7 @@ class ApiController extends Controller
             )->setParameter('dpt', $departement);
             $servicesQuery = $query->getResult();
         }
+        /*Si aucun des 2 critères n'a été rensaigné*/
         elseif ($categorie == "null" && $departement == "null") {
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
@@ -110,14 +115,17 @@ class ApiController extends Controller
             $servicesQuery = $query->getResult();
         }
 
+        /*Tri des services répondant au mots clés rentrés*/
         $services = array();
         $listeKeyword = explode(" ", $keyword);
         if ($keyword != "null") {
             foreach ($listeKeyword as $word) {
                 $index = 0;
                 foreach ($servicesQuery as $s) {
+                    /*Si la recherche en profondeur est activé, la recherche des mots clés se fait dans le titre et dans la description des services*/
                     if ($profondeur=="true" && (strpos(strtolower($s->getTitre()), strtolower($word)) || strpos(strtolower($s->getDescription()), strtolower($word)) )) {                        
                         $services[] = $s;
+                        /*Une fois le service ajouté, on le retire de la liste parcouru pour éviter les doublons*/
                         unset($servicesQuery[$index]);
                         $index++;
                     }
