@@ -35,6 +35,12 @@ body {
 	color: white;
 }
 
+.form-control{
+	text-align: center;
+	margin: 20px 0px;
+	margin-left: 25%;
+	width: 50%;
+}
 
 footer{
 	position: fixed;

@@ -26,7 +26,7 @@
             <h3>{{service.titre}}</h3>
             <p>{{service.description}}</p>
             <p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p>          
-            <p>Auteur :{{service.inscrit.username}} / {{service.inscrit.nom}} {{service.inscrit.prenom}}</p>
+            <p>Auteur :{{service.inscrit.username}} <!-- / {{service.inscrit.nom}} {{service.inscrit.prenom}} --></p>
             <a href="{{ path('recherche_service_id',{ 'id': service.id }) }}" class="btn btn-primary">voir en detail</a>
           </div>
         {% endfor %}
@@ -74,7 +74,7 @@
                   animation: google.maps.Animation.DROP
           });
       {% endfor %}
-      //markers.push(marker);
+      markers.push(marker);
     }
     google.maps.event.addDomListener(window, 'load', showGoogleMapsDefaut);
   </script>
