@@ -22,6 +22,10 @@
 	color: #FFFFFF;
 }
 
+.login span{
+	display: none;
+}
+
 header {
 	z-index: 5;
 	padding : 10px 0px;
@@ -235,24 +239,40 @@ footer{
   		flex-direction: column;
   		flex-wrap: wrap;
   		width: 100%;
-	}
+	}*/
 
-	.navbar {
+	/*.navbar {
 		padding: 0px 15px;
 		flex: 1;
 		order: 1;
+	}*/
+
+	.login span{
+		text-align: left;
+		padding: 5px 10px;
+		margin-right: 25%;
+		display: inline;
+		color: white;
+		background-color: #E9573F;
+		font-size: 14px;
+		font-weight: bold;
+		border-radius: 100%;
+	}
+
+	header{
+		display: none;
+	}
+	
+	.menu{
+		padding: 5px 15px;
 	}
 
 	.liste{
-		color: #000000;
 		padding: 0 5px;
-		flex: 1 2;
-		order: 3;
+		height: 50vh;
 	}
 
 	.cadre{
-	    flex: 2;
-	    order: 2;
-	    width: 100%;
-	}*/
+	    border-top : solid 2px #E6E9ED;
+	}
 }

@@ -10,7 +10,7 @@
 {% block liste %}
 	<!-- <h2>Mes services</h2> -->
 	<div class='ajout'>
-		<a href="{{ path('addServices') }}" class="btn btn-primary">Crée une nouvelle annonce</a>
+		<a href="{{ path('addServices') }}" class="btn btn-primary">Créer une nouvelle annonce</a>
 	</div>
 	{% for service in services %}
 		{% if service.fin|date('Y-m-d') < "now"|date('Y-m-d') %}
@@ -22,7 +22,7 @@
 						$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
 					</script>
 			   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
-			   	<a href="#" class="btn btn-primary">voir en détail</a>
+			   	<a href="#cadre" class="btn btn-primary">voir en détail</a>
 		  </div>
 		{% else %}
 			<div id="{{service.id}}" class="tuile valide">
@@ -33,7 +33,7 @@
 						$("#date{{service.id}}").text("Du : "+moment('{{service.debut|date("d F Y H:i")}}').lang('fr').format("LLL")+" au "+moment('{{service.fin|date("d F Y H:i")}}').lang('fr').format("LLL"));
 					</script>
 			   	<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
-			   	<a href="#" class="btn btn-primary">voir en détail</a>
+			   	<a href="#cadre" class="btn btn-primary">voir en détail</a>
 		  </div>
 		{% endif %}
 	{% endfor %}

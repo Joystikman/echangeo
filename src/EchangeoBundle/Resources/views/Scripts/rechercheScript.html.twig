@@ -5,6 +5,7 @@
 <!-- Recherche -->
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
 <script type="text/javascript">
+	/*Liste des variables globales*/
 	var chargement = "<img class='loading' src={{ asset('assets/Loading_icon.gif')}}>";
 	{% if app.user %}
 		var userId = "{{app.user.id}}";
@@ -27,6 +28,7 @@
 		index++;
 	{% endfor %}
 	servicesCourants['length'] = index+1;
+	/*critères de recherche*/
 	var idCategorie = "";
 	var departement = "";
 	var keyword = "";
@@ -59,7 +61,7 @@
 			dataType: "json",
 			success: function(recherche){
 				console.log(recherche);
-				/*On enlève l'icone de chargement et les potentiel ancienne sous catégories*/
+				/*On enlève l'icone de chargement et les potentiels anciennes sous catégories*/
 				$("#liste").empty();
 				$('#select2').empty();
 				$('#select2').append($("<form id='formSousCategorie' class='sousCategorie' method='get'>"));
@@ -267,7 +269,6 @@
 	   
 	function showGoogleMapsDefaut() {
 		console.log("display map");
-		console.log($('#body').width());
 		if($('#body').width()<700) {
 			console.log('mobile');
 			$('#googlemaps').height(300);
@@ -279,11 +280,11 @@
 	    /*paramètres de la map*/
 	    var latLng = new google.maps.LatLng(position[0], position[1]);
 	    var mapOptions = {
-	      zoom: 13, // initialize zoom level - the max value is 21
-	      streetViewControl: false, // hide the yellow Street View pegman
-	      scaleControl: true, // allow users to zoom the Google Map
-	      mapTypeId: google.maps.MapTypeId.ROADMAP,
-	      center: latLng
+	      zoom: 13, // zoom sur la carte (max 21)
+	      streetViewControl: false, // controles pour le street view
+	      scaleControl: true, // controle de zoom
+	      mapTypeId: google.maps.MapTypeId.ROADMAP, //type de la map
+	      center: latLng //position
 	    };
 
 	    //Affichage de la map
@@ -301,6 +302,7 @@
 	}
 
 	function markerServices(defaut,service,icone){
+		/*Si defaut est vrai, on affiche les services retourné par le controleur.*/
 		if(defaut){
 			{% for service in services %}
 				var position = "{{service.lieu}}".split(",");

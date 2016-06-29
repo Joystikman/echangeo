@@ -29,6 +29,7 @@ class ApiController extends Controller
         $docService = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
         $services = $docService->findAll();
         /*Serialisation*/
+        /*test : temps d'execution du passage en JSON*/
         $start = microtime(true);
         $serializer = $this->get('serializer');
 		$jsonContent = $serializer->serialize($services, 'json');
@@ -433,7 +434,7 @@ class ApiController extends Controller
         $serviceBrut = $reponse->getService();
 
         /*print_r(strtotime($reponse->getDateRendezVous())<strtotime(now()));*/
-        if($reponse->getDateRendezVous()<new \Datetime()){
+        if($reponse->getDateRendezVous()<new \Datetime() && $reponse->getEtat()=="valide"){
             $etat = "notation";
         }
         else{

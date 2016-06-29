@@ -72,16 +72,20 @@
 		});
 	}); 
 
+	/*Affiche les formulaires de modification de la réponse selon son état*/
 	function validation(data){
 		if (data.etat=="attente") {
 			$("#reponse").append($("<div id='validation'>"));
 			$("#validation").append($("<p>").text("votre proposition n'a pas encore été validé"));
 		}
 		if (data.etat=="valide"){
+			/*La réponse a été accepté, il faut attentre que le service soit passé pour voter*/
 			$("#reponse").append($("<div id='validation'>"));
 			$("#validation").append($("<p>").text("votre proposition a été validé. Un fois le service rendu, pensez à noter"));
 		}
 		if (data.etat=="notation"){
+			/*Le rendez-vous est passé, le formulaire de notation s'affiche*/
+			/*On test si l'utilisateur a déjà voté ou non */
 			if (data.evaluateurs.indexOf("{{app.user.username}}")> -1) {
 				$("#reponse").append($("<p>").text("Vous avez deja noté"));
 			}

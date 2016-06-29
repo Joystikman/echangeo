@@ -12,11 +12,16 @@
 {% block content %}
 	<div class="container">
 		{% if app.user %}
-	      <p class="login"><a href="{{ path('index') }}">accueil</a> | 
+	      <p class="login">
+	      	<a href="{{ path('index') }}"><span>E</span></a>
+	        <a href="{{ path('index') }}">accueil</a> | 
 	        <a href="{{ path('fos_user_security_logout') }}">deconnexion</a>
+	      </p>
 	    {% else %}
-	      <p class="login"><a href="{{ path('fos_user_security_login') }}">se connecter</a> |   
-	      <a href="{{ path('fos_user_registration_register') }}">s'inscrire</a></p>    
+	      <p class="login">
+	      	<a href="{{ path('index') }}"><span>E</span></a>
+	     	<a href="{{ path('fos_user_security_login') }}">se connecter</a> |   
+	      	<a href="{{ path('fos_user_registration_register') }}">s'inscrire</a></p>    
 	    {% endif %}
 		<div class="main row">
 			<header>
@@ -30,7 +35,7 @@
 					<li><a id="optionsMenu" href="{{ path('options') }}" class="menu">Options</a></li>
 				</ul>
 			</nav>
-			<div class="liste col-xs-12 col-sm-12 col-md-4 col-lg-4">
+			<div id="liste" class="liste col-xs-12 col-sm-12 col-md-4 col-lg-4">
 				{% block liste %}
 					<!-- <div><p> block de liste</p></div> -->
 				{% endblock liste %}
@@ -38,14 +43,7 @@
 			<div id="cadre" class="cadre col-xs-12 col-sm-12 col-md-8 col-lg-8">
 				{% block affichage %}
 					<div><h2> Bonjour {{ app.user.username }}</h2></div>
-					<div><h4> Vos dernières annonces : </h4></div>
-					{% for service in services %}
-						<div class="tuile">
-		       				<h3>{{service.titre}}</h3>
-		       				<p>{{service.description}}</p>
-		       				<p>Sous-catégorie : <b>{{service.sousCategorie.libelle}}</b></p> 
-		       			</div>
-					{% endfor %}	
+					<div><h3>Vous avez une moyenne de : {{moyenne[:1]}}</h3></div>
 				{% endblock affichage %}	
 			</div>	
 		</div>
@@ -59,6 +57,9 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#dashboardMenu").css({'border-bottom': 'solid 8px #4FC1E9'});
+	});
+	$(document).ready(function(){
+		$("#liste").css({'display': 'none'});
 	});
 </script>
 {% endblock script %}

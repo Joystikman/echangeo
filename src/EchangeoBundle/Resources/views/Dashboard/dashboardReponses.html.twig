@@ -18,7 +18,7 @@
 					$("#date{{reponse.id}}").text("Le : "+moment('{{reponse.dateRendezVous|date("d F Y H:i")}}').lang('fr').format("LLL"));
 				</script>
 	   		<p>Etat : {{reponse.etat}}</p>
-	   		<a href="#" class="btn btn-primary">voir en détail</a>
+	   		<a href="#cadre" class="btn btn-primary">voir en détail</a>
 	   	</div>
 	{% endfor %}
 {% endblock liste %}

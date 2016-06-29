@@ -18,7 +18,7 @@
     <h1 class="titre">Echangeo</h1>
     <div class="link"><a href="{{ path('recherche_service') }}" class="btn btn-primary">voir les annonces</a></div>
   <!-- dernières annonces -->
-    <div class="main">
+    <div id="main" class="main">
       <h2>Dernières annonces passées :</h2>
       <div class="annonces">
         {% for service in services %}
@@ -38,11 +38,12 @@
 {% block script %}
   <!-- Include the Google Maps API library - required for embedding maps -->
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAP6ZUJ4H43dX3bjj-uNmFwal8Yi0iZX9g"></script>
-     
+  <script src="{{ asset('script/jquery-1.12.3.min.js') }}"></script>
   <script type="text/javascript">
        
     // The latitude and longitude of your business / place
     var position = [48.858727, 2.344376];
+    $("#googlemaps").height($('#main').height()+500);
      
     function showGoogleMapsDefaut() {
       console.log("display map");

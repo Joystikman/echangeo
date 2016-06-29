@@ -92,34 +92,40 @@ class DefaultController extends Controller
     }
 
     /**
-     * Répondre recherche de service
+     * Route du formulaire de réponse à un service
      * @Route("/recherche/reponse",
               name="reponse_service")
      * @Method({"POST"})
      */
     public function reponseAction(Request $request)
     {
-    /*On créé les entités vierges*/
+      /*On créé les entités vierges*/
       $reponse = new Reponse();
       $conversation = new Conversation();
       $message = new Message();
       $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
       $service = $docS->find($request->request->get('idService'));
       
+      /*On créé un objet date avec la date rentré dans le formulaire*/
       $dateRDV = new \DateTime($request->request->get('dateRDV'));
+
+      /*On défini les attributs de l'objet réponse*/
       $reponse->setDateRendezVous($dateRDV);
       $reponse->setEtat('attente');
       $reponse->setInscrit($this->getUser());
       $reponse->setService($service);
       $reponse->setConversation($conversation);
 
+      /*On défini les attributs de l'objet conversation*/
       $conversation->setInterlocuteur1($service->getInscrit());
       $conversation->setInterlocuteur2($this->getUser());
 
+      /*On défini les attributs de l'objet message*/
       $message->setContenu($request->request->get('message'));
       $message->setInscrit($this->getUser());
       $message->setConversation($conversation);
 
+      /*On enregistre dans la Base de données les objets*/
       $em = $this->getDoctrine()->getManager();
       $em->persist($reponse);
       $em->persist($conversation);

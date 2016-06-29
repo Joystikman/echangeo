@@ -132,8 +132,10 @@
 		}
 	}
 
+	/*Affiche les formulaires de modification de la réponse selon son état*/
 	function validation(reponse){
 		if (reponse.etat=="attente") {
+			/*La réponse est en attente : on peut l'accepter ou la refuser*/
 			var urlVal = "{{ path('validation') }}";
 			$("#reponseId").append($("<form id='validation' action="+urlVal+" method='POST'>"));
 			$("#validation").append($("<input type='hidden' name='idReponse' value="+reponse.id+">"));
@@ -141,6 +143,8 @@
 			$("#validation").append($("<input type='submit' name='decline' class='btn btn-danger' value='decliner'>"));
 		}
 		if (reponse.etat=="valide"){
+			/*La réponse a été accepté, il faut attentre que le service soit passé pour voter*/
+			/*On peut cependant l'annuler à tout moment*/
 			var urlVal = "{{ path('validation') }}";
 			$("#reponseId").append($("<div>"));
 			$("#reponseId").append($("<p>").text("La proposition de "+reponse.username+" a été accepter, une fois le service rendu, pensez à venir noter."));
@@ -149,6 +153,8 @@
 			$("#validation").append($("<input type='submit' name='decline' class='btn btn-danger' value='annuler'>"));
 		}
 		if (reponse.etat=="notation"){
+			/*Le rendez-vous est passé, le formulaire de notation s'affiche*/
+			/*On test si l'utilisateur a déjà voté ou non */
 			if (reponse.evaluateurs.indexOf("{{app.user.username}}")> -1) {
 				$("#reponseId").append($("<p>").text("Vous avez deja noté"));
 			}
