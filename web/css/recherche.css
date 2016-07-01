@@ -18,6 +18,10 @@
 	color: #FFFFFF;
 }
 
+.login span{
+	display: none;
+}
+
 header {
 	z-index: 1;
 	padding : 5px 0px;
@@ -54,19 +58,18 @@ nav{
 
 .Recherche {
 	padding: 0px 15px;
-	/*display: flex;
-	flex-direction: row;*/
 }
 
 
 .dropdown{
-	/*margin-left: 15px;*/
+	margin : 0px 5px;
 	padding: 5px 0px;
 	font-size: 18px;
 	border-radius: 5px;
 }
 
 .keyword{
+	margin : 0px 5px;
 	font-size: 18px;
 	padding: 5px 2px;
 	border-radius: 5px;
@@ -142,12 +145,61 @@ footer{
 }
 
 @media (max-width: 700px) {
+
+	.container{
+		margin: inherit;
+		padding: inherit;
+	}
+
 	.main{
 		display: flex;
   		flex-direction: column;
-  		/*flex-wrap: wrap;*/
   		width: 100%;
   		min-height: 550px;
+  		margin-left: 5px;
+	}
+
+
+	.login{
+	    padding: inherit;
+		padding : 5px 0px 0px 0px;
+	}
+
+	.login span{
+		text-align: left;
+		padding: 5px 10px;
+		margin-right: 25%;
+		display: inline;
+		color: white;
+		background-color: #E9573F;
+		font-size: 14px;
+		font-weight: bold;
+		border-radius: 100%;
+	}
+
+	header{
+		display: none;
+	}
+
+	.logo {
+		margin-top: inherit;
+	}
+
+	.logo h1{
+		font-size: inherit;
+	}
+
+	.logo span{
+		padding: 10px 16px;
+		color: white;
+		background-color: #E9573F;
+		font-size: 26px;
+		font-weight: bold;
+		border-radius: 100%;	
+	}
+
+	.main{
+		margin-top: 5px;
 	}
 
 	.Recherche {

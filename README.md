@@ -31,14 +31,24 @@ Une fois la BD créée, on créé les table grâce à doctrine. Il faut exécute
 | indexAction            | ANY         | /                                      | index                          |
 | testAction             | ANY         | /test                                  | test                           |
 | rechercheAction        | ANY         | /recherche                             | recherche_service              |
+| rechercheServiceAction | ANY         | /recherche/service/{id}                | recherche_service_id           |
+| reponseAction          | POST        | /recherche/reponse                     | reponse_service                |
 | ###FOSU                |             |                                        |                                |
-| login                  | ANY         | /login                                 | login                          |
+| login                  | ANY         | /login                                 | fos_user_security_login                          |
 | logout                 | ANY         | /logout                                | logout                         |
-| logout                 | ANY         | /logout                                | logout                         |
+| register               | ANY         | /register                              | fos_user_registration_register                       |
 | ###Dashboard           |             |                                        |                                |
 | dashboardAction        | ANY         | /dashboard                             | dashboard                      |
 | servicesUserAction     | ANY         | /dashboard/services                    | servicesUser                   |
-| addServicesAction      | ANY         | /dashboard/services/new                | addServices                    |
+| addServicesAction      | POST        | /dashboard/services/new                | addServices                    |
+| editServicesAction     | POST        | /dashboard/services/edit/{id}          | editServices                   |
+| reponsesUserAction     | ANY         | /dashboard/reponses                    | reponsesUser                   |
+| sendAction             | POST        | /dashboard/send                        | sendMessage                    |
+| validationAction       | POST        | /dashboard/validation                  | validation                     |
+| notationAction         | POST        | /dashboard/notation                    | notation                       |
+| optionsAction          | ANY         | /dashboard/options                     | options                        |
+| editProfilAction       | POST        | /dashboard/options/profil/{id}         | editProfil                     |
+| optionsCategorieAction | POST        | /dashboard/options/categorie           | optionsCategorie               |
 
 ##Notes
 Pensez à utiliser la commande `composer update` à chaque pull.

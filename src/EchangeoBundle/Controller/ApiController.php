@@ -29,6 +29,7 @@ class ApiController extends Controller
         $docService = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
         $services = $docService->findAll();
         /*Serialisation*/
+        /*test : temps d'execution du passage en JSON*/
         $start = microtime(true);
         $serializer = $this->get('serializer');
 		$jsonContent = $serializer->serialize($services, 'json');
@@ -58,6 +59,8 @@ class ApiController extends Controller
         $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
         $sousCategories = $docSC->findBy(array('categorie' => $categorie), array(), null, null);
 
+        /*Requete pour récupérer les services corrépondant à la recherche*/
+        /*Si une catégorie et un département ont été renseignés*/
         if($categorie != "null" && $departement != "null"){
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
@@ -75,6 +78,7 @@ class ApiController extends Controller
              ->setParameter('dpt', $departement);
             $servicesQuery = $query->getResult();
         }
+        /*Si seulement une catégorie a été rensignée*/
         elseif ($categorie != "null" && $departement == "null") {
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
@@ -90,6 +94,7 @@ class ApiController extends Controller
             )->setParameter('categorie', $categorie);
             $servicesQuery = $query->getResult();
         }
+        /*Si seulement un département a été rensigné*/
         elseif ($categorie == "null" && $departement != "null") {
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
@@ -100,6 +105,7 @@ class ApiController extends Controller
             )->setParameter('dpt', $departement);
             $servicesQuery = $query->getResult();
         }
+        /*Si aucun des 2 critères n'a été rensaigné*/
         elseif ($categorie == "null" && $departement == "null") {
             $em = $this->getDoctrine()->getManager();
             $query = $em->createQuery(
@@ -110,14 +116,17 @@ class ApiController extends Controller
             $servicesQuery = $query->getResult();
         }
 
+        /*Tri des services répondant au mots clés rentrés*/
         $services = array();
         $listeKeyword = explode(" ", $keyword);
         if ($keyword != "null") {
             foreach ($listeKeyword as $word) {
                 $index = 0;
                 foreach ($servicesQuery as $s) {
+                    /*Si la recherche en profondeur est activé, la recherche des mots clés se fait dans le titre et dans la description des services*/
                     if ($profondeur=="true" && (strpos(strtolower($s->getTitre()), strtolower($word)) || strpos(strtolower($s->getDescription()), strtolower($word)) )) {                        
                         $services[] = $s;
+                        /*Une fois le service ajouté, on le retire de la liste parcouru pour éviter les doublons*/
                         unset($servicesQuery[$index]);
                         $index++;
                     }
@@ -134,6 +143,7 @@ class ApiController extends Controller
         }
 
         /*Optimisation pour la transcription en JSON*/
+        /*On ne garde que les attribut qui sont utiles*/
         $sousCategories_res = array();
         foreach ($sousCategories as $sc) {
             $sous_categorie = array('id' => $sc->getId(),
@@ -187,7 +197,7 @@ class ApiController extends Controller
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
 
         $ids = explode(",", $sousCategorie);
-
+        /*Recherche des services appartenant aux sousCategorie selectionnées*/
         if ( $departement != "null") {
             $repository = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
             $query = $repository->createQueryBuilder('s')
@@ -211,6 +221,7 @@ class ApiController extends Controller
             $servicesQuery = $query->getResult();
         }
 
+        /*Recherche des mots clés*/
         $services = array();
         $listeKeyword = explode(" ", $keyword);
         if ($keyword != "null") {
@@ -272,7 +283,7 @@ class ApiController extends Controller
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
         $service = $docS->find($id);
 
-        /*$res = array();*/
+        /*Optimisation pour le JSON*/
         $res = array('id' => $service->getId(),
                          'titre'=> $service->getTitre(),
                          'description'=> $service->getDescription(),
@@ -286,7 +297,6 @@ class ApiController extends Controller
                          'username'=> $service->getInscrit()->getUsername(),
                          'icone'=> $service->getSousCategorie()->getIcone(),
            );
-        /*$res[]=$service;*/
     
         /*passage en JSON avec Serializer*/
         $serializer = $this->get('serializer');
@@ -314,11 +324,8 @@ class ApiController extends Controller
         $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
         $service = $docS->find($id);
 
-        /*$docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');*/
-        /*$reponses = $docR->findBy(array('service' => $id), array('id'=>'desc'), null, null);*/
         $reponses = $service->getReponses();
 
-        /*$res = array();*/
         $res = array('id' => $service->getId(),
                          'titre'=> $service->getTitre(),
                          'description'=> $service->getDescription(),
@@ -367,6 +374,7 @@ class ApiController extends Controller
         $reponse = $docR->find($id);
         $messages = $reponse->getConversation()->getMessages();
         
+        /*Modification de l'etat de la réponse si la date du rendez-vous est passé*/
         if($reponse->getDateRendezVous()< new \Datetime() && $reponse->getEtat()=="valide"){
             $etat = "notation";
         }
@@ -424,8 +432,7 @@ class ApiController extends Controller
         $messages = $reponse->getConversation()->getMessages();
         $serviceBrut = $reponse->getService();
 
-        /*print_r(strtotime($reponse->getDateRendezVous())<strtotime(now()));*/
-        if($reponse->getDateRendezVous()<new \Datetime()){
+        if($reponse->getDateRendezVous()<new \Datetime() && $reponse->getEtat()=="valide"){
             $etat = "notation";
         }
         else{

@@ -2,10 +2,12 @@
 
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
 	<h1>S'inscrire</h1>
-    {{ form_row(form.email, { 'attr': {'class': 'form-control'} }) }}
-    {{ form_row(form.username, { 'attr': {'class': 'form-control'} }) }}
-    {{ form_row(form.plainPassword, { 'attr': {'class': 'form-control'} }) }}
+	<!-- affichage des champs du formulaire -->
+    {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder' : 'mail'} }) }}
+    {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder' : 'pseudonyme'} }) }}
+    {{ form_widget (form.plainPassword.children['first'],{ 'attr': {'class': 'form-control', 'placeholder' : 'mot de passe'} } ) }}
+	{{ form_widget (form.plainPassword.children['second'], { 'attr': {'class': 'form-control', 'placeholder' : 'confirmer le mot de passe'} }) }}
     <div>
-        <input type="submit" value="s'inscrire" />
+        <input type="submit" class="btn btn-success" value="s'inscrire" />
     </div>
 {{ form_end(form) }}

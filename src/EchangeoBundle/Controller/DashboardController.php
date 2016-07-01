@@ -38,11 +38,15 @@ class DashboardController extends Controller{
      */
     public function dashboardAction()
     {
-        $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-        $id = $this->getUser()->getId();
-        $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery(
+              'SELECT avg(e.note)
+              FROM EchangeoBundle:Evaluation e
+              WHERE e.inscritNote = :id'
+          )->setParameter('id', $this->getUser()->getId());
+          $servicesQuery = $query->getResult();
         return $this->render('EchangeoBundle:Dashboard:dashboard.html.twig',array(
-                "services"=>$services)
+                "moyenne"=>$servicesQuery[0][1])
                 );
     }
 
@@ -54,12 +58,13 @@ class DashboardController extends Controller{
      */
     public function servicesUserAction()
     {
-        $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
-        $id = $this->getUser()->getId();
-        $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
-        return $this->render('EchangeoBundle:Dashboard:dashboardServices.html.twig',array(
-                "services"=>$services)
-                );
+      /*on recupère les services de l'utilisateur courant, par id décroisant*/
+      $docServices = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
+      $id = $this->getUser()->getId();      
+      $services = $docServices->findBy(array("inscrit" => $id), array('id' => 'desc'), null, null);
+      return $this->render('EchangeoBundle:Dashboard:dashboardServices.html.twig',array(
+              "services"=>$services)
+              );
     }
 
     /**
@@ -71,23 +76,23 @@ class DashboardController extends Controller{
     {
       $service = new Service();
 
-      $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
-      $SC = $docSC->findAll();
+      /*Pour les titre dans la liste - pas encore utilisé*/
+        $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
+        $SC = $docSC->findAll();
 
-      /*Pour les titre dans la liste*/
-      $sousCategories = [];
-      $titre = "";
-      $index = -1;
-      foreach ($SC as $sousCategorie) {
-        if ($titre!=$sousCategorie->getCategorie()->getLibelle()) {
-          $titre = $sousCategorie->getCategorie()->getLibelle();
-          $index += 1;
-          $sousCategories[$titre]=array($sousCategorie->getCategorie()->getLibelle()=>$sousCategorie->getLibelle());
+        $sousCategories = [];
+        $titre = "";
+        $index = -1;
+        foreach ($SC as $sousCategorie) {
+          if ($titre!=$sousCategorie->getCategorie()->getLibelle()) {
+            $titre = $sousCategorie->getCategorie()->getLibelle();
+            $index += 1;
+            $sousCategories[$titre]=array($sousCategorie->getCategorie()->getLibelle()=>$sousCategorie->getLibelle());
+          }
+          else{
+            $sousCategories[$titre][]=$sousCategorie->getLibelle();
+          }
         }
-        else{
-          $sousCategories[$titre][]=$sousCategorie->getLibelle();
-        }
-      }
 
       /*creer le formulaire*/
       $formulaire = $this->createFormBuilder($service)
@@ -164,23 +169,22 @@ class DashboardController extends Controller{
       $docS = $this->getDoctrine()->getRepository('EchangeoBundle:Service');
       $service = $docS->find($id);
 
-      $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
-      $SC = $docSC->findAll();
-
       /*Pour les titre dans la liste*/
-      $sousCategories = [];
-      $titre = "";
-      $index = -1;
-      foreach ($SC as $sousCategorie) {
-        if ($titre!=$sousCategorie->getCategorie()->getLibelle()) {
-          $titre = $sousCategorie->getCategorie()->getLibelle();
-          $index += 1;
-          $sousCategories[$titre]=array($sousCategorie->getCategorie()->getLibelle()=>$sousCategorie->getLibelle());
+        $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
+        $SC = $docSC->findAll();
+        $sousCategories = [];
+        $titre = "";
+        $index = -1;
+        foreach ($SC as $sousCategorie) {
+          if ($titre!=$sousCategorie->getCategorie()->getLibelle()) {
+            $titre = $sousCategorie->getCategorie()->getLibelle();
+            $index += 1;
+            $sousCategories[$titre]=array($sousCategorie->getCategorie()->getLibelle()=>$sousCategorie->getLibelle());
+          }
+          else{
+            $sousCategories[$titre][]=$sousCategorie->getLibelle();
+          }
         }
-        else{
-          $sousCategories[$titre][]=$sousCategorie->getLibelle();
-        }
-      }
 
       /*creer le formulaire*/
       $formulaire = $this->createFormBuilder($service)
@@ -266,7 +270,7 @@ class DashboardController extends Controller{
      */
     public function sendAction(Request $request)
     {
-      //print_r($request->request->get('message'));
+
     /*On enregistre le réponse*/
       $message = new Message();
       $docC = $this->getDoctrine()->getRepository('EchangeoBundle:Conversation');
@@ -298,12 +302,10 @@ class DashboardController extends Controller{
      */
     public function validationAction(Request $request)
     {
-      //print_r($request->request->get('message'));
+      
       /*On enregistre le réponse*/
       $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
       $reponse = $docR->find($request->request->get('idReponse'));
-
-      print_r($request->request->get('valide'));
 
       if ($request->request->get('valide')) {
         $reponse->setEtat('valide');
@@ -331,20 +333,22 @@ class DashboardController extends Controller{
       /*On enregistre le réponse*/
       $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
       $reponse = $docR->find($request->request->get('idReponse'));
-
+      /*creation de l'evalutation*/
       $evaluation = new Evaluation();
       $evaluation->setNote($request->request->get('rating'));
       $evaluation->setCommentaire($request->request->get('commentaire'));
       $evaluation->setInscritNotant($this->getUser());
       $evaluation->setReponse($reponse);
-      /*à modifier*/
-      if (count($reponse->getEvaluations())>= 2) {
+      
+      /*changement de l'état de la réponse*/
+      if (count($reponse->getEvaluations())>= 1) {
         $reponse->setEtat("cloture");
       }
       else{
         $reponse->setEtat("notation");
       }
 
+      /*Redirection vers la page d'origine*/
       if ($request->request->get('page')=="services") {
         $evaluation->setInscritNote($reponse->getInscrit());
         $em = $this->getDoctrine()->getManager();

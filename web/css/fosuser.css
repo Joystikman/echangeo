@@ -23,9 +23,7 @@ body {
 
 .connexion{
 	margin: 12% 0%;
-	/*margin-top: 20%;*/
 	padding: 20px 15px;
-	/*max-width: 400px;*/
 	height: auto;
 	background-color: #E9573F;
 	border-radius: 5px;
@@ -35,6 +33,12 @@ body {
 	color: white;
 }
 
+.form-control{
+	text-align: center;
+	margin: 20px 0px;
+	margin-left: 25%;
+	width: 50%;
+}
 
 footer{
 	position: fixed;

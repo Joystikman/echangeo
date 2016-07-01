@@ -11,13 +11,10 @@
 <div class="row">
     <div class="connexion">
         <h1>Se connecter</h1>
-        <form action="{{ path("fos_user_security_check") }}" method="post" class="">
+        <!-- creation du formulaire d'inscription -->
+        <form action="{{ path("fos_user_security_check") }}" method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-
-            <!-- <label for="username">Pseudonyme : </label> -->
             <input type="text" class="from-control" id="username" name="_username" placeholder="Pseudonyme" value="{{ last_username }}" required="required" />
-
-            <!-- <label for="password">Mot de passe : </label> -->
             <input type="password" class="from-control" id="password" placeholder="Mot de passe" name="_password" required="required" />
             <br>
             <input type="checkbox" class="from-control" id="remember_me" name="_remember_me" value="on" /><label for="remember_me">Se rappeller de moi</label>
