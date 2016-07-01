@@ -31,7 +31,6 @@ header {
 	padding : 10px 0px;
 	text-align: center;
 	background-color: #434A54;
-	/*border-bottom: 2px solid #B87731;*/
 }
 
 .logo {
@@ -234,18 +233,6 @@ footer{
 }
 
 @media (max-width: 700px) {
-	/*.main{
-		display: flex;
-  		flex-direction: column;
-  		flex-wrap: wrap;
-  		width: 100%;
-	}*/
-
-	/*.navbar {
-		padding: 0px 15px;
-		flex: 1;
-		order: 1;
-	}*/
 
 	.login span{
 		text-align: left;

@@ -170,21 +170,21 @@ class DashboardController extends Controller{
       $service = $docS->find($id);
 
       /*Pour les titre dans la liste*/
-      $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
-      $SC = $docSC->findAll();
-      $sousCategories = [];
-      $titre = "";
-      $index = -1;
-      foreach ($SC as $sousCategorie) {
-        if ($titre!=$sousCategorie->getCategorie()->getLibelle()) {
-          $titre = $sousCategorie->getCategorie()->getLibelle();
-          $index += 1;
-          $sousCategories[$titre]=array($sousCategorie->getCategorie()->getLibelle()=>$sousCategorie->getLibelle());
+        $docSC = $this->getDoctrine()->getRepository('EchangeoBundle:SousCategorie');
+        $SC = $docSC->findAll();
+        $sousCategories = [];
+        $titre = "";
+        $index = -1;
+        foreach ($SC as $sousCategorie) {
+          if ($titre!=$sousCategorie->getCategorie()->getLibelle()) {
+            $titre = $sousCategorie->getCategorie()->getLibelle();
+            $index += 1;
+            $sousCategories[$titre]=array($sousCategorie->getCategorie()->getLibelle()=>$sousCategorie->getLibelle());
+          }
+          else{
+            $sousCategories[$titre][]=$sousCategorie->getLibelle();
+          }
         }
-        else{
-          $sousCategories[$titre][]=$sousCategorie->getLibelle();
-        }
-      }
 
       /*creer le formulaire*/
       $formulaire = $this->createFormBuilder($service)
@@ -270,7 +270,7 @@ class DashboardController extends Controller{
      */
     public function sendAction(Request $request)
     {
-      //print_r($request->request->get('message'));
+
     /*On enregistre le réponse*/
       $message = new Message();
       $docC = $this->getDoctrine()->getRepository('EchangeoBundle:Conversation');
@@ -302,7 +302,7 @@ class DashboardController extends Controller{
      */
     public function validationAction(Request $request)
     {
-      //print_r($request->request->get('message'));
+      
       /*On enregistre le réponse*/
       $docR = $this->getDoctrine()->getRepository('EchangeoBundle:Reponse');
       $reponse = $docR->find($request->request->get('idReponse'));

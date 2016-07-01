@@ -160,6 +160,7 @@
 	  	</nav> 	 	
   	 	<!-- Block Services -->
 	    <div id="services" class="services col-xs-12 col-sm-12 col-md-5 col-lg-5">
+	    	{% block service %}
 		    <h2 id="titre">Les derniers services ajoutés : </h2>
 	    	<div id="liste" class="liste">
 		    	{% set index = 0 %}
@@ -174,8 +175,9 @@
 			       		<a id="{{service.id}}" href="#" class="btn btn-primary">voir en détails</a>
 			       	</div>
 			       	{% set index = index + 1 %}
-		      {% endfor %}
+		      	{% endfor %}
 		    </div>
+		    {% endblock service %}
 	    </div>
 	    <!-- La Carte -->
 	    <div id="carte" class="carte col-xs-12 col-sm-12 col-md-7 col-lg-7">
@@ -190,7 +192,5 @@
 {% block script %}	 
 	<!-- include fonction de recherche	 -->
 	{% include 'EchangeoBundle:Scripts:rechercheScript.html.twig' %}
-<script type="text/javascript">
-</script>
 {% endblock script %}
 

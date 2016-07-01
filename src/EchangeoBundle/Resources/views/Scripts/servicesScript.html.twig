@@ -17,7 +17,6 @@
 		url = url.replace("idPlaceholder", this.id);
 		var urlEdit = "{{ path('editServices',{ 'id': "idPlaceholder"}) }}";
 		urlEdit = urlEdit.replace("idPlaceholder", this.id);
-		/*console.log(url);*/
 		/*fonction ajax*/
 		$("#cadre").empty();
 		$("#cadre").append($(chargement));
@@ -26,7 +25,6 @@
 			type: "GET",
 			dataType: "json",
 			success: function(service){
-				console.log('test get service');
 				console.log(service);
 				$("#cadre").empty();
 				$("#cadre").append($("<div id='service' class='service'>"));
@@ -36,7 +34,7 @@
 				$("#description").append($("<h5>").text("Description : "));
 				$("#description").append($("<p>").text(service.description));
 				/*$("#service").append($("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>"));*/
-				$("#service").append($("<p>").text("Du : "+moment(service.debut).lang('fr').format("LLL")+" au "+moment(service.fin).lang('fr').format("LLL")));
+				$("#service").append($("<p>").text("Du : "+moment(service.debut).locale('fr').format("LLL")+" au "+moment(service.fin).locale('fr').format("LLL")));
 				$("#service").append($("<p>").text(service.adresse));
 				$("#service").append($("<input id='lieu' hidden value="+service.lieu+">"));
 				$("#service").append($("<input id='distance' hidden value="+service.distance+">"));
@@ -59,7 +57,6 @@
 	}); 
 
 	function listeReponses(data){
-		/*console.log(data);*/
 		var service = data;
 		$("#reponse").empty();
 		$("#reponse").append($("<h3>").text("Réponse :"));
@@ -68,7 +65,7 @@
 			var id = data.reponses[i].id;
 			$("#reponse").append($("<div id='reponse"+id+"' title='"+id+"' class='reponseId'>"));
 			$("#reponse"+id).append($("<h4>").text('de '+data.reponses[i].username));
-			$("#reponse"+id).append($("<p>").text('date proposé pour le service :'+moment(data.reponses[i].date_rendez_vous).lang('fr').format("LLL")));			
+			$("#reponse"+id).append($("<p>").text('date proposé pour le service :'+moment(data.reponses[i].date_rendez_vous).locale('fr').format("LLL")));			
 			$("#reponse"+id).append($("<p class='btn btn-primary'>").text("voir en détails."));
 			$("#reponse"+id).on("click", function(){
 				console.log('click voir en detail');
@@ -94,7 +91,7 @@
 						$("#reponseId").append($("<p id='retour' class='btn btn-primary'>").text("retour"));
 						$("#retour").on("click", function(){listeReponses(service)});
 						$("#reponseId").append($("<h4>").text('de '+reponse.username));
-						$("#reponseId").append($("<p>").text('date proposé pour le service :'+moment(reponse.date_rendez_vous).lang('fr').format("LLL")));
+						$("#reponseId").append($("<p>").text('date proposé pour le service :'+moment(reponse.date_rendez_vous).locale('fr').format("LLL")));
 						$("#reponseId").append($("<p>").text('etat :'+reponse.etat));
 						validation(reponse);
 						$("#reponseId").append($("<div id='conversation' class='conversation'>"));
@@ -214,16 +211,6 @@
 		    animation: google.maps.Animation.DROP
 		});
 		var radius = $("#distance").val();
-		/*cityCircle = new google.maps.Circle({
-		    strokeColor: '#FF0000',
-		    strokeOpacity: 0.8,
-		    strokeWeight: 2,
-		    fillColor: '#FF0000',
-		    fillOpacity: 0.35,
-		    map: map,
-		    center: latLng,
-			radius: radius * 1000
-		});*/
 		console.log("fin displayMap");
 	}
 

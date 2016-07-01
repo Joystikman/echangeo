@@ -35,6 +35,7 @@
 
 {% block script %}
 <script src="{{ asset('script/pikaday.js')}}"></script>
+{% include 'EchangeoBundle:Scripts:servicesScript.html.twig' %}
 {% include 'EchangeoBundle:Scripts:servicesAjoutScript.html.twig' %}
 <script type="text/javascript">
 		var picker = new Pikaday({ field: $('#form_debut')[0] });

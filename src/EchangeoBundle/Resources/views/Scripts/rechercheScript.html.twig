@@ -138,6 +138,7 @@
 				console.log(services);
 				$("#liste").empty();
 				servicesCourants=services;
+				/*affichage des service au div liste*/
 				for(var i=0; i<services.length; i++){
 					$('#liste').append($("<div id='service"+services[i].id+"' name="+i+" class='tuile'>"));
 					$('#service'+services[i].id).append($("<h3>").text(services[i].titre));
@@ -156,7 +157,6 @@
 			}
 		});
 	}
-
 
 	function displayDetails(id, onload){
 		console.log("displayDetails");
@@ -224,14 +224,13 @@
 					markerServices(false,service,service.icone);
 				},
 				error: function (req, status, err){
-					console.log("erreur");
+					console.log("erreur display details");
 					console.log(err);
 				}
 			});
 			return false;
 		});
 	}
-
 
 	function backDisplay(){
 		var retour = $("#retour");

@@ -2,6 +2,7 @@
 
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
 	<h1>S'inscrire</h1>
+	<!-- affichage des champs du formulaire -->
     {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder' : 'mail'} }) }}
     {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder' : 'pseudonyme'} }) }}
     {{ form_widget (form.plainPassword.children['first'],{ 'attr': {'class': 'form-control', 'placeholder' : 'mot de passe'} } ) }}
